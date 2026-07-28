@@ -1,0 +1,113 @@
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+import sharp from 'sharp'
+import path from 'path'
+import { buildConfig, PayloadRequest } from 'payload'
+import { fileURLToPath } from 'url'
+import { zhTw } from 'payload/i18n/zhTw'
+
+import { Categories } from './collections/Categories'
+import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
+import { Posts } from './collections/Posts'
+import { Users } from './collections/Users'
+import { Footer } from './Footer/config'
+import { Header } from './Header/config'
+import { plugins } from './plugins'
+import { defaultLexical } from '@/fields/defaultLexical'
+import { getServerSideURL } from './utilities/getURL'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+
+export default buildConfig({
+  admin: {
+    components: {
+      beforeDashboard: ['@/components/BeforeDashboard'],
+    },
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
+    user: Users.slug,
+    meta: {
+      titleSuffix: '－胰探究竟',
+    },
+    livePreview: {
+      breakpoints: [
+        {
+          label: 'Mobile',
+          name: 'mobile',
+          width: 375,
+          height: 667,
+        },
+        {
+          label: 'Tablet',
+          name: 'tablet',
+          width: 768,
+          height: 1024,
+        },
+        {
+          label: 'Desktop',
+          name: 'desktop',
+          width: 1440,
+          height: 900,
+        },
+      ],
+    },
+  },
+  i18n: {
+    supportedLanguages: { 'zh-TW': zhTw },
+    fallbackLanguage: 'zh-TW',
+  },
+  editor: defaultLexical,
+  db: vercelPostgresAdapter({
+    pool: {
+      connectionString: process.env.POSTGRES_URL || '',
+    },
+    push: false,
+  }),
+  collections: [
+    {
+      slug: 'folders',
+      folders: true,
+      admin: {
+        hidden: true,
+        useAsTitle: 'name',
+      },
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          required: true,
+          label: '資料夾名稱',
+        },
+      ],
+    },
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+  ],
+  cors: [getServerSideURL()].filter(Boolean),
+  plugins: [...plugins],
+  globals: [Header, Footer],
+  secret: process.env.PAYLOAD_SECRET,
+  sharp,
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  jobs: {
+    access: {
+      run: ({ req }: { req: PayloadRequest }): boolean => {
+        if (req.user) return true
+
+        const secret = process.env.CRON_SECRET
+        if (!secret) return false
+
+        const authHeader = req.headers.get('authorization')
+        return authHeader === `Bearer ${secret}`
+      },
+    },
+    tasks: [],
+  },
+})

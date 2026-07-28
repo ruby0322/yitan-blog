@@ -1,0 +1,4 @@
+body.admin-bar-visible header {
+  margin-top: var(--admin-bar-height, 0px);
+  top: var(--admin-bar-height, 0px);
+}
