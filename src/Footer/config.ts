@@ -10,18 +10,38 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
-      name: 'navItems',
+      name: 'linkGroups',
       type: 'array',
+      label: '連結分類',
+      maxRows: 4,
       fields: [
-        link({
-          appearances: false,
-        }),
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: '分類名稱',
+        },
+        {
+          name: 'items',
+          type: 'array',
+          label: '連結',
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          admin: {
+            initCollapsed: true,
+            components: {
+              RowLabel: '@/Footer/LinkRowLabel#LinkRowLabel',
+            },
+          },
+        },
       ],
-      maxRows: 6,
       admin: {
         initCollapsed: true,
         components: {
-          RowLabel: '@/Footer/RowLabel#RowLabel',
+          RowLabel: '@/Footer/GroupRowLabel#GroupRowLabel',
         },
       },
     },

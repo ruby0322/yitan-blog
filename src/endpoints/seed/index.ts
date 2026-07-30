@@ -1,4 +1,4 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest } from 'payload'
+import type { CollectionSlug, Payload, PayloadRequest } from 'payload'
 
 import { about } from './about'
 import { home } from './home'
@@ -17,8 +17,6 @@ import { post6 } from './post-6'
 import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
-
-const globals = ['header', 'footer'] as const satisfies GlobalSlug[]
 
 const categories = ['迷思破解', '飲食保健', '基礎知識'] as const
 
@@ -42,20 +40,28 @@ export const seed = async ({
 
   payload.logger.info(`— Clearing collections and globals...`)
 
-  await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
-        depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
-      }),
-    ),
-  )
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'header',
+      data: {
+        navItems: [],
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      data: {
+        linkGroups: [],
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+  ])
 
   for (const collection of collections) {
     await payload.db.deleteMany({ collection, req, where: {} })
@@ -314,27 +320,103 @@ export const seed = async ({
       slug: 'footer',
       context: { disableRevalidate: true },
       data: {
-        navItems: [
+        linkGroups: [
           {
-            link: {
-              type: 'custom',
-              label: '首頁',
-              url: '/',
-            },
+            label: '網站導覽',
+            items: [
+              {
+                link: {
+                  type: 'custom',
+                  label: '首頁',
+                  url: '/',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '關於',
+                  url: '/about',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '部落格',
+                  url: '/posts',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '搜尋',
+                  url: '/search',
+                },
+              },
+            ],
           },
           {
-            link: {
-              type: 'custom',
-              label: '關於',
-              url: '/about',
-            },
+            label: '章明珠醫師',
+            items: [
+              {
+                link: {
+                  type: 'custom',
+                  label: '認識章醫師',
+                  url: '/about',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '台大醫院個人頁',
+                  url: 'https://www.ntuh.gov.tw/Med/Vcard.action?q_type=A03&q_itemCode=180',
+                  newTab: true,
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '台大醫院內科部',
+                  url: 'https://www.ntuh.gov.tw/',
+                  newTab: true,
+                },
+              },
+            ],
           },
           {
-            link: {
-              type: 'custom',
-              label: '部落格',
-              url: '/posts',
-            },
+            label: '《攔截胰臟癌》',
+            items: [
+              {
+                link: {
+                  type: 'custom',
+                  label: '新書介紹',
+                  url: '/#book-sales',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '博客來選購',
+                  url: 'https://www.books.com.tw/products/search?key=9786267916070',
+                  newTab: true,
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '天下網路書店',
+                  url: 'https://www.cwbook.com.tw/products/search?keyword=9786267916070',
+                  newTab: true,
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: '天下雜誌出版',
+                  url: 'https://www.cw.com.tw/',
+                  newTab: true,
+                },
+              },
+            ],
           },
         ],
       },

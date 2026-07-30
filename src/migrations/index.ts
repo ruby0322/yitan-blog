@@ -6,6 +6,7 @@ import * as migration_20260730_212500_book_sales_block from './20260730_212500_b
 import * as migration_20260730_213000_book_sales_block_ensure from './20260730_213000_book_sales_block_ensure'
 import * as migration_20260730_214000_book_sales_editorial_fields from './20260730_214000_book_sales_editorial_fields'
 import * as migration_20260730_220000_about_teaser_editorial_fields from './20260730_220000_about_teaser_editorial_fields'
+import * as migration_20260730_230000_footer_link_groups from './20260730_230000_footer_link_groups'
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260730_220000_about_teaser_editorial_fields.up,
     down: migration_20260730_220000_about_teaser_editorial_fields.down,
     name: '20260730_220000_about_teaser_editorial_fields',
+  },
+  {
+    up: migration_20260730_230000_footer_link_groups.up,
+    down: migration_20260730_230000_footer_link_groups.down,
+    name: '20260730_230000_footer_link_groups',
   },
 ]
