@@ -249,6 +249,7 @@ export interface Page {
     | CategoryNavBlock
     | ArchiveBlock
     | AboutTeaserBlock
+    | BookSalesBlock
     | NewsletterBlock
     | CallToActionBlock
     | ContentBlock
@@ -477,6 +478,7 @@ export interface QuoteBlockBlock {
     };
     [k: string]: unknown;
   } | null;
+  coverImage?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'quoteBlock';
@@ -567,6 +569,8 @@ export interface ArchiveBlock {
 export interface AboutTeaserBlock {
   sectionNumber?: string | null;
   heading: string;
+  doctorName: string;
+  credentialsLine?: string | null;
   body: {
     root: {
       type: string;
@@ -582,6 +586,7 @@ export interface AboutTeaserBlock {
     };
     [k: string]: unknown;
   };
+  highlightLine?: string | null;
   image?: (number | null) | Media;
   link: {
     type?: ('reference' | 'custom') | null;
@@ -601,6 +606,37 @@ export interface AboutTeaserBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutTeaserBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BookSalesBlock".
+ */
+export interface BookSalesBlock {
+  sectionNumber?: string | null;
+  heading: string;
+  bookSubtitle?: string | null;
+  description?: string | null;
+  highlightLine?: string | null;
+  authorLine?: string | null;
+  coverImage?: (number | null) | Media;
+  buyLink: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bookSalesBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1244,6 +1280,7 @@ export interface PagesSelect<T extends boolean = true> {
         categoryNavBlock?: T | CategoryNavBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         aboutTeaserBlock?: T | AboutTeaserBlockSelect<T>;
+        bookSalesBlock?: T | BookSalesBlockSelect<T>;
         newsletterBlock?: T | NewsletterBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
@@ -1272,6 +1309,7 @@ export interface QuoteBlockBlockSelect<T extends boolean = true> {
   quote?: T;
   attribution?: T;
   sideText?: T;
+  coverImage?: T;
   id?: T;
   blockName?: T;
 }
@@ -1335,9 +1373,36 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
 export interface AboutTeaserBlockSelect<T extends boolean = true> {
   sectionNumber?: T;
   heading?: T;
+  doctorName?: T;
+  credentialsLine?: T;
   body?: T;
+  highlightLine?: T;
   image?: T;
   link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BookSalesBlock_select".
+ */
+export interface BookSalesBlockSelect<T extends boolean = true> {
+  sectionNumber?: T;
+  heading?: T;
+  bookSubtitle?: T;
+  description?: T;
+  highlightLine?: T;
+  authorLine?: T;
+  coverImage?: T;
+  buyLink?:
     | T
     | {
         type?: T;
@@ -1906,23 +1971,29 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  navItems?:
+  linkGroups?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        label: string;
+        items?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1957,17 +2028,23 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  linkGroups?:
     | T
     | {
-        link?:
+        label?: T;
+        items?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
