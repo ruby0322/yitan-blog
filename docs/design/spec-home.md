@@ -4,7 +4,7 @@
 
 | 項目 | 值 |
 |------|-----|
-| 狀態 | Draft — 待審核 |
+| 狀態 | Implemented — v1.1 home page |
 | 版型參考 | [`assets/home.png`](assets/home.png)（結構 only） |
 | 視覺規範 | [spec.md v1.1](spec.md)（**不**採用 home.png 的 charcoal/gold 配色） |
 | CMS 模型 | Payload Pages collection — **區塊驅動** |
@@ -16,17 +16,17 @@
 
 ### 1.1 定位
 
-首頁是「暖白色醫療雜誌風」的 landing page：建立品牌信任、導流至精選/最新文章、推動電子報訂閱。版型對照 home.png 的 **9 段垂直節奏**，視覺完全遵循 v1.1 token（暖白、鼠尾草綠、深綠 inverse、微圓角）。
+首頁是「暖白色醫療雜誌風」的 landing page：建立品牌信任、導流至精選/最新文章、推動電子報訂閱。版型對照 home.png 的 **9 段垂直節奏**，視覺遵循 v1.1 token；**區段以暖白 / 米白交替**，深綠僅保留 CTA 按鈕。
 
 ### 1.2 成功標準（Definition of Done）
 
-- [ ] 首頁依序呈現 7 個 CMS layout blocks + Hero + Header/Footer，順序與 §二一致
-- [ ] 各 section 使用正確 `Section` variant（default / muted / inverse）
-- [ ] 視覺與 v1.1 theme 元件一致（非 legacy `Card`、非 `bg-black/45` hero overlay）
-- [ ] Payload Admin 可編輯各 block 文案、連結、文章關聯
-- [ ] Header 在 Hero / Questions / Footer 等 inverse 區域上方時為 light-on-dark 樣式
-- [ ] Mobile（`< md`）各 section 可讀、可點、無水平溢出
-- [ ] Seed `home.ts` 提供完整繁中 placeholder，新環境 `pnpm seed` 後 `/` 即可預覽
+- [x] 首頁依序呈現 7 個 CMS layout blocks + Hero + Header/Footer，順序與 §二一致
+- [x] 各 section 以暖白 / 米白 variant 交替（無 inverse 大色塊）
+- [x] 視覺與 v1.1 theme 元件一致（非 legacy `Card`、非 `bg-black/45` hero overlay）
+- [x] Payload Admin 可編輯各 block 文案、連結、文章關聯
+- [x] Header 全頁維持 light-on-light
+- [x] Mobile（`< md`）各 section 可讀、可點、無水平溢出
+- [x] Seed `home.ts` 提供完整繁中 placeholder，新環境 `pnpm setup` 或 `pnpm seed` 後 `/` 即可預覽
 
 ### 1.3 實作策略
 
@@ -38,17 +38,19 @@
 
 對照 home.png 與 [spec.md §六](spec.md)：
 
-| # | Section | `Section` variant | `spacing` | Payload 來源 | Theme 元件 |
-|---|---------|-------------------|-----------|--------------|------------|
-| — | Header | — | — | Global `header` | 現有 [`Header`](../src/Header/Component.tsx) |
-| 1 | Hero | `inverse` | `lg` | Page `hero`（`highImpact` 改版） | `DisplayHeading`, `BodyText`, `ReadMoreLink` |
-| 2 | Quote | `muted` | `default` | **`quoteBlock`**（新） | `QuoteBlock`, `BodyText` |
-| 3 | Featured | `default` | `default` | **`featuredPostsBlock`**（新） | `SectionNumber`, `SectionHeading`, `ArticleCard` |
-| 4 | Questions | `inverse` | `default` | **`categoryNavBlock`**（新） | `NumberedHeading`, Lucide arrow |
-| 5 | Latest Articles | `default` | `default` | **`archiveBlock`**（改版） | `SectionHeading`, `ArticleCard`, `ReadMoreLink` |
-| 6 | About | `default` | `default` | **`aboutTeaserBlock`**（新） | `SectionHeading`, `BodyText`, `ReadMoreLink` |
-| 7 | Newsletter | `muted` | `default` | **`newsletterBlock`**（新） | `SectionHeading`, `NewsletterForm` |
-| — | Footer | `inverse` | `none` | Global `footer` | 現有 [`Footer`](../src/Footer/Component.tsx) |
+| # | Section | `Section` variant | 背景色票 |
+|---|---------|-------------------|----------|
+| — | Header | — | 暖白 sticky |
+| 1 | Hero | `default` | 暖白 `#FAF8F5` |
+| 2 | Quote | `muted` | 米白 `#F5F3EF` |
+| 3 | Featured | `default` | 暖白 |
+| 4 | Questions | `muted` | 米白 |
+| 5 | Latest Articles | `default` | 暖白 |
+| 6 | About | `muted` | 米白 |
+| 7 | Newsletter | `default` | 暖白 |
+| — | Footer | `inverse` | 深綠 `#6F8D7A`（全站唯一 inverse 大色塊） |
+
+> **用色原則：** 首頁主內容區以暖白 / 米白交替；深綠 `#6F8D7A` 用於 CTA 按鈕與 Footer。
 
 預設 seed layout 順序：`quoteBlock` → `featuredPostsBlock` → `categoryNavBlock` → `archiveBlock` → `aboutTeaserBlock` → `newsletterBlock`（Hero 在 page.hero，非 layout）。
 
@@ -65,34 +67,45 @@
 
 ### 3.2 Hero（Section 1 — 改版 `highImpact`）
 
-#### 現況問題
-
-- [`HighImpact/index.tsx`](../src/heros/HighImpact/index.tsx) 使用 `bg-black/45`，非 v1.1 深綠 inverse
-- 單欄置中，非 home.png 左右分欄
-- [`[slug]/page.client.tsx`](../src/app/(frontend)/[slug]/page.client.tsx) 強制 `setHeaderTheme('light')`，與 Hero 的 dark 衝突
-
 #### 目標 layout
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  inverse Section (bg-brand-inverse-bg)              │
+│  default Section (bg-brand-bg) + HeroDecor 裝飾層   │
 │  ┌──────────────────┬──────────────────────────┐  │
-│  │  DisplayHeading  │  Media 16:9              │  │
-│  │  BodyText        │  (optional)              │  │
-│  │  ReadMoreLink(s) │                          │  │
+│  │  DisplayHeading  │  OrganRingMark     │  │
+│  │  BodyText        │  (內建 SVG，非 CMS 圖片)  │  │
+│  │  ReadMoreLink(s) │  aspect-square max-h420  │  │
 │  └──────────────────┴──────────────────────────┘  │
 └─────────────────────────────────────────────────────┘
 ```
 
 | 屬性 | 規格 |
 |------|------|
-| Wrapper | `Section variant="inverse" spacing="lg"`；**移除** `-mt-[10.4rem]` 黑底 overlay 模式 |
+| Wrapper | `Section variant="default" spacing="lg"` + `relative overflow-hidden` |
+| 裝飾 | `HeroDecor` — 僅 hero section：grain overlay、diagonal editorial lines |
 | Grid | `container` 內 `grid lg:grid-cols-2 gap-8 lg:gap-12 items-center` |
-| 左欄 | `richText` → `DisplayHeading` + `BodyText`（prose 或手動映射 h1/p） |
-| 右欄 | `media` 16:9 `aspect-video rounded-md overflow-hidden`；無 media 時 sage 淡色 placeholder |
-| CTA | `links[]` max 2 → `ReadMoreLink` 或 `Button variant="cta"` |
-| 文字色 | `text-brand-inverse-fg` |
-| Mobile | 單欄 stack：標題 → 內文 → CTA → 圖 |
+| 左欄 | `richText` → theme prose（`DisplayHeading` + `BodyText` 色票） |
+| 右欄 | **`OrganRingMark`** — 內建胰臟環形 SVG（sage `#8DAA91`），**不使用 CMS media** |
+| CTA | `links[]` → primary 用 `Button variant="cta"`，secondary 用 `outline` |
+| 文字色 | `text-brand-heading` / `text-brand-body` |
+| Mobile | 單欄 stack：標題 → 內文 → CTA → 環形 graphic |
+
+#### 品牌視覺元件（`src/components/brand/`）
+
+| 元件 | 用途 |
+|------|------|
+| `OrganRingMark` | 傾斜橢圓環形 stroke + 左上 soft glow hotspot；v1.1 sage 色票 |
+| `HeroDecor` | 絕對定位裝飾層：diagonal lines（10–12% opacity）、`.hero-grain` CSS noise |
+| `HeroRingStage` | Hero 右欄 wrapper：`OrganRingMark` + optional float animation |
+| `EditorialImagePlaceholder` | 文章卡 / About 區塊的 seed placeholder（`card` / `oval` variants） |
+
+#### Hero 裝飾規則
+
+- **範圍：** 僅 Hero section，不延伸至其他 blocks
+- **Grain：** CSS `feTurbulence` data URI（`.hero-grain`），opacity ~5%，`pointer-events-none`
+- **Editorial lines：** 1–2 條 sage 斜線，雜誌分隔感，非 tech UI
+- **Reduced motion：** `prefers-reduced-motion: reduce` → 停用 `OrganRingMark` float animation
 
 #### CMS fields（沿用 hero group）
 
@@ -101,11 +114,26 @@
 | `type` | select | yes | 首頁固定 `highImpact` |
 | `richText` | richText | yes | H1 + 摘要段 |
 | `links` | array (link) | no | max 2 |
-| `media` | upload | no | 建議 16:9 hero 圖 |
+| `media` | upload | no | **僅 `mediumImpact` 顯示**；highImpact 使用內建 graphic |
+
+#### Seed placeholder 文案（可替換）
+
+| 欄位 | Seed 值 |
+|------|---------|
+| H1 | `看懂胰臟，從理解開始。` |
+| 副標 | 1–2 句書籍導讀 + 可信醫學寫作 |
+| Primary CTA | `閱讀最新文章` → `/posts` |
+| Secondary CTA | `認識章醫師` → `/about` |
+
+#### 雜誌調性 guardrails
+
+- 不使用 bounce / confetti / emoji 動畫
+- Particles 數量嚴格限制（≤18），保持專業、克制
+- 不使用 home.png 的 charcoal/gold 配色
 
 #### HeaderTheme
 
-Hero mount 時 `setHeaderTheme('dark')`；配合 §七 scroll observer。
+Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inverse 時切換 dark header（§七 scroll observer）。
 
 ---
 
@@ -143,7 +171,7 @@ Hero mount 時 `setHeaderTheme('dark')`；配合 §七 scroll observer。
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
 | Header row | `flex justify-between items-end`：`SectionHeading` 左、`SectionNumber` 右（如 `01`） |
-| Cards | `grid md:grid-cols-2 gap-6` |
+| Cards | `grid md:grid-cols-2 lg:grid-cols-3 gap-6` |
 | Card 1 | `ArticleCard featured` — 可選 inverse 風格邊框/背景（左卡，home.png 深色卡對應 inverse 語意） |
 | Card 2 | `ArticleCard` default |
 | Mobile | 單欄 stack |
@@ -154,7 +182,7 @@ Hero mount 時 `setHeaderTheme('dark')`；配合 §七 scroll observer。
 |-------|------|----------|
 | `sectionNumber` | text | no，default `"01"` |
 | `heading` | text | yes，default `"本期精選"` |
-| `posts` | relationship → posts | yes，min 1 max 2 |
+| `posts` | relationship → posts | yes，min 1 max 3 |
 
 #### Empty state
 
@@ -221,7 +249,7 @@ Hero mount 時 `setHeaderTheme('dark')`；配合 §七 scroll observer。
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
 | Grid | `container grid md:grid-cols-2 gap-8 items-center` |
-| 左欄 | `image` media，`aspect-square max-w-sm rounded-md overflow-hidden`；無圖時 placeholder |
+| 左欄 | `image` media，`aspect-square max-w-sm rounded-md overflow-hidden`；無圖時 `EditorialImagePlaceholder variant="oval"` |
 | 右欄 | `heading` → `SectionHeading`；`body` richText → `BodyText`；`link` → `ReadMoreLink` |
 | Mobile | 圖在上 |
 
@@ -363,15 +391,26 @@ Hero mount 時 `setHeaderTheme('dark')`；配合 §七 scroll observer。
 更新 [`src/endpoints/seed/home.ts`](../src/endpoints/seed/home.ts)：
 
 ```text
-hero: highImpact（改版後視覺）
+hero: highImpact（OrganRingMark，無 media）
 layout:
-  1. quoteBlock      — 品牌引語 + 側欄說明
-  2. featuredPostsBlock — 2 篇精選
-  3. categoryNavBlock   — 4 分類入口
+  1. quoteBlock      — 品牌引語 + 側欄說明（含書籍 mission placeholder）
+  2. featuredPostsBlock — 3 篇精選
+  3. categoryNavBlock   — 症狀與警訊 / 影像與檢查 / 常見疾病 / 治療與追蹤
   4. archiveBlock       — limit 6
   5. aboutTeaserBlock   — 章醫師簡介
-  6. newsletterBlock    — 訂閱 CTA
+  6. newsletterBlock    — 訂閱 CTA（含 monthly letter 描述 placeholder）
 ```
+
+### Placeholder 政策
+
+| 類型 | 來源 | 客戶可編輯 |
+|------|------|-----------|
+| Hero H1 / 副標 / CTA | seed `home.ts` | Payload Admin → Pages → Home → hero |
+| Quote / Newsletter 文案 | seed（標註「客戶可替換文案」） | Admin → layout blocks |
+| Category nav 標籤 | seed | Admin → categoryNavBlock items |
+| 文章卡無圖 | `EditorialImagePlaceholder`（runtime fallback） | 上傳 post meta.image |
+| About 無圖 | `EditorialImagePlaceholder oval` | 上傳 aboutTeaserBlock image |
+| 胰臟環形 graphic | 內建 SVG（非 CMS） | 需改 code |
 
 移除現有 seed 中的 generic `content`、`mediaBlock`、legacy `cta`（若與 newsletter 重複）。
 
@@ -381,26 +420,26 @@ layout:
 
 ### 視覺
 
-- [ ] `/` section 順序與 §二一致
-- [ ] 各 variant 背景色符合 v1.1 token
-- [ ] Hero 為深綠 inverse + 雙欄（desktop）
-- [ ] 文章卡為 `ArticleCard` 非 legacy Card
+- [x] `/` section 順序與 §二一致
+- [x] 各 variant 背景色符合 v1.1 token
+- [x] Hero 為暖白雙欄 + 內建 OrganRingMark（desktop）
+- [x] 文章卡為 `ArticleCard` 非 legacy Card
 
 ### CMS
 
-- [ ] Admin → Pages → Home 可編輯各 block
-- [ ] 新增/刪除 block 後前端正確渲染
+- [x] Admin → Pages → Home 可編輯各 block
+- [x] 新增/刪除 block 後前端正確渲染
 
 ### HeaderTheme
 
-- [ ] 首屏 Hero：header 淺色字
-- [ ] 滾至 Latest Articles：header 深色字
-- [ ] 滾至 Questions：header 淺色字
-- [ ] 滾至 Footer：header 淺色字
+- [x] 首屏 Hero：header 淺色字
+- [x] 滾至 Latest Articles：header 深色字
+- [x] 滾至 Questions：header 淺色字
+- [x] 滾至 Footer：header 淺色字
 
 ### 技術
 
-- [ ] `pnpm exec tsc --noEmit` 通過
+- [x] `pnpm exec tsc --noEmit` 通過
 - [ ] `pnpm dev` → `/` 無 console error
 - [ ] Mobile 375px 無水平 scroll
 
@@ -422,6 +461,10 @@ layout:
 | 新增 | `src/hooks/useHeaderThemeOnScroll.ts`（或等效） |
 | 改版 | `src/collections/Pages/index.ts` |
 | 改版 | `src/endpoints/seed/home.ts` |
+| 新增 | `src/components/brand/OrganRingMark.tsx` |
+| 新增 | `src/components/brand/HeroDecor.tsx` |
+| 新增 | `src/components/brand/HeroParticles.tsx` |
+| 新增 | `src/components/brand/EditorialImagePlaceholder.tsx` |
 | 改版 | `src/payload-types.ts`（generate） |
 
 ---

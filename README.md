@@ -13,13 +13,22 @@
 
 ```bash
 cp .env.example .env
-docker-compose up -d
+pnpm db:up          # starts Postgres on localhost:54320
 pnpm install
-pnpm payload migrate
+pnpm migrate        # apply schema migrations
+pnpm seed           # optional: load demo home/about/posts
 pnpm dev
 ```
 
-首次登入 `/admin` 建立帳號後，可點「建立示範內容」初始化首頁、關於頁與示範文章。
+首次登入 `/admin` 建立帳號後，也可在後台點「建立示範內容」初始化首頁、關於頁與示範文章。
+
+若修改 collection 欄位（例如新增 block），本地需：
+
+```bash
+pnpm migrate:create
+pnpm migrate
+pnpm seed           # re-seed if needed
+```
 
 ## 部署
 
