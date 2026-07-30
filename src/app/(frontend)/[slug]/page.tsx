@@ -4,7 +4,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
+import React from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
 import { aboutStatic } from '@/endpoints/seed/about-static'
 
@@ -13,6 +13,8 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   try {
@@ -88,7 +90,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const isHome = decodedSlug === 'home'
 
   return (
-    <div className={isHome ? 'pb-24' : 'pb-24 pt-16'}>
+    <div className={isHome ? undefined : 'pb-24 pt-16'}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -117,7 +119,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+async function queryPageBySlug({ slug }: { slug: string }) {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -137,4 +139,4 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
   })
 
   return result.docs?.[0] || null
-})
+}
