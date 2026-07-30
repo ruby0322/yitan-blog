@@ -27,7 +27,7 @@
 | 陰影 | 無 card shadow | v1 設計原則 |
 | 日常用色 | 暖白、米白、鼠尾草綠、淺灰、深綠、淺鼠尾草 | 客戶 v1.1 回饋 |
 | Inverse 區塊 | 深綠 `#6F8D7A` + 暖白文字 | 客戶 v1.1 回饋 |
-| Scope | theme foundation only | 首頁/文章版型組裝為後續 PR |
+| Scope | theme foundation ✅ · 首頁見 [spec-home.md](spec-home.md) | 文章內頁為後續 PR |
 | Dark mode | section-scoped inverse only | 不暴露 user toggle |
 | Icon | Lucide line icons | v1「線條式 Icon」 |
 
@@ -171,11 +171,15 @@ All buttons: `rounded-md`.
 
 ---
 
-## 六、頁面版型（reference only — 本次不實作）
+## 六、頁面版型
+
+> **首頁詳細規格：** [spec-home.md](spec-home.md)（SDD 子規格，含 CMS fields、section layout、HeaderTheme）
 
 ### 首頁區塊順序（對應 home.png）
 
 Header → Hero (inverse) → Quote (muted) → Featured → Questions (inverse) → Latest Articles → About → Newsletter (muted) → Footer (inverse)
+
+**狀態：** spec 已撰寫，待審核後實作。
 
 ### 文章內頁
 
@@ -271,6 +275,7 @@ docs/
 ├── design/
 │   ├── README.md
 │   ├── spec.md              # this file
+│   ├── spec-home.md         # home page SDD sub-spec
 │   ├── spec-client.html     # client review
 │   ├── assets/
 │   │   └── home.png         # layout reference
