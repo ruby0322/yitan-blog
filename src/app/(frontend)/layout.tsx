@@ -11,6 +11,12 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
+import '@fontsource/noto-sans-tc/400.css'
+import '@fontsource/noto-sans-tc/500.css'
+import '@fontsource/noto-sans-tc/700.css'
+import '@fontsource/noto-serif-tc/400.css'
+import '@fontsource/noto-serif-tc/600.css'
+import '@fontsource/noto-serif-tc/700.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,7 +26,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="zh-Hant" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
