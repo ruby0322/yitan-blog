@@ -1,4 +1,5 @@
 import { CategoryBadge } from '@/components/CategoryBadge'
+import { EditorialImagePlaceholder } from '@/components/brand'
 import { Media } from '@/components/Media'
 import { ReadMoreLink } from '@/components/theme/read-more-link'
 import { cn } from '@/utilities/ui'
@@ -52,9 +53,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             size={featured ? '50vw' : '33vw'}
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-brand-subtitle">
-            暫無圖片
-          </div>
+          <EditorialImagePlaceholder />
         )}
       </div>
       <div className={cn('p-4', featured && 'p-6')}>

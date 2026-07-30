@@ -14,7 +14,7 @@ export const QuoteBlock: React.FC<QuoteBlockProps> = ({ attribution, children, c
         「{children}」
       </p>
       {attribution && (
-        <footer className="mt-6 font-sans text-sm text-brand-subtitle">{attribution}</footer>
+        <footer className="mt-6 font-sans text-sm text-brand-sage">{attribution}</footer>
       )}
     </blockquote>
   )

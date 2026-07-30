@@ -41,7 +41,7 @@ export const SectionNumber: React.FC<TypographyProps> = ({
 )
 
 export const BodyText: React.FC<TypographyProps> = ({ as: Tag = 'p', children, className }) => (
-  <Tag className={cn('font-sans tracking-wide text-muted-foreground leading-loose', className)}>
+  <Tag className={cn('font-sans tracking-wide text-brand-body leading-loose', className)}>
     {children}
   </Tag>
 )
