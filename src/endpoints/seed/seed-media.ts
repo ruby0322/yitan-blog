@@ -20,11 +20,18 @@ export async function fetchLocalSeedFile(relativePath: string): Promise<File> {
   const absolutePath = path.resolve(dirname, '../../../public/seed-media', relativePath)
   const data = await readFile(absolutePath)
   const uniqueName = relativePath.replace(/\//g, '-')
+  const extension = path.extname(relativePath).toLowerCase()
+  const mimetype =
+    extension === '.jpg' || extension === '.jpeg'
+      ? 'image/jpeg'
+      : extension === '.png'
+        ? 'image/png'
+        : 'image/webp'
 
   return {
     name: uniqueName,
     data,
-    mimetype: 'image/webp',
+    mimetype,
     size: data.byteLength,
   }
 }

@@ -5,6 +5,7 @@ import { home } from './home'
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { image3, image4, image5, image6, imageInlineDiet } from './image-3'
+import { imageBookFlatMeta } from './image-book'
 import { imageBrandHero } from './image-brand-hero'
 import { imageDoctorPortraitMeta } from './image-doctor-portrait'
 import { post1 } from './post-1'
@@ -81,6 +82,7 @@ export const seed = async ({
   const [
     brandHeroBuffer,
     doctorPortraitBuffer,
+    bookFlatBuffer,
     post1Buffer,
     post2Buffer,
     post3Buffer,
@@ -91,6 +93,7 @@ export const seed = async ({
   ] = await Promise.all([
     fetchLocalSeedFile('brand-hero.webp'),
     fetchLocalSeedFile('doctor-portrait.webp'),
+    fetchLocalSeedFile('book-flat.JPG'),
     fetchLocalSeedFile('post-1.webp'),
     fetchLocalSeedFile('post-2.webp'),
     fetchLocalSeedFile('post-3.webp'),
@@ -126,6 +129,7 @@ export const seed = async ({
   const mediaCreates = [
     { data: imageBrandHero, file: brandHeroBuffer },
     { data: imageDoctorPortraitMeta, file: doctorPortraitBuffer },
+    { data: imageBookFlatMeta, file: bookFlatBuffer },
     { data: image1, file: post1Buffer },
     { data: image2, file: post2Buffer },
     { data: image3, file: post3Buffer },
@@ -150,6 +154,7 @@ export const seed = async ({
   const [
     _brandHeroDoc,
     doctorPortraitDoc,
+    bookFlatDoc,
     image1Doc,
     image2Doc,
     image3Doc,
@@ -259,6 +264,7 @@ export const seed = async ({
       depth: 0,
       context: { disableRevalidate: true },
       data: home({
+        bookFlatImage: bookFlatDoc,
         doctorImage: doctorPortraitDoc,
         featuredPostIds: [post1Doc.id, post2Doc.id, post3Doc.id],
         metaImage: doctorPortraitDoc,

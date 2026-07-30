@@ -49,6 +49,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   const {
     alt: altFromProps,
     fill,
+    imgStyle,
     pictureClassName,
     imgClassName,
     priority,
@@ -98,6 +99,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         loading={loading}
         sizes={sizes}
         src={src}
+        style={imgStyle}
         width={!fill ? width : undefined}
       />
     </picture>

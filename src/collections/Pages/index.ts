@@ -4,6 +4,7 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { AboutTeaserBlockConfig } from '../../blocks/AboutTeaserBlock/config'
+import { BookSalesBlockConfig } from '../../blocks/BookSalesBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { CategoryNavBlockConfig } from '../../blocks/CategoryNavBlock/config'
 import { Content } from '../../blocks/Content/config'
@@ -91,6 +92,7 @@ export const Pages: CollectionConfig = {
                 CategoryNavBlockConfig,
                 Archive,
                 AboutTeaserBlockConfig,
+                BookSalesBlockConfig,
                 NewsletterBlockConfig,
                 CallToAction,
                 Content,

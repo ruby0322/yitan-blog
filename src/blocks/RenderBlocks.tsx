@@ -3,6 +3,7 @@ import React, { Fragment } from 'react'
 import type { Page } from '@/payload-types'
 
 import { AboutTeaserBlockComponent } from '@/blocks/AboutTeaserBlock/Component'
+import { BookSalesBlockComponent } from '@/blocks/BookSalesBlock/Component'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { CategoryNavBlockComponent } from '@/blocks/CategoryNavBlock/Component'
@@ -16,6 +17,7 @@ import { QuoteBlockComponent } from '@/blocks/QuoteBlock/Component'
 const blockComponents = {
   aboutTeaserBlock: AboutTeaserBlockComponent,
   archive: ArchiveBlock,
+  bookSalesBlock: BookSalesBlockComponent,
   categoryNavBlock: CategoryNavBlockComponent,
   content: ContentBlock,
   cta: CallToActionBlock,

@@ -3,6 +3,7 @@ import type { Media } from '@/payload-types'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type HomeArgs = {
+  bookFlatImage: Media
   doctorImage: Media
   featuredPostIds: number[]
   metaImage: Media
@@ -12,6 +13,7 @@ const BRAND_INTRO =
   '歡迎來到「胰探究竟－章醫師的胰臟日常」。這裡以臨床經驗結合最新醫學證據，分享真正重要的胰臟知識，破解迷思，致力於傳遞正確、可信且容易理解的醫學資訊。希望幫助更多人認識胰臟、了解胰臟，進而守護自己與家人的胰臟健康。'
 
 export const home = ({
+  bookFlatImage,
   doctorImage,
   featuredPostIds,
   metaImage,
@@ -119,22 +121,9 @@ export const home = ({
       ],
     },
     {
-      blockType: 'archive',
-      blockName: 'Latest Posts',
-      sectionNumber: '03',
-      heading: '最新文章',
-      populateBy: 'collection',
-      relationTo: 'posts',
-      limit: 6,
-      categories: [],
-      introContent: richTextRoot(
-        paragraph(text('以下為最近發布的文章，點選標題即可閱讀全文。')),
-      ),
-    },
-    {
       blockType: 'aboutTeaserBlock',
       blockName: 'About Teaser',
-      sectionNumber: '04',
+      sectionNumber: '03',
       heading: '認識章醫師',
       body: richTextRoot(
         paragraph(
@@ -151,12 +140,22 @@ export const home = ({
       },
     },
     {
-      blockType: 'newsletterBlock',
-      blockName: 'Newsletter',
-      sectionNumber: '05',
-      heading: '每月一封，陪您看懂胰臟。',
+      blockType: 'bookSalesBlock',
+      blockName: 'Book Sales',
+      sectionNumber: '04',
+      heading: '攔截胰臟癌',
+      bookSubtitle: '破解癌王無聲警報，及早攔截沉默殺手',
       description:
-        '訂閱電子報，每月收到一篇精選胰臟保健重點、新文章摘要與書籍動態。不會過度寄送，隨時可取消訂閱。（客戶可替換文案）',
+        '定期健檢正常，為何仍得胰臟癌？台灣胰臟癌篩檢權威章明珠醫師，以 25 年臨床數據揭開「零期攔截」的防禦地圖。從被動等待到主動管理，讓胰臟癌風險不再只是命運。',
+      highlightLine: '五年存活率從不到 10% 翻轉至 98%！',
+      authorLine: '章明珠醫師 著',
+      coverImage: bookFlatImage.id,
+      buyLink: {
+        type: 'custom',
+        label: '前往博客來選購',
+        url: 'https://www.books.com.tw/',
+        newTab: true,
+      },
     },
   ],
   meta: {
