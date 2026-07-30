@@ -15,27 +15,35 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const pages = await payload.find({
+      collection: 'pages',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
     })
 
-  return params
+    const params = pages.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      })
+
+    return params ?? []
+  } catch (error) {
+    console.warn(
+      '[pages] generateStaticParams skipped — database unavailable. Start Postgres with `pnpm db:up`, then run `pnpm migrate`.',
+      error,
+    )
+    return []
+  }
 }
 
 type Args = {
@@ -50,11 +58,18 @@ export default async function Page({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
+  let page: RequiredDataFromCollectionSlug<'pages'> | null = null
 
-  page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
+  try {
+    page = await queryPageBySlug({
+      slug: decodedSlug,
+    })
+  } catch (error) {
+    console.warn(
+      `[pages] Failed to load slug "${decodedSlug}" — database unavailable. Using static fallback when available.`,
+      error,
+    )
+  }
 
   // Remove this code once your website is seeded
   if (!page && slug === 'home') {
@@ -70,9 +85,10 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout } = page
+  const isHome = decodedSlug === 'home'
 
   return (
-    <article className="pt-16 pb-24">
+    <div className={isHome ? 'pb-24' : 'pb-24 pt-16'}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -81,19 +97,24 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout} />
-    </article>
+    </div>
   )
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
-  // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
 
-  return generateMeta({ doc: page })
+  try {
+    const page = await queryPageBySlug({
+      slug: decodedSlug,
+    })
+
+    return generateMeta({ doc: page })
+  } catch (error) {
+    console.warn(`[pages] generateMetadata skipped for "${decodedSlug}" — database unavailable.`, error)
+    return generateMeta({ doc: null })
+  }
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
@@ -103,6 +124,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'pages',
+    depth: 2,
     draft,
     limit: 1,
     pagination: false,

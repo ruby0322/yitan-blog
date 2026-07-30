@@ -12,7 +12,13 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <Section as="footer" className="mt-auto border-t border-brand-inverse-border" spacing="none" variant="inverse">
+    <Section
+      as="footer"
+      className="mt-auto border-t border-brand-inverse-border"
+      data-header-theme="dark"
+      spacing="none"
+      variant="inverse"
+    >
       <div className="container flex flex-col gap-8 py-10">
         <div className="flex flex-col gap-6 md:flex-row md:justify-between">
           <Link className="flex items-center" href="/">
