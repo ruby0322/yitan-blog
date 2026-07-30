@@ -62,10 +62,11 @@ export const hero: Field = {
       name: 'media',
       type: 'upload',
       admin: {
-        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        condition: (_, { type } = {}) => type === 'mediumImpact',
+        description: 'highImpact 使用內建胰臟環形 graphic，無需上傳圖片。',
       },
       relationTo: 'media',
-      required: true,
+      required: false,
     },
   ],
   label: false,

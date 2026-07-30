@@ -1,48 +1,60 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect } from 'react'
+
+import React from 'react'
 
 import type { Page } from '@/payload-types'
 
+import { HeroDecor, HeroRingStage } from '@/components/brand'
 import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { heroRichTextClassName } from '@/components/theme'
+import { Section } from '@/components/theme/section'
+import type { LinkAppearances } from '@/fields/link'
+import { cn } from '@/utilities/ui'
 
-export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
-  const { setHeaderTheme } = useHeaderTheme()
+function heroLinkAppearance(appearance?: LinkAppearances | null) {
+  if (appearance === 'outline') return 'outline' as const
+  return 'cta' as const
+}
 
-  useEffect(() => {
-    setHeaderTheme('dark')
-  })
-
+export const HighImpactHero: React.FC<Page['hero']> = ({ links, richText }) => {
   return (
-    <div
-      className="relative -mt-[10.4rem] flex min-h-[70vh] items-center justify-center text-white md:min-h-[80vh]"
-      data-theme="dark"
-    >
-      <div className="absolute inset-0 select-none">
-        {media && typeof media === 'object' && (
-          <Media fill imgClassName="object-cover" priority resource={media} />
-        )}
-        <div className="absolute inset-0 bg-black/45" />
-      </div>
+    <Section className="relative overflow-hidden py-12 md:py-20 lg:py-28" spacing="none" variant="default">
+      <HeroDecor />
 
-      <div className="container relative z-10 flex items-center justify-center pb-16 pt-[12rem] md:pb-24 md:pt-[14rem]">
-        <div className="max-w-[36.5rem] md:text-center">
-          {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
+      <div className="container relative z-10 grid items-center gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:gap-8">
+        <div className="order-2 flex flex-col gap-4 text-center sm:gap-6 sm:text-left lg:order-1 lg:gap-8">
+          {richText && (
+            <RichText
+              className={heroRichTextClassName}
+              data={richText}
+              enableGutter={false}
+              enableProse={false}
+            />
+          )}
           {Array.isArray(links) && links.length > 0 && (
-            <ul className="flex flex-wrap gap-4 md:justify-center">
-              {links.map(({ link }, i) => {
-                return (
-                  <li key={i}>
-                    <CMSLink {...link} />
-                  </li>
-                )
-              })}
+            <ul className="mx-auto flex w-full max-w-md flex-col gap-3 sm:mx-0 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-4">
+              {links.map(({ link }, i) => (
+                <li className="w-full sm:w-auto" key={i}>
+                  <CMSLink
+                    {...link}
+                    appearance={heroLinkAppearance(link.appearance)}
+                    className={cn(
+                      'h-11 w-full justify-center px-6 text-[0.9375rem] sm:w-auto sm:px-8 sm:text-sm',
+                      i === 0 && 'shadow-sm',
+                    )}
+                    size="clear"
+                  />
+                </li>
+              ))}
             </ul>
           )}
         </div>
+
+        <div className="order-1 mx-auto w-full max-h-56 max-w-48 sm:max-h-80 sm:max-w-70 lg:order-2 lg:max-h-105 lg:max-w-sm">
+          <HeroRingStage />
+        </div>
       </div>
-    </div>
+    </Section>
   )
 }

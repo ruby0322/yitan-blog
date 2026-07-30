@@ -20,6 +20,7 @@ import type {
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { themeRichTextClassName } from '@/components/theme/rich-text-classes'
 import { cn } from '@/utilities/ui'
 
 type NodeTypes =
@@ -71,8 +72,8 @@ export default function RichText(props: Props) {
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md dark:prose-invert prose-p:leading-loose prose-p:tracking-wide': enableProse,
         },
+        enableProse && themeRichTextClassName,
         className,
       )}
       {...rest}

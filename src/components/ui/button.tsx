@@ -17,6 +17,10 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         readMore:
           'h-auto p-0 text-brand-heading underline-offset-4 hover:text-brand-cta hover:underline',
+        inverseOutline:
+          'border border-brand-inverse-fg/40 bg-transparent text-brand-inverse-fg hover:bg-brand-inverse-fg/10',
+        inverseSolid:
+          'bg-brand-warm-white text-brand-heading hover:bg-brand-warm-white/90',
       },
       size: {
         clear: '',
