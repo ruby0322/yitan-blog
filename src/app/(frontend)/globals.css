@@ -60,7 +60,7 @@
   .container {
     width: 100%;
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 1.25rem;
   }
 
   @variant sm {
@@ -78,19 +78,21 @@
 
   @variant lg {
     .container {
-      max-width: var(--breakpoint-lg);
+      max-width: 62rem;
+      padding-inline: 2.25rem;
     }
   }
 
   @variant xl {
     .container {
-      max-width: var(--breakpoint-xl);
+      max-width: 76rem;
+      padding-inline: 2.5rem;
     }
   }
 
   @variant 2xl {
     .container {
-      max-width: var(--breakpoint-2xl);
+      max-width: 80rem;
     }
   }
 }
@@ -262,6 +264,7 @@
 
 html {
   opacity: 0;
+  scroll-behavior: smooth;
 }
 
 html[data-theme='dark'],
