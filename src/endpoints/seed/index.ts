@@ -148,7 +148,7 @@ export const seed = async ({
   }
 
   const [
-    brandHeroDoc,
+    _brandHeroDoc,
     doctorPortraitDoc,
     image1Doc,
     image2Doc,
@@ -258,7 +258,11 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: home({ heroImage: brandHeroDoc, metaImage: doctorPortraitDoc }),
+      data: home({
+        doctorImage: doctorPortraitDoc,
+        featuredPostIds: [post1Doc.id, post2Doc.id, post3Doc.id],
+        metaImage: doctorPortraitDoc,
+      }),
     }),
     payload.create({
       collection: 'pages',
