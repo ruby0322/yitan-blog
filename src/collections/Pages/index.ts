@@ -3,10 +3,15 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
+import { AboutTeaserBlockConfig } from '../../blocks/AboutTeaserBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { CategoryNavBlockConfig } from '../../blocks/CategoryNavBlock/config'
 import { Content } from '../../blocks/Content/config'
+import { FeaturedPostsBlockConfig } from '../../blocks/FeaturedPostsBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { NewsletterBlockConfig } from '../../blocks/NewsletterBlock/config'
+import { QuoteBlockConfig } from '../../blocks/QuoteBlock/config'
 import { hero } from '@/heros/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
@@ -80,7 +85,18 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                QuoteBlockConfig,
+                FeaturedPostsBlockConfig,
+                CategoryNavBlockConfig,
+                Archive,
+                AboutTeaserBlockConfig,
+                NewsletterBlockConfig,
+                CallToAction,
+                Content,
+                MediaBlock,
+                FormBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

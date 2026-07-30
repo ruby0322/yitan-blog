@@ -5,16 +5,25 @@ import { getPayload } from 'payload'
 import React from 'react'
 import RichText from '@/components/RichText'
 
-import { LatestArticlesSection } from '@/components/LatestArticlesSection'
+import { ArticleCard, ReadMoreLink, SectionHeader, themeRichTextClassName } from '@/components/theme'
+import { Section } from '@/components/theme/section'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
   }
 > = async (props) => {
-  const { categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const {
+    categories,
+    heading,
+    introContent,
+    limit: limitFromProps,
+    populateBy,
+    sectionNumber,
+    selectedDocs,
+  } = props
 
-  const limit = limitFromProps || 3
+  const limit = limitFromProps || 6
 
   let posts: Post[] = []
 
@@ -53,14 +62,34 @@ export const ArchiveBlock: React.FC<
     }
   }
 
+  if (posts.length === 0) return null
+
   return (
-    <div className="my-16">
-      {introContent && (
-        <div className="container mb-8">
-          <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
+    <Section spacing="default" variant="default">
+      <div className="container">
+        <SectionHeader heading={heading || '最新文章'} sectionNumber={sectionNumber} />
+
+        {introContent && (
+          <div className="mb-8 max-w-3xl">
+            <RichText
+              className={themeRichTextClassName}
+              data={introContent}
+              enableGutter={false}
+              enableProse={false}
+            />
+          </div>
+        )}
+
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <ArticleCard doc={post} key={post.id} />
+          ))}
         </div>
-      )}
-      <LatestArticlesSection featured={limit <= 3} posts={posts} showViewAll title="最新文章" />
-    </div>
+
+        <div className="mt-10 flex justify-center">
+          <ReadMoreLink href="/posts" label="查看全部文章" />
+        </div>
+      </div>
+    </Section>
   )
 }

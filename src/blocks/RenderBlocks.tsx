@@ -2,18 +2,28 @@ import React, { Fragment } from 'react'
 
 import type { Page } from '@/payload-types'
 
+import { AboutTeaserBlockComponent } from '@/blocks/AboutTeaserBlock/Component'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { CategoryNavBlockComponent } from '@/blocks/CategoryNavBlock/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FeaturedPostsBlockComponent } from '@/blocks/FeaturedPostsBlock/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { NewsletterBlockComponent } from '@/blocks/NewsletterBlock/Component'
+import { QuoteBlockComponent } from '@/blocks/QuoteBlock/Component'
 
 const blockComponents = {
+  aboutTeaserBlock: AboutTeaserBlockComponent,
   archive: ArchiveBlock,
+  categoryNavBlock: CategoryNavBlockComponent,
   content: ContentBlock,
   cta: CallToActionBlock,
+  featuredPostsBlock: FeaturedPostsBlockComponent,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  newsletterBlock: NewsletterBlockComponent,
+  quoteBlock: QuoteBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{
@@ -30,14 +40,14 @@ export const RenderBlocks: React.FC<{
           const { blockType } = block
 
           if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
+            const Block = blockComponents[blockType as keyof typeof blockComponents]
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
+                <Fragment key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
-                </div>
+                </Fragment>
               )
             }
           }

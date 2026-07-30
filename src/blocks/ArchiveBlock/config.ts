@@ -7,10 +7,19 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { sectionNumberField } from '@/fields/sectionNumber'
+
 export const Archive: Block = {
   slug: 'archive',
   interfaceName: 'ArchiveBlock',
   fields: [
+    sectionNumberField('03'),
+    {
+      name: 'heading',
+      type: 'text',
+      defaultValue: '最新文章',
+      label: '標題',
+    },
     {
       name: 'introContent',
       type: 'richText',
@@ -18,7 +27,7 @@ export const Archive: Block = {
         features: ({ rootFeatures }) => {
           return [
             ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            HeadingFeature({ enabledHeadingSizes: ['h3', 'h4'] }),
             FixedToolbarFeature(),
             InlineToolbarFeature(),
           ]
