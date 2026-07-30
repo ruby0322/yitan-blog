@@ -7,6 +7,7 @@ import React from 'react'
 import type { Post } from '@/payload-types'
 
 import { CategoryBadge } from '@/components/CategoryBadge'
+import { ReadMoreLink } from '@/components/theme/read-more-link'
 import { Media } from '@/components/Media'
 import { formatDateTime } from '@/utilities/formatDateTime'
 
@@ -46,13 +47,12 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md',
-        featured ? 'hover:cursor-pointer' : 'hover:cursor-pointer',
+        'group overflow-hidden rounded-md border border-border bg-card shadow-none hover:cursor-pointer',
         className,
       )}
       ref={card.ref}
     >
-      <div className={cn('relative w-full overflow-hidden bg-muted', featured ? 'aspect-[16/10]' : 'aspect-video')}>
+      <div className="relative aspect-video w-full overflow-hidden bg-brand-card">
         {metaImage && typeof metaImage !== 'string' ? (
           <Media
             imgClassName="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
@@ -60,32 +60,45 @@ export const Card: React.FC<{
             size={featured ? '50vw' : '33vw'}
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">暫無圖片</div>
+          <div className="flex h-full items-center justify-center text-sm text-brand-subtitle">
+            暫無圖片
+          </div>
         )}
       </div>
       <div className={cn('p-4', featured && 'p-6')}>
         <div className="mb-3 flex flex-wrap items-center gap-2">
           {showCategories && primaryCategory && <CategoryBadge label={primaryCategory} />}
           {publishedAt && (
-            <time className="text-xs text-muted-foreground" dateTime={publishedAt}>
+            <time className="text-xs text-brand-sage" dateTime={publishedAt}>
               {formatDateTime(publishedAt)}
             </time>
           )}
         </div>
         {titleToUse && (
-          <div className="prose dark:prose-invert">
-            <h3 className={cn('not-prose font-semibold text-foreground', featured ? 'text-xl md:text-2xl' : 'text-lg')}>
-              <Link className="hover:text-primary" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
+          <h3
+            className={cn(
+              'font-serif font-semibold text-brand-heading',
+              featured ? 'text-xl md:text-2xl' : 'text-lg',
+            )}
+          >
+            <Link className="hover:text-brand-cta" href={href} ref={link.ref}>
+              {titleToUse}
+            </Link>
+          </h3>
         )}
         {description && (
-          <div className="mt-2">
-            <p className={cn('text-muted-foreground', featured ? 'line-clamp-4 text-base' : 'line-clamp-3 text-sm')}>
-              {sanitizedDescription}
-            </p>
+          <p
+            className={cn(
+              'mt-2 text-brand-body leading-relaxed',
+              featured ? 'line-clamp-4 text-base' : 'line-clamp-3 text-sm',
+            )}
+          >
+            {sanitizedDescription}
+          </p>
+        )}
+        {slug && (
+          <div className="mt-4">
+            <ReadMoreLink href={href} />
           </div>
         )}
       </div>

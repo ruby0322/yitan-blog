@@ -6,13 +6,6 @@ export const CategoryBadge: React.FC<{
   label: string
 }> = ({ className, label }) => {
   return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary',
-        className,
-      )}
-    >
-      {label}
-    </span>
+    <span className={cn('text-xs font-medium text-brand-sage', className)}>{label}</span>
   )
 }
