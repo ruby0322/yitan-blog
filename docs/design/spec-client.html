@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>胰探究竟 — 整合設計參考 v1.1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --warm-white: #FAF8F5;
+      --card: #F5F3EF;
+      --heading: #4A5248;
+      --body: #6E756B;
+      --subtitle: #607D8B;
+      --sage: #8DAA91;
+      --border: #D9D6D2;
+      --cta: #6F8D7A;
+      --hover: #E6EFE8;
+      --inverse-bg: #6F8D7A;
+      --inverse-fg: #FAF8F5;
+      --radius: 4px;
+      --serif: 'Noto Serif TC', 'Source Han Serif TC', serif;
+      --sans: 'Noto Sans TC', 'Source Han Sans TC', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: A4 portrait; margin: 0; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: #eceae6;
+      color: var(--body);
+      line-height: 1.45;
+      font-size: 9px;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    /* A4 canvas — 210 × 297 mm */
+    .a4-sheet {
+      width: 210mm;
+      height: 297mm;
+      background: var(--warm-white);
+      padding: 10mm 11mm 9mm;
+      display: flex;
+      flex-direction: column;
+      gap: 5mm;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,.12);
+    }
+
+    /* Header */
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 3mm;
+      flex-shrink: 0;
+    }
+
+    .sheet-header h1 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1.2;
+    }
+
+    .sheet-header .sub {
+      font-size: 8px;
+      color: var(--subtitle);
+      margin-top: 1px;
+    }
+
+    .sheet-header .meta {
+      text-align: right;
+      font-size: 7.5px;
+      color: var(--subtitle);
+      line-height: 1.5;
+    }
+
+    .sheet-header .tagline {
+      font-family: var(--serif);
+      color: var(--sage);
+      font-weight: 600;
+      font-size: 8.5px;
+    }
+
+    /* Section blocks */
+    .block h2 {
+      font-family: var(--serif);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 2mm;
+    }
+
+    .block h3 {
+      font-family: var(--serif);
+      font-size: 8.5px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 1.5mm;
+    }
+
+    /* Top row: decisions + pending */
+    .top-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 4mm;
+      flex-shrink: 0;
+    }
+
+    .decisions-compact {
+      list-style: none;
+      display: grid;
+      gap: 1.5mm;
+    }
+
+    .decisions-compact li {
+      padding: 1.5mm 2mm;
+      background: var(--card);
+      border-left: 2px solid var(--sage);
+      font-size: 7.5px;
+      line-height: 1.4;
+    }
+
+    .decisions-compact strong {
+      color: var(--heading);
+      font-weight: 600;
+      margin-right: 1mm;
+    }
+
+    .resolved {
+      background: var(--hover);
+      border: 1px solid var(--sage);
+      padding: 2.5mm;
+      font-size: 7px;
+      color: var(--heading);
+      line-height: 1.45;
+      border-radius: var(--radius);
+    }
+
+    .resolved h3 {
+      color: var(--cta);
+      font-size: 8px;
+      margin-bottom: 1.5mm;
+    }
+
+    .resolved ul {
+      margin-left: 3mm;
+    }
+
+    .resolved li + li { margin-top: 1mm; }
+
+    /* Color swatches */
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 1.5mm;
+    }
+
+    .swatch {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      border-radius: var(--radius);
+    }
+
+    .swatch-color { height: 10mm; }
+
+    .swatch-info {
+      padding: 1mm 1.2mm;
+      background: white;
+      font-size: 6px;
+      line-height: 1.35;
+    }
+
+    .swatch-info .name {
+      font-weight: 600;
+      color: var(--heading);
+    }
+
+    .swatch-info .hex {
+      color: var(--subtitle);
+      font-family: monospace;
+      font-size: 5.5px;
+    }
+
+    /* Typography: catalog + live sample */
+    .typography-block {
+      flex-shrink: 0;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+    }
+
+    .type-catalog,
+    .type-live {
+      padding: 2.5mm;
+      background: var(--card);
+      border-radius: var(--radius);
+    }
+
+    .type-catalog {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8mm;
+    }
+
+    .type-item {
+      display: grid;
+      grid-template-columns: 13mm 1fr;
+      gap: 1.5mm;
+      align-items: start;
+    }
+
+    .type-label {
+      font-size: 5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--subtitle);
+      text-transform: uppercase;
+      padding-top: 0.5mm;
+    }
+
+    .type-display {
+      font-family: var(--serif);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: 0.06em;
+      line-height: 1.35;
+    }
+
+    .type-section {
+      font-family: var(--serif);
+      font-size: 8.5px;
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: 0.05em;
+    }
+
+    .type-number {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .type-body-sample {
+      font-family: var(--sans);
+      font-size: 6px;
+      color: var(--body);
+      line-height: 1.9;
+      letter-spacing: 0.03em;
+    }
+
+    .type-body-sample .emphasis {
+      font-weight: 700;
+      color: var(--subtitle);
+    }
+
+    .type-caption-sample {
+      font-family: var(--sans);
+      font-size: 5.5px;
+      color: var(--sage);
+    }
+
+    .type-live-caption {
+      font-size: 5.5px;
+      color: var(--sage);
+      margin-bottom: 1mm;
+    }
+
+    .type-live-title {
+      font-family: var(--serif);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: 0.06em;
+      line-height: 1.5;
+      margin-bottom: 1.5mm;
+      border-left: 3px solid var(--sage);
+      padding-left: 2mm;
+    }
+
+    .type-live-body {
+      font-family: var(--sans);
+      font-size: 6.5px;
+      color: var(--body);
+      line-height: 1.9;
+      letter-spacing: 0.03em;
+    }
+
+    .type-item .numbered-heading {
+      margin-top: 0;
+    }
+
+    .numbered-heading {
+      display: flex;
+      align-items: center;
+      gap: 2mm;
+      margin-top: 2mm;
+    }
+
+    .numbered-heading .badge {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 7px;
+      flex-shrink: 0;
+    }
+
+    .numbered-heading .title {
+      font-family: var(--serif);
+      font-size: 8.5px;
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: 0.05em;
+    }
+
+    .palette-note {
+      font-size: 6.5px;
+      color: var(--body);
+      margin-bottom: 1.5mm;
+      line-height: 1.5;
+    }
+
+    .surfaces {
+      display: grid;
+      gap: 2mm;
+      text-align: center;
+    }
+
+    .surfaces h2 {
+      text-align: center;
+    }
+
+    .inverse-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5mm;
+    }
+
+    .inverse-block {
+      padding: 2mm;
+      text-align: center;
+      font-size: 6.5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+    }
+
+    .inverse-block.light {
+      background: var(--warm-white);
+      color: var(--heading);
+      border: 1px solid var(--border);
+    }
+
+    .inverse-block.dark {
+      background: var(--inverse-bg);
+      color: var(--inverse-fg);
+    }
+
+    .inverse-block .label {
+      font-family: var(--serif);
+      font-size: 7.5px;
+      font-weight: 600;
+    }
+
+    .section-variants {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5mm;
+    }
+
+    .section-variant {
+      padding: 2mm 1mm;
+      text-align: center;
+      font-size: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+    }
+
+    .section-variant.default { background: var(--warm-white); border: 1px solid var(--border); color: var(--heading); }
+    .section-variant.muted { background: var(--card); color: var(--heading); }
+    .section-variant.inverse { background: var(--inverse-bg); color: var(--inverse-fg); }
+
+    .section-variant .name {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 7px;
+    }
+
+    /* Examples row: components + surfaces */
+    .examples-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3mm;
+      align-items: stretch;
+      flex-shrink: 0;
+    }
+
+    .examples-components {
+      width: fit-content;
+    }
+
+    .examples-surfaces {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .examples-surfaces h2 {
+      text-align: left;
+      flex-shrink: 0;
+    }
+
+    .examples-surfaces .surfaces-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2mm;
+      min-height: 0;
+    }
+
+    .examples-surfaces .inverse-compare {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .examples-surfaces .section-variants {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .examples-surfaces .inverse-block {
+      height: 100%;
+    }
+
+    .examples-surfaces .section-variant {
+      height: 100%;
+    }
+
+    /* Components row */
+    .components-row {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 3mm;
+      align-items: start;
+      width: fit-content;
+    }
+
+    .components-col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2mm;
+      width: 44mm;
+    }
+
+    .components-col-left .component-box {
+      width: 100%;
+    }
+
+    .components-col-left .newsletter {
+      width: 100%;
+    }
+
+    .components-col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5mm;
+      width: fit-content;
+    }
+
+    .article-cards {
+      display: flex;
+      gap: 2mm;
+      flex-wrap: nowrap;
+      width: fit-content;
+    }
+
+    .component-box {
+      padding: 2mm;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5mm;
+      border-radius: var(--radius);
+    }
+
+    .component-box .label {
+      font-size: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--subtitle);
+    }
+
+    .btn-cta {
+      display: inline-block;
+      background: var(--cta);
+      color: var(--warm-white);
+      padding: 1.5mm 3mm;
+      font-family: var(--sans);
+      font-size: 7px;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: default;
+    }
+
+    .read-more {
+      color: var(--heading);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-size: 7px;
+    }
+
+    .components-col-right > .label {
+      font-size: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--subtitle);
+    }
+
+    .article-card {
+      width: 38mm;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .article-card .image {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--subtitle);
+      font-size: 6px;
+      overflow: hidden;
+    }
+
+    .article-card .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-card .content { padding: 1.8mm; }
+
+    .article-card .meta {
+      font-size: 5.5px;
+      color: var(--sage);
+      margin-bottom: 0.6mm;
+    }
+
+    .article-card .title {
+      font-family: var(--serif);
+      font-size: 7px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 0.6mm;
+      line-height: 1.3;
+    }
+
+    .article-card .excerpt {
+      font-size: 5.5px;
+      color: var(--body);
+      margin-bottom: 1mm;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .newsletter {
+      display: flex;
+      gap: 0;
+    }
+
+    .newsletter input {
+      flex: 1;
+      min-width: 0;
+      padding: 1mm;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      font-family: var(--sans);
+      font-size: 6px;
+      outline: none;
+    }
+
+    .newsletter .btn-cta {
+      padding: 1mm 2mm;
+      font-size: 6px;
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    .sheet-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 2mm;
+      font-size: 6.5px;
+      color: var(--subtitle);
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* Print / export */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .a4-sheet {
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      .export-hint { display: none !important; }
+    }
+
+    .export-hint {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--heading);
+      color: var(--warm-white);
+      font-size: 11px;
+      padding: 8px 14px;
+      border-radius: 4px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 800px) {
+      body { padding: 0; }
+      .a4-sheet {
+        width: 100%;
+        height: auto;
+        min-height: 297mm;
+        box-shadow: none;
+      }
+      .export-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="a4-sheet" id="export-target">
+
+    <header class="sheet-header">
+      <div>
+        <h1>胰探究竟</h1>
+        <div class="sub">章醫師的胰臟日常</div>
+      </div>
+      <div class="meta">
+        <div class="tagline">暖白色醫療雜誌風</div>
+        整合設計參考 v1.1 · Integrated Design Spec v1.1 · 2026
+      </div>
+    </header>
+
+    <div class="top-row">
+      <div class="block">
+        <h2>設計決策</h2>
+        <ul class="decisions-compact">
+          <li><strong>色彩</strong>9 色保留；日常優先用暖白、米白、鼠尾草綠、淺灰、深綠、淺鼠尾草</li>
+          <li><strong>字型</strong>標題思源宋體、內文思源黑體；字距與行距加大</li>
+          <li><strong>造型</strong>微圓角 4px、無陰影、大量留白，圖片 16:9</li>
+          <li><strong>Accent 區塊</strong>Hero / Footer 採深綠 #6F8D7A + 暖白文字</li>
+        </ul>
+      </div>
+      <div class="block">
+        <div class="resolved">
+          <h3>v1.1 已決議</h3>
+          <ul>
+            <li>Accent 區塊改為深綠（非深藍灰）</li>
+            <li>微圓角（非完全直角）</li>
+            <li>分類標籤改用鼠尾草綠</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>品牌色彩</h2>
+      <p class="palette-note">Primary（日常）：暖白 · 米白 · 鼠尾草綠 · 淺灰 · 深綠 · 淺鼠尾草　｜　Secondary（ sparingly）：深灰 · 中灰 · 灰藍</p>
+      <div class="swatches">
+        <div class="swatch"><div class="swatch-color" style="background:#FAF8F5"></div><div class="swatch-info"><div class="name">暖白</div><div class="hex">#FAF8F5</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#F5F3EF"></div><div class="swatch-info"><div class="name">米白</div><div class="hex">#F5F3EF</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#4A5248"></div><div class="swatch-info"><div class="name">深灰</div><div class="hex">#4A5248</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#6E756B"></div><div class="swatch-info"><div class="name">中灰</div><div class="hex">#6E756B</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#607D8B"></div><div class="swatch-info"><div class="name">灰藍</div><div class="hex">#607D8B</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#8DAA91"></div><div class="swatch-info"><div class="name">鼠尾草綠</div><div class="hex">#8DAA91</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#D9D6D2"></div><div class="swatch-info"><div class="name">淺灰</div><div class="hex">#D9D6D2</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#6F8D7A"></div><div class="swatch-info"><div class="name">深綠</div><div class="hex">#6F8D7A</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#E6EFE8"></div><div class="swatch-info"><div class="name">淺鼠尾草</div><div class="hex">#E6EFE8</div></div></div>
+      </div>
+    </div>
+
+    <div class="block typography-block">
+      <h2>字型</h2>
+      <div class="type-grid">
+        <div class="type-catalog">
+          <div class="type-item">
+            <span class="type-label">Display</span>
+            <div class="type-display">看懂胰臟，從理解開始。</div>
+          </div>
+          <div class="type-item">
+            <span class="type-label">Section</span>
+            <div class="type-section">本期精選文章</div>
+          </div>
+          <div class="type-item">
+            <span class="type-label">Number</span>
+            <div class="type-number">01</div>
+          </div>
+          <div class="type-item">
+            <span class="type-label">Body</span>
+            <div class="type-body-sample">
+              胰臟雖然只是身體裡一個小小的器官，卻與我們的消化、代謝息息相關。
+              <span class="emphasis">突然出現的糖尿病、不明原因的體重減輕</span>，都是需要提高警覺的警訊。
+            </div>
+          </div>
+          <div class="type-item">
+            <span class="type-label">Block</span>
+            <div class="numbered-heading">
+              <div class="badge">1</div>
+              <div class="title">真實故事</div>
+            </div>
+          </div>
+          <div class="type-item">
+            <span class="type-label">Caption</span>
+            <div class="type-caption-sample">2026/01/15 · 胰臟知識</div>
+          </div>
+        </div>
+        <div class="type-live">
+          <div class="type-live-caption">2026/01/15 · 胰臟知識</div>
+          <div class="type-live-title">你的胰臟初老了嗎？</div>
+          <div class="type-live-body">
+            在診間的日常裡，我常看見許多患者帶著厚厚一疊「正常」的報告，眼神卻透著無助。他們有的做過好幾次胃鏡，有的連大腸鏡都排了，結果卻總是被告知：「沒事，就是功能性消化不良。」但他們心裡的苦，只有自己知道——那是揮之不去的脹氣，以及不明原因、看著體重計數字往下掉的恐懼。每當這時，我總會輕聲提醒：「有沒有可能，是躲在胃後方那個沉默的『胰臟』，正在向你求救？」胰臟雖然沈默，但它一旦選擇「罷工」，往往代表情況已經相當嚴重。今天，我想與你聊聊胰臟的健康管理，讓我們一起學會傾聽這個器官的求救聲。
+          </div>
+          <div class="numbered-heading">
+            <div class="badge">1</div>
+            <div class="title">真實故事</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="examples-row">
+      <div class="block examples-components">
+        <h2>元件範例</h2>
+        <div class="components-row">
+          <div class="components-col-left">
+            <div class="component-box">
+              <div class="label">CTA</div>
+              <button class="btn-cta">訂閱電子報</button>
+            </div>
+            <div class="component-box">
+              <div class="label">Read More</div>
+              <a href="#" class="read-more">閱讀更多 →</a>
+            </div>
+            <div class="component-box">
+              <div class="label">電子報</div>
+              <div class="newsletter">
+                <input type="email" placeholder="Email">
+                <button class="btn-cta">訂閱</button>
+              </div>
+            </div>
+          </div>
+          <div class="components-col-right">
+            <div class="label">文章卡片</div>
+            <div class="article-cards">
+              <div class="article-card">
+                <div class="image">
+                  <img src="assets/sample-banner.webp" alt="認識胰臟文章封面">
+                </div>
+                <div class="content">
+                  <div class="meta">胰臟知識 · 2026/01/15</div>
+                  <div class="title">認識胰臟：身體裡被低估的器官</div>
+                  <div class="excerpt">胰臟同時負責內分泌與外分泌功能...</div>
+                  <a href="#" class="read-more">閱讀更多 →</a>
+                </div>
+              </div>
+              <div class="article-card">
+                <div class="image">16:9</div>
+                <div class="content">
+                  <div class="meta">飲食保健 · 2026/02/03</div>
+                  <div class="title">胰臟保健：日常飲食可以怎麼做？</div>
+                  <div class="excerpt">均衡飲食與規律生活，是保護胰臟的基本功...</div>
+                  <a href="#" class="read-more">閱讀更多 →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block surfaces examples-surfaces">
+        <h2>區塊樣式</h2>
+        <div class="surfaces-body">
+          <div class="inverse-compare">
+            <div class="inverse-block light"><div class="label">一般區塊</div>暖白 · 綠灰文字</div>
+            <div class="inverse-block dark"><div class="label">Accent 區塊</div>深綠 · 暖白文字</div>
+          </div>
+          <div class="section-variants">
+            <div class="section-variant default"><div class="name">Default</div>暖白</div>
+            <div class="section-variant muted"><div class="name">Muted</div>米白</div>
+            <div class="section-variant inverse"><div class="name">Inverse</div>深綠</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="sheet-footer">
+      整合設計參考 v1.1 客戶預覽版 · Integrated Design Spec v1.1 · 完整開發規格見 docs/design/spec.md
+    </footer>
+
+  </div>
+
+  <p class="export-hint">匯出：Cmd+P → 另存 PDF，或截圖 .a4-sheet 區域（210×297mm）</p>
+
+</body>
+</html>
