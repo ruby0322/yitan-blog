@@ -36,5 +36,11 @@ export const QuoteBlockConfig: Block = {
         features: ({ rootFeatures }) => [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()],
       }),
     },
+    {
+      name: 'coverImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: '書封圖片',
+    },
   ],
 }

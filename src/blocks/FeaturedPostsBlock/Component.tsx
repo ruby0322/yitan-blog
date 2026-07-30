@@ -2,7 +2,7 @@ import React from 'react'
 
 import type { FeaturedPostsBlock as FeaturedPostsBlockProps, Post } from '@/payload-types'
 
-import { ArticleCard, SectionHeader } from '@/components/theme'
+import { ArticleCard, ReadMoreLink, SectionHeader } from '@/components/theme'
 import { Section } from '@/components/theme/section'
 
 export const FeaturedPostsBlockComponent: React.FC<FeaturedPostsBlockProps> = ({
@@ -24,6 +24,9 @@ export const FeaturedPostsBlockComponent: React.FC<FeaturedPostsBlockProps> = ({
           {resolvedPosts.map((post) => (
             <ArticleCard doc={post} key={post.id} />
           ))}
+        </div>
+        <div className="mt-10 flex justify-center">
+          <ReadMoreLink href="/posts" label="查看全部文章" />
         </div>
       </div>
     </Section>

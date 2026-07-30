@@ -1,4 +1,4 @@
-import { SectionHeading, SectionNumber } from '@/components/theme/typography'
+import { SectionNumber } from '@/components/theme/typography'
 import { cn } from '@/utilities/ui'
 import React from 'react'
 
@@ -8,7 +8,7 @@ export type SectionHeaderProps = {
   sectionNumber?: string | null
 }
 
-/** Magazine section label row — heading left, large section number right. */
+/** Magazine section meta row — kicker left, section number right, sage underline. */
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   className,
   heading,
@@ -17,15 +17,21 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   if (!heading && !sectionNumber) return null
 
   return (
-    <div
+    <header
       className={cn(
-        'mb-8 flex items-end justify-between gap-4',
+        'mb-6 flex items-end justify-between gap-4 border-b border-brand-sage/25 pb-4 lg:mb-8 lg:pb-6',
         !heading && sectionNumber && 'justify-end',
         className,
       )}
     >
-      {heading ? <SectionHeading>{heading}</SectionHeading> : null}
-      {sectionNumber ? <SectionNumber>{sectionNumber}</SectionNumber> : null}
-    </div>
+      {heading ? (
+        <p className="font-sans text-sm tracking-[0.28em] text-brand-sage uppercase md:text-base">
+          {heading}
+        </p>
+      ) : null}
+      {sectionNumber ? (
+        <SectionNumber className="text-3xl md:text-4xl lg:text-5xl">{sectionNumber}</SectionNumber>
+      ) : null}
+    </header>
   )
 }
