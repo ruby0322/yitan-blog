@@ -16,7 +16,7 @@
 
 ### 1.1 定位
 
-首頁是「暖白色醫療雜誌風」的 landing page：建立品牌信任、導流至精選/最新文章、推動電子報訂閱。版型對照 home.png 的 **9 段垂直節奏**，視覺遵循 v1.1 token；**區段以暖白 / 米白交替**，深綠僅保留 CTA 按鈕。
+首頁是「暖白色醫療雜誌風」的 landing page：建立品牌信任、導流至精選/最新文章、推動書籍購買。版型對照 home.png 的 **9 段垂直節奏**，視覺遵循 v1.1 token；**區段以暖白 / 米白交替**，深綠僅保留 CTA 按鈕。
 
 ### 1.2 成功標準（Definition of Done）
 
@@ -45,18 +45,30 @@
 | 2 | Quote | `muted` | 米白 `#F5F3EF` |
 | 3 | Featured | `default` | 暖白 |
 | 4 | Questions | `muted` | 米白 |
-| 5 | Latest Articles | `default` | 暖白 |
-| 6 | About | `muted` | 米白 |
-| 7 | Newsletter | `default` | 暖白 |
+| 5 | About | `default` | 暖白 |
+| 6 | Book Sales | `muted` | 米白 |
 | — | Footer | `inverse` | 深綠 `#6F8D7A`（全站唯一 inverse 大色塊） |
 
 > **用色原則：** 首頁主內容區以暖白 / 米白交替；深綠 `#6F8D7A` 用於 CTA 按鈕與 Footer。
 
-預設 seed layout 順序：`quoteBlock` → `featuredPostsBlock` → `categoryNavBlock` → `archiveBlock` → `aboutTeaserBlock` → `newsletterBlock`（Hero 在 page.hero，非 layout）。
+預設 seed layout 順序：`quoteBlock` → `featuredPostsBlock` → `categoryNavBlock` → `aboutTeaserBlock` → `bookSalesBlock`（Hero 在 page.hero，非 layout）。
 
 ---
 
 ## 三、各 Section 詳細規格
+
+### 3.0 Section header（全站統一）
+
+所有 layout blocks 共用 [`SectionHeader`](../src/components/theme/section-header.tsx)：
+
+| 元素 | 規格 |
+|------|------|
+| Wrapper | `<header>` 全寬，`border-b border-brand-sage/25 pb-4 mb-6 lg:mb-8 lg:pb-6` |
+| Kicker（左） | `heading` CMS 欄位 → `font-sans text-sm md:text-base tracking-[0.28em] text-brand-sage uppercase` |
+| 編號（右） | `sectionNumber` → `SectionNumber`（`text-3xl md:text-4xl lg:text-5xl`） |
+| 僅編號 | 無 kicker 時（如 quote）→ `justify-end`，只顯示編號 |
+
+---
 
 ### 3.1 Header（既有）
 
@@ -139,15 +151,16 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ### 3.3 Quote（Section 2 — `quoteBlock`）
 
-對照 home.png：大引文左欄 + 說明文字右欄。
+對照 home.png：引文左欄 + 說明右欄（雙欄雜誌 layout，無書封）。
 
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="muted" spacing="default"` |
-| Grid | `container max-w-5xl grid md:grid-cols-2 gap-8 md:gap-12 items-start` |
-| 左欄 | `QuoteBlock` — serif 「」引文，`text-2xl md:text-3xl tracking-wide` |
-| 右欄 | `sideText` richText → `BodyText` |
-| Mobile | stack，引文在上 |
+| Header | 可選 `SectionHeader sectionNumber`（無 kicker 時僅顯示編號） |
+| Grid | `container max-w-5xl grid md:grid-cols-2 gap-8 md:gap-12 items-stretch` |
+| 左欄 | `QuoteBlock`（含 attribution） |
+| 右欄 | `sideText` richText |
+| Mobile | stack |
 
 #### CMS fields
 
@@ -156,6 +169,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | `quote` | textarea | yes |
 | `attribution` | text | no |
 | `sideText` | richText | no |
+| `coverImage` | upload → media | no（保留欄位，前端不渲染） |
 
 #### Empty state
 
@@ -170,8 +184,9 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
-| Header row | `flex justify-between items-end`：`SectionHeading` 左、`SectionNumber` 右（如 `01`） |
+| Header | `SectionHeader`：`heading` + `sectionNumber` |
 | Cards | `grid md:grid-cols-2 lg:grid-cols-3 gap-6` |
+| Footer link | 置中 `ReadMoreLink`：`查看全部文章` → `/posts` |
 | Card 1 | `ArticleCard featured` — 可選 inverse 風格邊框/背景（左卡，home.png 深色卡對應 inverse 語意） |
 | Card 2 | `ArticleCard` default |
 | Mobile | 單欄 stack |
@@ -197,7 +212,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="inverse" spacing="default"` |
-| Header | `NumberedHeading variant="badge"` + section 標題（或 `SectionNumber` + `SectionHeading`） |
+| Header | `SectionHeader`：`heading` + `sectionNumber` |
 | Grid | `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4` |
 | Item | 可點擊 card：`border border-brand-inverse-border rounded-md p-6`；左上 badge 編號；標題 serif；右下 Lucide `ArrowUpRight` |
 | Link | 整卡為 `<Link>` |
@@ -241,51 +256,74 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ---
 
-### 3.7 About（Section 6 — `aboutTeaserBlock`）
+### 3.7 About（Section 5 — `aboutTeaserBlock`）
 
-對照 home.png 醫師介紹：左圖右文。
+文青編輯式醫師 profile，對齊 book sales 區塊語彙。文案來源：[`spec-book-marketing.md`](spec-book-marketing.md) §十 About mapping。
 
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
-| Grid | `container grid md:grid-cols-2 gap-8 items-center` |
-| 左欄 | `image` media，`aspect-square max-w-sm rounded-md overflow-hidden`；無圖時 `EditorialImagePlaceholder variant="oval"` |
-| 右欄 | `heading` → `SectionHeading`；`body` richText → `BodyText`；`link` → `ReadMoreLink` |
-| Mobile | 圖在上 |
+| Meta row | `SectionHeader`：`heading` + `sectionNumber` |
+| Desktop layout | `grid lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch lg:gap-x-16` |
+| 左欄 | 肖像 `aspect-[3/4]`、`object-cover object-top`，白色 frame + shadow；高度對齊右欄 |
+| 右欄 | `doctorName` → `DisplayHeading` → `credentialsLine` → `body` richText → `highlightLine` → `ReadMoreLink` |
+| Mobile layout | 白色 frame 卡片：肖像 + 姓名/職稱垂直 stack；內文與引述全寬於下方 |
+| 無圖 | `EditorialImagePlaceholder variant="oval"` |
 
 #### CMS fields
 
 | Field | Type | Required |
 |-------|------|----------|
-| `heading` | text | yes |
+| `sectionNumber` | text | no，default `03` |
+| `heading` | text | yes，區塊標籤（seed：`認識章醫師`） |
+| `doctorName` | text | yes（seed：`章明珠`） |
+| `credentialsLine` | text | no |
 | `body` | richText | yes |
+| `highlightLine` | text | no（重點引述） |
 | `image` | upload | no |
 | `link` | link | no，default `/about` |
 
+#### Seed copy
+
+見 [`spec-book-marketing.md` §十](spec-book-marketing.md#十首頁-cms-field-mapping) `aboutTeaserBlock` 表。
+
 ---
 
-### 3.8 Newsletter（Section 7 — `newsletterBlock`）
+### 3.8 Book Sales（Section 6 — `bookSalesBlock`）
+
+首頁 closing CTA：文青雜誌式書籍推廣，以平放書封 + 封面文案排版 + 外部購買連結。文案來源：[`spec-book-marketing.md`](spec-book-marketing.md) §十 Book Sales mapping。
 
 | 屬性 | 規格 |
 |------|------|
-| Wrapper | `Section variant="muted" spacing="default"` |
-| Layout | `container max-w-2xl mx-auto text-center` |
-| 標題 | `SectionHeading` |
-| 說明 | optional `description` → `BodyText` |
-| 表單 | `NewsletterForm`（underline input + CTA） |
+| Wrapper | `Section variant="muted" spacing="default"`，`id="book-sales"`（quote 區 attribution 錨點） |
+| Meta row | `SectionHeader`：kicker `新書出版` + `sectionNumber` |
+| Desktop layout | `grid lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch lg:gap-x-16 xl:gap-x-20` |
+| 左欄（desktop） | 單層 `<figure>`（`lg:p-6` 柔和 frame + shadow），書封高度對齊右欄 |
+| 右欄（desktop） | 書名 → 副標 → `BodyText` → 左邊線 `highlightLine`（黑體）→ `authorLine` → `CMSLink` outline |
+| Mobile layout | 白色 frame 卡片：書封置中 → 書名/副標（垂直 stack）；內文、引述、作者、CTA 全寬於卡片下方 |
+| CTA | Mobile `w-full`；Desktop `w-auto min-w-44`；外部 URL，`newTab` 預設 true |
+| 書封 sizing | Mobile `max-h-52`；Desktop `imgStyle` + `lg:h-full` 對齊文字欄高度 |
 
 #### CMS fields
 
 | Field | Type | Required |
 |-------|------|----------|
-| `heading` | text | yes，default `"每月一封，陪您看懂胰臟。"` |
+| `sectionNumber` | text | no，default `05` |
+| `heading` | text | yes，書名（seed：`攔截胰臟癌`） |
+| `bookSubtitle` | text | no |
 | `description` | textarea | no |
+| `highlightLine` | text | no（重點引述，如存活率數據） |
+| `authorLine` | text | no |
+| `coverImage` | upload → media | no（seed：`book-flat.JPG`） |
+| `buyLink` | link group | yes（外部購買 URL + label） |
 
-#### 後端整合
+#### Seed copy
 
-**Phase 1（本 PR）：** UI only — `onSubmit` 顯示 console / toast placeholder。
+見 [`spec-book-marketing.md` §十](spec-book-marketing.md#十首頁-cms-field-mapping) `bookSalesBlock` 表。
 
-**Phase 2（後續）：** 接入 Payload `formBlock` 或外部 ESP API。spec 不阻塞首頁視覺上線。
+#### 電子報 block（保留）
+
+`newsletterBlock` 仍註冊於 Payload，可供其他頁面使用；首頁 seed 不再包含。Phase 2 可接入 ESP 或 Footer 訂閱。
 
 ---
 
@@ -306,7 +344,8 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | `featuredPostsBlock` | `src/blocks/FeaturedPostsBlock/` | 同上 |
 | `categoryNavBlock` | `src/blocks/CategoryNavBlock/` | 同上 |
 | `aboutTeaserBlock` | `src/blocks/AboutTeaserBlock/` | 同上 |
-| `newsletterBlock` | `src/blocks/NewsletterBlock/` | 同上 |
+| `bookSalesBlock` | `src/blocks/BookSalesBlock/` | 同上 |
+| `newsletterBlock` | `src/blocks/NewsletterBlock/` | 同上（保留，首頁未使用） |
 
 每 block 標準結構：`config.ts` + `Component.tsx`（參考 [`ArchiveBlock`](../src/blocks/ArchiveBlock/)）。
 
@@ -393,12 +432,11 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 ```text
 hero: highImpact（OrganRingMark，無 media）
 layout:
-  1. quoteBlock      — 品牌引語 + 側欄說明（含書籍 mission placeholder）
-  2. featuredPostsBlock — 3 篇精選
+  1. quoteBlock         — 品牌引語 + 側欄說明（雙欄，無書封）
+  2. featuredPostsBlock — 3 篇精選 + 查看全部文章
   3. categoryNavBlock   — 症狀與警訊 / 影像與檢查 / 常見疾病 / 治療與追蹤
-  4. archiveBlock       — limit 6
-  5. aboutTeaserBlock   — 章醫師簡介
-  6. newsletterBlock    — 訂閱 CTA（含 monthly letter 描述 placeholder）
+  4. aboutTeaserBlock   — 章醫師編輯 profile（NTUH 職稱 + 引述）
+  5. bookSalesBlock     — 平放書封 + 封面文案排版 + 購買 CTA
 ```
 
 ### Placeholder 政策
@@ -406,13 +444,14 @@ layout:
 | 類型 | 來源 | 客戶可編輯 |
 |------|------|-----------|
 | Hero H1 / 副標 / CTA | seed `home.ts` | Payload Admin → Pages → Home → hero |
-| Quote / Newsletter 文案 | seed（標註「客戶可替換文案」） | Admin → layout blocks |
+| Quote / Book Sales 文案 | seed（標註「客戶可替換文案」） | Admin → layout blocks |
+| 書封圖片 | seed `book-flat.JPG`（書籍區塊） | Admin → bookSalesBlock coverImage |
 | Category nav 標籤 | seed | Admin → categoryNavBlock items |
 | 文章卡無圖 | `EditorialImagePlaceholder`（runtime fallback） | 上傳 post meta.image |
 | About 無圖 | `EditorialImagePlaceholder oval` | 上傳 aboutTeaserBlock image |
 | 胰臟環形 graphic | 內建 SVG（非 CMS） | 需改 code |
 
-移除現有 seed 中的 generic `content`、`mediaBlock`、legacy `cta`（若與 newsletter 重複）。
+移除現有 seed 中的 generic `content`、`mediaBlock`、legacy `cta`（若與 book sales 重複）。
 
 ---
 
@@ -457,7 +496,8 @@ layout:
 | 新增 | `src/blocks/FeaturedPostsBlock/` |
 | 新增 | `src/blocks/CategoryNavBlock/` |
 | 新增 | `src/blocks/AboutTeaserBlock/` |
-| 新增 | `src/blocks/NewsletterBlock/` |
+| 新增 | `src/blocks/BookSalesBlock/` |
+| 新增 | `src/blocks/NewsletterBlock/`（保留） |
 | 新增 | `src/hooks/useHeaderThemeOnScroll.ts`（或等效） |
 | 改版 | `src/collections/Pages/index.ts` |
 | 改版 | `src/endpoints/seed/home.ts` |
@@ -479,5 +519,5 @@ layout:
 | 02 四格分類 黑底 | Questions inverse | 改 v1.1 深綠 |
 | Latest 6 卡 grid | Latest default | sage metadata |
 | About 雙欄 | About default | — |
-| Subscribe 居中 | Newsletter muted | — |
+| Subscribe 居中 | Book Sales default | 3D 書封 + 購買 CTA |
 | Footer 黑底 | Footer inverse | 改 v1.1 深綠 |
