@@ -9,6 +9,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { CategoryNavBlockConfig } from '../../blocks/CategoryNavBlock/config'
 import { Content } from '../../blocks/Content/config'
 import { FeaturedPostsBlockConfig } from '../../blocks/FeaturedPostsBlock/config'
+import { FeaturesBlockConfig } from '../../blocks/FeaturesBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { NewsletterBlockConfig } from '../../blocks/NewsletterBlock/config'
@@ -88,6 +89,7 @@ export const Pages: CollectionConfig = {
               type: 'blocks',
               blocks: [
                 QuoteBlockConfig,
+                FeaturesBlockConfig,
                 FeaturedPostsBlockConfig,
                 CategoryNavBlockConfig,
                 Archive,

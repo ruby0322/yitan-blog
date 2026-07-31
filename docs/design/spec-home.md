@@ -20,7 +20,7 @@
 
 ### 1.2 成功標準（Definition of Done）
 
-- [x] 首頁依序呈現 7 個 CMS layout blocks + Hero + Header/Footer，順序與 §二一致
+- [x] 首頁依序呈現 8 個 CMS layout blocks + Hero + Header/Footer，順序與 §二一致
 - [x] 各 section 以暖白 / 米白 variant 交替（無 inverse 大色塊）
 - [x] 視覺與 v1.1 theme 元件一致（非 legacy `Card`、非 `bg-black/45` hero overlay）
 - [x] Payload Admin 可編輯各 block 文案、連結、文章關聯
@@ -43,15 +43,16 @@
 | — | Header | — | 暖白 sticky |
 | 1 | Hero | `default` | 暖白 `#FAF8F5` |
 | 2 | Quote | `muted` | 米白 `#F5F3EF` |
-| 3 | Featured | `default` | 暖白 |
-| 4 | Questions | `muted` | 米白 |
-| 5 | About | `default` | 暖白 |
-| 6 | Book Sales | `muted` | 米白 |
+| 3 | 四大特色 | `default` | 暖白 |
+| 4 | Featured | `muted` | 米白 |
+| 5 | 依主題閱讀 | `default` | 暖白 |
+| 6 | About | `muted` | 米白 |
+| 7 | Book Sales | `default` | 暖白 |
 | — | Footer | `inverse` | 深綠 `#6F8D7A`（全站唯一 inverse 大色塊） |
 
 > **用色原則：** 首頁主內容區以暖白 / 米白交替；深綠 `#6F8D7A` 用於 CTA 按鈕與 Footer。
 
-預設 seed layout 順序：`quoteBlock` → `featuredPostsBlock` → `categoryNavBlock` → `aboutTeaserBlock` → `bookSalesBlock`（Hero 在 page.hero，非 layout）。
+預設 seed layout 順序：`quoteBlock` → `featuresBlock` → `featuredPostsBlock` → `categoryNavBlock` → `aboutTeaserBlock` → `bookSalesBlock`（Hero 在 page.hero，非 layout）。
 
 ---
 
@@ -177,13 +178,43 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ---
 
-### 3.4 Featured（Section 3 — `featuredPostsBlock`）
+### 3.4 四大特色（Section 3 — `featuresBlock`）
 
-對照 home.png「01 本期精選」：section 編號 + 2 張並排精選卡。
+品牌價值主張：4 項靜態特色，bar-variant 標題 + 說明文字。
 
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
+| Header | `SectionHeader`：`heading`（default「四大特色」）+ `sectionNumber`（default `"01"`） |
+| Grid | Mobile 單欄；Desktop 左右兩組 flex column（左：①③，右：②④） |
+| Stagger | 右組 `lg:mt-16 xl:mt-20` — 兩組 top 錯落；組內 `items-start` 置左對齊 |
+| Item | `NumberedHeading variant="bar"`（無子項編號）+ sans body |
+| Mobile | 單欄 stack（1×4） |
+| Desktop | 左右兩組各 2 項垂直堆疊；右組 top 下移製造層次 |
+
+#### CMS fields
+
+| Field | Type | Required |
+|-------|------|----------|
+| `sectionNumber` | text | no，default `"01"` |
+| `heading` | text | yes，default `"四大特色"` |
+| `items` | array | yes，min 4 max 4 |
+| `items[].title` | text | yes |
+| `items[].description` | textarea | yes |
+
+#### Empty state
+
+`items` 空 → 不渲染。
+
+---
+
+### 3.5 Featured（Section 4 — `featuredPostsBlock`）
+
+對照 home.png「02 本期精選」：section 編號 + 精選卡 grid。
+
+| 屬性 | 規格 |
+|------|------|
+| Wrapper | `Section variant="muted" spacing="default"` |
 | Header | `SectionHeader`：`heading` + `sectionNumber` |
 | Cards | `grid md:grid-cols-2 lg:grid-cols-3 gap-6` |
 | Footer link | 置中 `ReadMoreLink`：`查看全部文章` → `/posts` |
@@ -195,7 +226,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 | Field | Type | Required |
 |-------|------|----------|
-| `sectionNumber` | text | no，default `"01"` |
+| `sectionNumber` | text | no，default `"02"` |
 | `heading` | text | yes，default `"本期精選"` |
 | `posts` | relationship → posts | yes，min 1 max 3 |
 
@@ -205,26 +236,26 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ---
 
-### 3.5 Questions（Section 4 — `categoryNavBlock`）
+### 3.6 依主題閱讀（Section 5 — `categoryNavBlock`）
 
-對照 home.png Section 02：inverse 底、4 欄分類導覽，每格含編號、標題、箭頭。
+6 欄主題導覽，每格含編號、標題、箭頭；連結至 `/posts?category={slug}`。
 
 | 屬性 | 規格 |
 |------|------|
-| Wrapper | `Section variant="inverse" spacing="default"` |
+| Wrapper | `Section variant="default" spacing="default"` |
 | Header | `SectionHeader`：`heading` + `sectionNumber` |
-| Grid | `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4` |
-| Item | 可點擊 card：`border border-brand-inverse-border rounded-md p-6`；左上 badge 編號；標題 serif；右下 Lucide `ArrowUpRight` |
-| Link | 整卡為 `<Link>` |
-| Mobile | 2-col 或 1-col（`sm:grid-cols-2`） |
+| Grid | `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5` |
+| Item | 可點擊 card：`border border-brand-sage/20 bg-brand-bg rounded-md p-6`；hover `border-brand-sage bg-brand-hover`；左上 sage badge 編號；標題 serif；右下 Lucide `ArrowUpRight` |
+| Link | 整卡為 `<Link>`，seed URL：`/posts?category={分類 slug}` |
+| Mobile | 2-col（`sm:grid-cols-2`） |
 
 #### CMS fields
 
 | Field | Type | Required |
 |-------|------|----------|
-| `sectionNumber` | text | no，default `"02"` |
-| `heading` | text | no，default `"從這裡開始"` |
-| `items` | array | yes，min 1 max 4 |
+| `sectionNumber` | text | no，default `"03"` |
+| `heading` | text | no，default `"依主題閱讀"` |
+| `items` | array | yes，min 1 max 6 |
 | `items[].number` | text | yes，如 `"01"` |
 | `items[].title` | text | yes |
 | `items[].link` | link | yes |
@@ -256,13 +287,13 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ---
 
-### 3.7 About（Section 5 — `aboutTeaserBlock`）
+### 3.7 About（Section 6 — `aboutTeaserBlock`）
 
 文青編輯式醫師 profile，對齊 book sales 區塊語彙。文案來源：[`spec-book-marketing.md`](spec-book-marketing.md) §十 About mapping。
 
 | 屬性 | 規格 |
 |------|------|
-| Wrapper | `Section variant="default" spacing="default"` |
+| Wrapper | `Section variant="muted" spacing="default"` |
 | Meta row | `SectionHeader`：`heading` + `sectionNumber` |
 | Desktop layout | `grid lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch lg:gap-x-16` |
 | 左欄 | 肖像 `aspect-[3/4]`、`object-cover object-top`，白色 frame + shadow；高度對齊右欄 |
@@ -274,7 +305,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 | Field | Type | Required |
 |-------|------|----------|
-| `sectionNumber` | text | no，default `03` |
+| `sectionNumber` | text | no，default `04` |
 | `heading` | text | yes，區塊標籤（seed：`認識章醫師`） |
 | `doctorName` | text | yes（seed：`章明珠`） |
 | `credentialsLine` | text | no |
@@ -289,13 +320,13 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ---
 
-### 3.8 Book Sales（Section 6 — `bookSalesBlock`）
+### 3.8 Book Sales（Section 7 — `bookSalesBlock`）
 
 首頁 closing CTA：文青雜誌式書籍推廣，以平放書封 + 封面文案排版 + 外部購買連結。文案來源：[`spec-book-marketing.md`](spec-book-marketing.md) §十 Book Sales mapping。
 
 | 屬性 | 規格 |
 |------|------|
-| Wrapper | `Section variant="muted" spacing="default"`，`id="book-sales"`（quote 區 attribution 錨點） |
+| Wrapper | `Section variant="default" spacing="default"`，`id="book-sales"`（quote 區 attribution 錨點） |
 | Meta row | `SectionHeader`：kicker `新書出版` + `sectionNumber` |
 | Desktop layout | `grid lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch lg:gap-x-16 xl:gap-x-20` |
 | 左欄（desktop） | 單層 `<figure>`（`lg:p-6` 柔和 frame + shadow），書封高度對齊右欄 |
@@ -341,6 +372,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | slug | 目錄 | 註冊於 |
 |------|------|--------|
 | `quoteBlock` | `src/blocks/QuoteBlock/` | `Pages/index.ts`, `RenderBlocks.tsx`, `payload.config.ts` |
+| `featuresBlock` | `src/blocks/FeaturesBlock/` | 同上 |
 | `featuredPostsBlock` | `src/blocks/FeaturedPostsBlock/` | 同上 |
 | `categoryNavBlock` | `src/blocks/CategoryNavBlock/` | 同上 |
 | `aboutTeaserBlock` | `src/blocks/AboutTeaserBlock/` | 同上 |
@@ -379,8 +411,6 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 | 觸發區 | Header theme |
 |--------|--------------|
-| Hero（inverse）可見 | `dark` |
-| Questions（inverse）可見 | `dark` |
 | Footer（inverse）可見 | `dark` |
 | 其餘 scroll 位置 | `light` |
 
@@ -389,7 +419,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 新增 `src/hooks/useHeaderThemeOnScroll.ts`（或 `providers/HeaderTheme/observer.tsx`）：
 
 - 在 home page client component mount
-- 以 `data-header-theme="dark"` 標記 inverse sections（Hero wrapper、categoryNavBlock Section、Footer）
+- 以 `data-header-theme="dark"` 標記 inverse sections（Footer）
 - `IntersectionObserver` `rootMargin: '-64px 0px 0px 0px'`（header 高度）`threshold: 0`
 - 任一 dark sentinel intersecting → `setHeaderTheme('dark')`，否則 `light`
 
@@ -433,10 +463,11 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 hero: highImpact（OrganRingMark，無 media）
 layout:
   1. quoteBlock         — 品牌引語 + 側欄說明（雙欄，無書封）
-  2. featuredPostsBlock — 3 篇精選 + 查看全部文章
-  3. categoryNavBlock   — 症狀與警訊 / 影像與檢查 / 常見疾病 / 治療與追蹤
-  4. aboutTeaserBlock   — 章醫師編輯 profile（NTUH 職稱 + 引述）
-  5. bookSalesBlock     — 平放書封 + 封面文案排版 + 購買 CTA
+  2. featuresBlock      — 四大特色（4 欄 bar-variant 價值主張）
+  3. featuredPostsBlock — 3 篇精選 + 查看全部文章
+  4. categoryNavBlock   — 基礎知識 / 胰臟癌 / 胰臟發炎 / 胰臟水泡 / 飲食保健 / 健檢判讀
+  5. aboutTeaserBlock   — 章醫師編輯 profile（NTUH 職稱 + 引述）
+  6. bookSalesBlock     — 平放書封 + 封面文案排版 + 購買 CTA
 ```
 
 ### Placeholder 政策

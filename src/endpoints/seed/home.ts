@@ -1,5 +1,6 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Media } from '@/payload-types'
+import { TOPIC_CATEGORIES, postsCategoryUrl } from '@/constants/categories'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type HomeArgs = {
@@ -45,12 +46,7 @@ export const home = ({
       heading('h1', '看懂胰臟，從理解開始。'),
       paragraph(
         text(
-          '以近 30 年胰臟臨床診療與研究經驗，陪您認識這個重要卻經常被忽略的器官。',
-        ),
-      ),
-      paragraph(
-        text(
-          '將艱深的醫學知識，化為清楚、容易理解的內容，幫助您更早辨識風險，做出更安心的健康決策。',
+          '以近 30 年胰臟臨床診療與研究經驗，陪您認識這個重要卻經常被忽略的器官。把艱深的醫學說成聽得懂的話，早一步看見風險，也讓選擇更從容。',
         ),
       ),
     ),
@@ -80,60 +76,59 @@ export const home = ({
       ),
     },
     {
+      blockType: 'featuresBlock',
+      blockName: '四大特色',
+      sectionNumber: '01',
+      heading: '四大特色',
+      items: [
+        {
+          title: '近 30 年臨床經驗',
+          description:
+            '近 30 年專注胰臟疾病臨床診療與研究，從門診到病房、從個案到長期追蹤，累積豐富而紮實的第一線經驗，持續投入胰臟健康的守護。',
+        },
+        {
+          title: '完整疾病光譜',
+          description:
+            '從急、慢性胰臟炎、脂肪胰、胰臟水泡（囊腫）、良性腫瘤到胰臟癌，串聯不同疾病之間的關聯與演變，從細微變化中辨識風險。',
+        },
+        {
+          title: '早期發現',
+          description:
+            '結合胰臟癌早期篩檢、腫瘤標記研究、影像追蹤與風險辨識，從蛛絲馬跡中發現異常，協助把握早期診斷的關鍵時機。',
+        },
+        {
+          title: '理解，而不是恐懼',
+          description:
+            '相信正確的知識是健康管理的起點，陪伴每位讀者理解疾病、降低恐慌，從被動等待走向主動管理。',
+        },
+      ],
+    },
+    {
       blockType: 'featuredPostsBlock',
       blockName: 'Featured Posts',
-      sectionNumber: '01',
+      sectionNumber: '02',
       heading: '本期精選',
       posts: featuredPostIds,
     },
     {
       blockType: 'categoryNavBlock',
       blockName: 'Category Navigation',
-      sectionNumber: '02',
-      heading: '從這裡開始',
-      items: [
-        {
-          number: '01',
-          title: '症狀與警訊',
-          link: {
-            type: 'custom',
-            label: '症狀與警訊',
-            url: '/posts',
-          },
+      sectionNumber: '03',
+      heading: '依主題閱讀',
+      items: TOPIC_CATEGORIES.map((title, index) => ({
+        number: String(index + 1).padStart(2, '0'),
+        title,
+        link: {
+          type: 'custom' as const,
+          label: title,
+          url: postsCategoryUrl(title),
         },
-        {
-          number: '02',
-          title: '影像與檢查',
-          link: {
-            type: 'custom',
-            label: '影像與檢查',
-            url: '/posts',
-          },
-        },
-        {
-          number: '03',
-          title: '常見疾病',
-          link: {
-            type: 'custom',
-            label: '常見疾病',
-            url: '/posts',
-          },
-        },
-        {
-          number: '04',
-          title: '治療與追蹤',
-          link: {
-            type: 'custom',
-            label: '治療與追蹤',
-            url: '/posts',
-          },
-        },
-      ],
+      })),
     },
     {
       blockType: 'aboutTeaserBlock',
       blockName: 'About Teaser',
-      sectionNumber: '03',
+      sectionNumber: '04',
       heading: '認識章醫師',
       doctorName: '章明珠',
       credentialsLine: '台大醫學院臨床副教授 · 台大醫院內科部消化系主治醫師',
@@ -160,7 +155,7 @@ export const home = ({
     {
       blockType: 'bookSalesBlock',
       blockName: 'Book Sales',
-      sectionNumber: '04',
+      sectionNumber: '05',
       heading: '攔截胰臟癌',
       bookSubtitle: '破解癌王無聲警報，及早攔截沉默殺手',
       description:

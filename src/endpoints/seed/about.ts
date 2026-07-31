@@ -70,8 +70,8 @@ export const about = ({ doctorImage, metaImage }: AboutArgs): RequiredDataFromCo
         {
           size: 'oneThird',
           richText: richTextRoot(
-            heading('h3', '迷思破解'),
-            paragraph(text('針對網路常見說法，提供有證據支持的澄清與建議。')),
+            heading('h3', '健檢判讀'),
+            paragraph(text('協助理解影像與血液檢查結果，釐清哪些發現需要追蹤。')),
           ),
         },
         {

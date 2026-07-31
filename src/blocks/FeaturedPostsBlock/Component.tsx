@@ -17,7 +17,7 @@ export const FeaturedPostsBlockComponent: React.FC<FeaturedPostsBlockProps> = ({
   if (resolvedPosts.length === 0) return null
 
   return (
-    <Section spacing="default" variant="default">
+    <Section spacing="default" variant="muted">
       <div className="container">
         <SectionHeader heading={heading || '本期精選'} sectionNumber={sectionNumber} />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

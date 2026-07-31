@@ -87,7 +87,7 @@ export const AboutTeaserBlockComponent: React.FC<AboutTeaserBlockProps> = ({
   )
 
   return (
-    <Section spacing="default" variant="default">
+    <Section spacing="default" variant="muted">
       <div className="container">
         <SectionHeader heading={heading} sectionNumber={sectionNumber} />
 

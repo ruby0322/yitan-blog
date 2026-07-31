@@ -9,6 +9,7 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { CategoryNavBlockComponent } from '@/blocks/CategoryNavBlock/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FeaturedPostsBlockComponent } from '@/blocks/FeaturedPostsBlock/Component'
+import { FeaturesBlockComponent } from '@/blocks/FeaturesBlock/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { NewsletterBlockComponent } from '@/blocks/NewsletterBlock/Component'
@@ -22,6 +23,7 @@ const blockComponents = {
   content: ContentBlock,
   cta: CallToActionBlock,
   featuredPostsBlock: FeaturedPostsBlockComponent,
+  featuresBlock: FeaturesBlockComponent,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   newsletterBlock: NewsletterBlockComponent,

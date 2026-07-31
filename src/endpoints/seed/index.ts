@@ -14,11 +14,11 @@ import { post3 } from './post-3'
 import { post4 } from './post-4'
 import { post5 } from './post-5'
 import { post6 } from './post-6'
+import { TOPIC_CATEGORIES } from '@/constants/categories'
+
 import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
-
-const categories = ['迷思破解', '飲食保健', '基礎知識'] as const
 
 const PUBLISHED_AT = {
   post1: '2026-06-20T08:00:00.000Z',
@@ -119,7 +119,7 @@ export const seed = async ({
   })
 
   const categoryDocs = await Promise.all(
-    categories.map((category) =>
+    TOPIC_CATEGORIES.map((category) =>
       payload.create({
         collection: 'categories',
         data: {
@@ -194,7 +194,7 @@ export const seed = async ({
     context: { disableRevalidate: true },
     data: post2({
       ...postArgs,
-      category: categoryByTitle['迷思破解'],
+      category: categoryByTitle['基礎知識'],
       heroImage: image2Doc,
       publishedAt: PUBLISHED_AT.post2,
     }),

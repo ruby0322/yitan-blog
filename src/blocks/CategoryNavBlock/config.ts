@@ -11,18 +11,18 @@ export const CategoryNavBlockConfig: Block = {
     singular: 'Category Nav Block',
   },
   fields: [
-    sectionNumberField('02'),
+    sectionNumberField('03'),
     {
       name: 'heading',
       type: 'text',
-      defaultValue: '從這裡開始',
+      defaultValue: '依主題閱讀',
       label: '標題',
     },
     {
       name: 'items',
       type: 'array',
       minRows: 1,
-      maxRows: 4,
+      maxRows: 6,
       required: true,
       label: '導覽項目',
       fields: [

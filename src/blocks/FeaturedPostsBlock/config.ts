@@ -10,7 +10,7 @@ export const FeaturedPostsBlockConfig: Block = {
     singular: 'Featured Posts Block',
   },
   fields: [
-    sectionNumberField('01'),
+    sectionNumberField('02'),
     {
       name: 'heading',
       type: 'text',

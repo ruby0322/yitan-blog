@@ -245,6 +245,7 @@ export interface Page {
   };
   layout: (
     | QuoteBlockBlock
+    | FeaturesBlock
     | FeaturedPostsBlock
     | CategoryNavBlock
     | ArchiveBlock
@@ -482,6 +483,22 @@ export interface QuoteBlockBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'quoteBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturesBlock".
+ */
+export interface FeaturesBlock {
+  sectionNumber?: string | null;
+  heading: string;
+  items: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuresBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1276,6 +1293,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         quoteBlock?: T | QuoteBlockBlockSelect<T>;
+        featuresBlock?: T | FeaturesBlockSelect<T>;
         featuredPostsBlock?: T | FeaturedPostsBlockSelect<T>;
         categoryNavBlock?: T | CategoryNavBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1310,6 +1328,23 @@ export interface QuoteBlockBlockSelect<T extends boolean = true> {
   attribution?: T;
   sideText?: T;
   coverImage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturesBlock_select".
+ */
+export interface FeaturesBlockSelect<T extends boolean = true> {
+  sectionNumber?: T;
+  heading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

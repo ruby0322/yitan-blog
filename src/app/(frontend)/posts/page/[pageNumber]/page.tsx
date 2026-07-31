@@ -5,11 +5,13 @@ import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import { PostsPageHeader } from '@/components/PostsPageHeader'
 import { POSTS_PER_PAGE } from '@/constants/posts'
+import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
+import { queryPosts } from '@/utilities/queryPosts'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { notFound } from 'next/navigation'
 import React from 'react'
 import PageClient from './page.client'
-import { notFound } from 'next/navigation'
 
 export const revalidate = 600
 
@@ -17,70 +19,99 @@ type Args = {
   params: Promise<{
     pageNumber: string
   }>
+  searchParams: Promise<{
+    category?: string
+  }>
 }
 
-export default async function Page({ params: paramsPromise }: Args) {
+export default async function Page({ params: paramsPromise, searchParams: searchParamsPromise }: Args) {
   const { pageNumber } = await paramsPromise
-  const payload = await getPayload({ config: configPromise })
-
+  const { category: categorySlug } = await searchParamsPromise
   const sanitizedPageNumber = Number(pageNumber)
 
-  if (!Number.isInteger(sanitizedPageNumber)) notFound()
+  if (!Number.isInteger(sanitizedPageNumber) || sanitizedPageNumber < 1) notFound()
 
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: POSTS_PER_PAGE,
+  const { category, notFound: categoryNotFound, posts } = await queryPosts({
+    categorySlug,
     page: sanitizedPageNumber,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      publishedAt: true,
-    },
   })
+
+  if (categoryNotFound || !posts) {
+    notFound()
+  }
 
   if (sanitizedPageNumber > posts.totalPages) notFound()
 
   return (
     <div className="pt-24 pb-24">
       <PageClient />
-      <PostsPageHeader totalDocs={posts.totalDocs} />
+      <PostsPageHeader categoryTitle={category?.title} totalDocs={posts.totalDocs} />
 
-      <div className="container mb-8">
-        <PageRange
-          collection="posts"
-          collectionLabels={{
-            plural: '篇文章',
-            singular: '篇文章',
-          }}
-          currentPage={posts.page}
-          limit={POSTS_PER_PAGE}
-          totalDocs={posts.totalDocs}
-        />
-      </div>
+      {posts.totalDocs > 0 ? (
+        <>
+          <div className="container mb-8">
+            <PageRange
+              collection="posts"
+              collectionLabels={{
+                plural: '篇文章',
+                singular: '篇文章',
+              }}
+              currentPage={posts.page}
+              limit={posts.limit}
+              totalDocs={posts.totalDocs}
+            />
+          </div>
 
-      <CollectionArchive posts={posts.docs} />
+          <CollectionArchive posts={posts.docs} />
 
-      <div className="container">
-        {posts?.page && posts?.totalPages > 1 && (
-          <Pagination page={posts.page} totalPages={posts.totalPages} />
-        )}
-      </div>
+          <div className="container">
+            {posts?.page && posts?.totalPages > 1 && (
+              <Pagination
+                categorySlug={categorySlug}
+                page={posts.page}
+                totalPages={posts.totalPages}
+              />
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="container">
+          <p className="text-muted-foreground">此主題目前尚無文章，請稍後再來看看。</p>
+        </div>
+      )}
     </div>
   )
 }
 
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+export async function generateMetadata({
+  params: paramsPromise,
+  searchParams: searchParamsPromise,
+}: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
+  const { category: categorySlug } = await searchParamsPromise
+
+  if (categorySlug) {
+    const { category, notFound: categoryNotFound } = await queryPosts({
+      categorySlug,
+      limit: 1,
+      page: 1,
+    })
+
+    if (categoryNotFound || !category) {
+      return {
+        title: '找不到分類',
+      }
+    }
+
+    return {
+      title: `${category.title} | 部落格 - 第 ${pageNumber} 頁`,
+      description: `閱讀「${category.title}」主題文章，了解胰臟相關的${category.title}資訊。`,
+    }
+  }
 
   return {
     title: `部落格 - 第 ${pageNumber} 頁`,
-    description:
-      '閱讀胰探究竟的最新文章，了解胰臟基礎知識、迷思破解與日常保健建議。',
+    description: `閱讀胰探究竟的最新文章，了解${TOPIC_CATEGORIES_DESCRIPTION}等主題。`,
   }
 }
 

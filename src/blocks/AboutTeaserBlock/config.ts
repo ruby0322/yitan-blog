@@ -17,7 +17,7 @@ export const AboutTeaserBlockConfig: Block = {
     singular: 'About Teaser Block',
   },
   fields: [
-    sectionNumberField('03'),
+    sectionNumberField('04'),
     {
       name: 'heading',
       type: 'text',

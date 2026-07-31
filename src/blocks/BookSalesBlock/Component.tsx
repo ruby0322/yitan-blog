@@ -48,7 +48,7 @@ export const BookSalesBlockComponent: React.FC<BookSalesBlockProps> = ({
   )
 
   return (
-    <Section className="scroll-mt-20" id="book-sales" spacing="default" variant="muted">
+    <Section className="scroll-mt-20" id="book-sales" spacing="default" variant="default">
       <div className="container">
         <SectionHeader heading="新書出版" sectionNumber={sectionNumber} />
 
