@@ -76,6 +76,18 @@ export async function Footer() {
             </Link>
             。
           </p>
+          <p className="text-xs text-brand-inverse-fg/45">
+            {LEGAL.developerCredit.label}
+            ・
+            <a
+              className="underline decoration-brand-inverse-fg/25 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg/70 hover:decoration-brand-inverse-fg/50"
+              href={LEGAL.developerCredit.url}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {LEGAL.developerCredit.name}
+            </a>
+          </p>
         </div>
       </div>
     </Section>

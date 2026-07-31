@@ -24,4 +24,9 @@ export const LEGAL = {
     description: '商業合作與網頁回饋',
     email: 'hello@pancrease.com',
   },
+  developerCredit: {
+    label: '網頁建置與維護',
+    name: 'Ruby',
+    url: 'https://rubytech.dev/zh-tw',
+  },
 } as const
