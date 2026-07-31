@@ -8,7 +8,11 @@ import config from '../src/payload.config.js'
 async function main(): Promise<void> {
   if (process.env.VERCEL && !process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error(
-      'BLOB_READ_WRITE_TOKEN is required on Vercel. Connect Vercel Blob in Project → Storage, then redeploy.',
+      [
+        'BLOB_READ_WRITE_TOKEN is required on Vercel for Payload media uploads.',
+        'BLOB_STORE_ID alone is not enough — update the Blob store project connection',
+        'to include the Read-Write Token for Production/Preview, then redeploy.',
+      ].join(' '),
     )
   }
 

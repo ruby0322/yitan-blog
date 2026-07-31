@@ -39,7 +39,13 @@ git push -u origin main
 | **Neon Postgres** | 文章、頁面、媒體 metadata |
 | **Vercel Blob** | 圖片上傳 |
 
-連接後會自動設定 `POSTGRES_URL` 與 `BLOB_READ_WRITE_TOKEN`。
+連接後會自動設定 `POSTGRES_URL`。Blob 需額外確認 **`BLOB_READ_WRITE_TOKEN`**（見下方）。
+
+> **重要：** Payload 的 Vercel Blob adapter **只認** `BLOB_READ_WRITE_TOKEN`。  
+> 若 env 裡只有 `BLOB_STORE_ID` + `BLOB_WEBHOOK_PUBLIC_KEY`（新版 OIDC 連線），**upload 會 silently 改走本機 `public/media`**，deploy 後圖片全掛。
+
+在 Blob store 頁 → 你的 project → **⋯ → Update Project Connection** → 勾選 **Production / Preview**，並在 Advanced 選項確認 **Read-Write Token** 有加入 project。  
+完成後 Settings → Environment Variables 應看得到 `BLOB_READ_WRITE_TOKEN`（格式 `vercel_blob_rw_...`）。
 
 ### 4. 設定環境變數
 
@@ -49,6 +55,7 @@ git push -u origin main
 | `CRON_SECRET` | 定時發布 cron 驗證 | 同上 |
 | `PREVIEW_SECRET` | 草稿預覽驗證 | 同上 |
 | `NEXT_PUBLIC_SERVER_URL` | 正式網域 | 例如 `https://yitan.example.com` |
+| `BLOB_READ_WRITE_TOKEN` | Payload 媒體上傳（**必填**） | Blob store 連接 project 時一併注入；見 §二 step 3 |
 
 ### 5. 部署
 
@@ -118,7 +125,7 @@ Vercel build 的 `pnpm run ci` 會自動執行 `payload migrate`。
 | 項目 | 做法 |
 |------|------|
 | `materials/` 已在 repo | 需含 `materials/posts/`（client 封面與 inline 圖），否則 seed 會 ENOENT |
-| Vercel Blob 已連接 | Project → **Storage** → 新增 **Blob**，會自動注入 `BLOB_READ_WRITE_TOKEN` |
+| Vercel Blob 已連接 | 需有 **`BLOB_READ_WRITE_TOKEN`**，不能只有 `BLOB_STORE_ID` |
 | Build log | 搜尋 `Seed completed successfully`；若有 `ENOENT` / `Seed failed` 代表媒體沒灌進 DB |
 | 手動重跑 seed | 部署成功後，以 admin 登入，對 `POST /next/seed` 觸發（會清空並重建 posts/media） |
 
@@ -126,6 +133,7 @@ Vercel build 的 `pnpm run ci` 會自動執行 `payload migrate`。
 
 - **第一次 deploy 時還沒 push `materials/`** → 重 push 含 materials 的 commit 後再 deploy
 - **沒接 Vercel Blob** → 上傳無持久化，runtime 讀不到檔案
+- **只有 `BLOB_STORE_ID`，沒有 `BLOB_READ_WRITE_TOKEN`** → Payload blob plugin 停用，seed 圖片不進 Blob（你目前的狀況）
 - **Build 有 seed 錯誤但被忽略** → 修正後在 Vercel 按 **Redeploy**
 
 `public/media/` 已在 `.gitignore`，不應期待把本機上傳檔 push 上去；正式環境一律走 Blob。
