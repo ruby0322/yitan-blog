@@ -115,7 +115,7 @@ Vercel build 的 `pnpm run ci` 會自動執行 `payload migrate`。
 本站圖片**不是**從 git 直接當靜態檔部署，而是：
 
 1. Build 跑 `pnpm ci` → `payload migrate` → **`pnpm seed`** → `next build`
-2. Seed 讀取 `materials/posts/`，上傳至 Payload **Media**
+2. Seed 讀取 `materials/posts/`（文章圖）與 `public/seed-media/book-flat.JPG`（首頁書封），上傳至 Payload **Media**
 3. 正式環境 Media 檔案存於 **Vercel Blob**（需 `BLOB_READ_WRITE_TOKEN`）
 
 因此「程式碼有上去、圖沒有」通常是 **seed 沒成功** 或 **Blob 沒接好**。

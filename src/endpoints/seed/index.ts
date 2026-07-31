@@ -2,10 +2,12 @@ import type { CollectionSlug, Payload, PayloadRequest } from 'payload'
 
 import { about } from './about'
 import { home } from './home'
+import { imageBookFlatMeta } from './image-book'
 import { featuredPostIdsFromClientPosts, seedClientPosts } from './seed-client-posts'
 import { TOPIC_CATEGORY_DATA } from '@/constants/categories'
 
 import { clearMediaCollection, clearOrphanedVercelBlobs } from './clear-media-storage'
+import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
 
@@ -72,7 +74,7 @@ export const seed = async ({
     },
   })
 
-  payload.logger.info(`— Seeding author...`)
+  const bookFlatBuffer = await fetchLocalSeedFile('book-flat.JPG')
 
   const demoAuthor = await payload.create({
     collection: 'users',
@@ -98,6 +100,14 @@ export const seed = async ({
 
   const categoryByTitle = Object.fromEntries(categoryDocs.map((doc) => [doc.title, doc]))
 
+  payload.logger.info(`— Seeding book cover media...`)
+
+  const bookFlatDoc = await payload.create({
+    collection: 'media',
+    data: imageBookFlatMeta,
+    file: bookFlatBuffer,
+  })
+
   payload.logger.info(`— Seeding client posts...`)
 
   const clientPosts = await seedClientPosts({
@@ -114,6 +124,7 @@ export const seed = async ({
       depth: 0,
       context: { disableRevalidate: true },
       data: home({
+        bookFlatImage: bookFlatDoc,
         categoryByTitle,
         featuredPostIds: featuredPostIdsFromClientPosts(clientPosts),
       }),

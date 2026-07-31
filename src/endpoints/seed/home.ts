@@ -1,9 +1,10 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
-import type { Category } from '@/payload-types'
+import type { Category, Media } from '@/payload-types'
 import { TOPIC_CATEGORY_DATA, postsCategoryUrl } from '@/constants/categories'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type HomeArgs = {
+  bookFlatImage: Media
   categoryByTitle: Record<string, Category>
   featuredPostIds: number[]
 }
@@ -12,6 +13,7 @@ const BRAND_INTRO =
   '歡迎來到「胰探究竟－章醫師的胰臟日常」。這裡以臨床經驗結合最新醫學證據，分享真正重要的胰臟知識，破解迷思，致力於傳遞正確、可信且容易理解的醫學資訊。希望幫助更多人認識胰臟、了解胰臟，進而守護自己與家人的胰臟健康。'
 
 export const home = ({
+  bookFlatImage,
   categoryByTitle,
   featuredPostIds,
 }: HomeArgs): RequiredDataFromCollectionSlug<'pages'> => ({
@@ -158,6 +160,7 @@ export const home = ({
         '定期健檢正常，為何仍得胰臟癌？台灣胰臟癌篩檢權威章明珠醫師，用近30年臨床經驗，25年研究數據「零期攔截」的防禦地圖。從被動等待到主動管理，讓胰臟癌風險不再只是命運。',
       highlightLine: '五年存活率從不到 10% 翻轉至 98%！',
       authorLine: '章明珠醫師 著',
+      coverImage: bookFlatImage.id,
       buyLink: {
         type: 'custom',
         label: '前往博客來選購',
