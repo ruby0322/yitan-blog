@@ -278,6 +278,10 @@ export interface Page {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * 顯示於文章標題下方，供讀者快速了解本文重點。
+   */
+  excerpt: string;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -296,6 +300,23 @@ export interface Post {
   };
   relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * 社群、YouTube、電子報等發佈用素材，不顯示於前台。
+   */
+  marketingNotes?: {
+    coverDesignNotes?: string | null;
+    youtubeTitle?: string | null;
+    youtubeDescription?: string | null;
+    socialPost?: string | null;
+    newsletterSummary?: string | null;
+  };
   meta?: {
     title?: string | null;
     /**
@@ -1537,10 +1558,27 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  excerpt?: T;
   heroImage?: T;
   content?: T;
   relatedPosts?: T;
   categories?: T;
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  marketingNotes?:
+    | T
+    | {
+        coverDesignNotes?: T;
+        youtubeTitle?: T;
+        youtubeDescription?: T;
+        socialPost?: T;
+        newsletterSummary?: T;
+      };
   meta?:
     | T
     | {

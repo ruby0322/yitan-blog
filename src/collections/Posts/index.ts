@@ -49,6 +49,7 @@ export const Posts: CollectionConfig = {
   defaultPopulate: {
     title: true,
     slug: true,
+    excerpt: true,
     categories: true,
     meta: {
       image: true,
@@ -79,6 +80,15 @@ export const Posts: CollectionConfig = {
       type: 'text',
       required: true,
       label: '標題',
+    },
+    {
+      name: 'excerpt',
+      type: 'textarea',
+      required: true,
+      label: '摘要',
+      admin: {
+        description: '顯示於文章標題下方，供讀者快速了解本文重點。',
+      },
     },
     {
       type: 'tabs',
@@ -138,6 +148,64 @@ export const Posts: CollectionConfig = {
               },
               hasMany: true,
               relationTo: 'categories',
+            },
+            {
+              name: 'faq',
+              type: 'array',
+              label: '常見問題',
+              labels: {
+                singular: '問答',
+                plural: '常見問題',
+              },
+              fields: [
+                {
+                  name: 'question',
+                  type: 'text',
+                  required: true,
+                  label: '問題',
+                },
+                {
+                  name: 'answer',
+                  type: 'textarea',
+                  required: true,
+                  label: '回答',
+                },
+              ],
+            },
+            {
+              name: 'marketingNotes',
+              type: 'group',
+              label: '行銷素材（後台備註）',
+              admin: {
+                description: '社群、YouTube、電子報等發佈用素材，不顯示於前台。',
+              },
+              fields: [
+                {
+                  name: 'coverDesignNotes',
+                  type: 'textarea',
+                  label: '封面圖設計說明',
+                },
+                {
+                  name: 'youtubeTitle',
+                  type: 'text',
+                  label: 'YouTube 標題',
+                },
+                {
+                  name: 'youtubeDescription',
+                  type: 'textarea',
+                  label: 'YouTube 說明欄',
+                },
+                {
+                  name: 'socialPost',
+                  type: 'textarea',
+                  label: 'Facebook／Threads 貼文',
+                },
+                {
+                  name: 'newsletterSummary',
+                  type: 'textarea',
+                  label: '電子報摘要',
+                },
+              ],
             },
           ],
           label: '其他',
