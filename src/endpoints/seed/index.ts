@@ -11,6 +11,22 @@ import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
 
+const LEGACY_SEED_ADMIN_EMAIL = 'demo-author@example.com'
+
+function getSeedAdminCredentials(): { email: string; name: string; password: string } {
+  const email = process.env.SEED_ADMIN_EMAIL
+  const password = process.env.SEED_ADMIN_PASSWORD
+  const name = process.env.SEED_ADMIN_NAME ?? '章醫師'
+
+  if (!email || !password) {
+    throw new Error(
+      'SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD must be set in the environment before seeding.',
+    )
+  }
+
+  return { email, name, password }
+}
+
 export const seed = async ({
   payload,
   req,
@@ -64,12 +80,14 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding author...`)
 
+  const seedAdmin = getSeedAdminCredentials()
+
   await payload.delete({
     collection: 'users',
     depth: 0,
     where: {
       email: {
-        equals: 'demo-author@example.com',
+        in: [LEGACY_SEED_ADMIN_EMAIL, seedAdmin.email],
       },
     },
   })
@@ -79,9 +97,9 @@ export const seed = async ({
   const demoAuthor = await payload.create({
     collection: 'users',
     data: {
-      name: '章醫師',
-      email: 'demo-author@example.com',
-      password: 'password',
+      name: seedAdmin.name,
+      email: seedAdmin.email,
+      password: seedAdmin.password,
     },
   })
 
