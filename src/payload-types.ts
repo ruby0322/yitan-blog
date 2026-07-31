@@ -609,6 +609,9 @@ export interface AboutTeaserBlock {
   sectionNumber?: string | null;
   heading: string;
   doctorName: string;
+  /**
+   * 每行一項，前台以條列顯示。
+   */
   credentialsLine?: string | null;
   body: {
     root: {

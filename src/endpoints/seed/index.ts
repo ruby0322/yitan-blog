@@ -4,7 +4,6 @@ import { about } from './about'
 import { home } from './home'
 import { imageBookFlatMeta } from './image-book'
 import { imageBrandHero } from './image-brand-hero'
-import { imageDoctorPortraitMeta } from './image-doctor-portrait'
 import { featuredPostIdsFromClientPosts, seedClientPosts } from './seed-client-posts'
 import { TOPIC_CATEGORY_DATA } from '@/constants/categories'
 
@@ -68,9 +67,8 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding media...`)
 
-  const [brandHeroBuffer, doctorPortraitBuffer, bookFlatBuffer] = await Promise.all([
+  const [brandHeroBuffer, bookFlatBuffer] = await Promise.all([
     fetchLocalSeedFile('brand-hero.webp'),
-    fetchLocalSeedFile('doctor-portrait.webp'),
     fetchLocalSeedFile('book-flat.JPG'),
   ])
 
@@ -100,7 +98,6 @@ export const seed = async ({
 
   const mediaCreates = [
     { data: imageBrandHero, file: brandHeroBuffer },
-    { data: imageDoctorPortraitMeta, file: doctorPortraitBuffer },
     { data: imageBookFlatMeta, file: bookFlatBuffer },
   ] as const
 
@@ -116,7 +113,7 @@ export const seed = async ({
     )
   }
 
-  const [_brandHeroDoc, doctorPortraitDoc, bookFlatDoc] = mediaDocs
+  const [brandHeroDoc, bookFlatDoc] = mediaDocs
 
   payload.logger.info(`— Seeding client posts...`)
 
@@ -136,16 +133,15 @@ export const seed = async ({
       data: home({
         bookFlatImage: bookFlatDoc,
         categoryByTitle,
-        doctorImage: doctorPortraitDoc,
         featuredPostIds: featuredPostIdsFromClientPosts(clientPosts),
-        metaImage: doctorPortraitDoc,
+        metaImage: brandHeroDoc,
       }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: about({ doctorImage: doctorPortraitDoc, metaImage: doctorPortraitDoc }),
+      data: about({ metaImage: brandHeroDoc }),
     }),
   ])
 

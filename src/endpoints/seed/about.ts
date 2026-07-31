@@ -4,17 +4,15 @@ import { LEGAL } from '@/content/legal'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type AboutArgs = {
-  doctorImage: Media
   metaImage: Media
 }
 
-export const about = ({ doctorImage, metaImage }: AboutArgs): RequiredDataFromCollectionSlug<'pages'> => ({
+export const about = ({ metaImage }: AboutArgs): RequiredDataFromCollectionSlug<'pages'> => ({
   slug: 'about',
   _status: 'published',
   title: '關於',
   hero: {
-    type: 'mediumImpact',
-    media: doctorImage.id,
+    type: 'lowImpact',
     richText: richTextRoot(
       heading('h1', '關於章醫師'),
       paragraph(
@@ -49,7 +47,17 @@ export const about = ({ doctorImage, metaImage }: AboutArgs): RequiredDataFromCo
             heading('h3', '專長與理念'),
             paragraph(
               text(
-                '專注於胰臟癌早期篩檢、脂肪胰與健檢盲點、影像追蹤與風險辨識，強調「理解原理、避免恐慌、適時就醫」的衛教方式。從被動等待到主動管理，幫助讀者看懂自己的風險，拿回胰臟健康的掌控權。',
+                '專注於胰臟疾病的臨床診療與研究近三十年，是台灣少數長期全心投入胰臟疾病診療、研究與胰臟癌早期篩檢的醫師。診療範圍涵蓋從急、慢性胰臟炎、脂肪胰、胰臟囊腫到胰臟癌等完整疾病光譜，累積國內豐富的胰臟疾病診療經驗。',
+              ),
+            ),
+            paragraph(
+              text(
+                '建立亞太最大的胰臟疾病資料庫，並撰寫胰臟超音波教科書。正因為同時照顧各類胰臟疾病，而非只專注於單一疾病，更能將發炎、囊腫、腫瘤與影像變化彼此連結、融會貫通，提升早期辨識風險與精準判斷的能力。',
+              ),
+            ),
+            paragraph(
+              text(
+                '秉持「理解原理、避免恐慌、適時就醫」的理念，協助讀者看懂自己的風險，從被動等待走向主動管理。',
               ),
             ),
           ),

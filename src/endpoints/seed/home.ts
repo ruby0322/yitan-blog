@@ -6,7 +6,6 @@ import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 type HomeArgs = {
   bookFlatImage: Media
   categoryByTitle: Record<string, Category>
-  doctorImage: Media
   featuredPostIds: number[]
   metaImage: Media
 }
@@ -17,7 +16,6 @@ const BRAND_INTRO =
 export const home = ({
   bookFlatImage,
   categoryByTitle,
-  doctorImage,
   featuredPostIds,
   metaImage,
 }: HomeArgs): RequiredDataFromCollectionSlug<'pages'> => ({
@@ -133,7 +131,8 @@ export const home = ({
       sectionNumber: '04',
       heading: '認識章醫師',
       doctorName: '章明珠',
-      credentialsLine: '台大醫學院臨床副教授 · 台大醫院內科部消化系主治醫師',
+      credentialsLine:
+        '台大醫學院臨床副教授\n台大醫院內科部專任主治醫師\n台大醫院綜合診療部超音波科主任\n國家衛生研究院 TCOG 胰臟疾病委員會委員',
       body: richTextRoot(
         paragraph(
           text(
@@ -146,8 +145,7 @@ export const home = ({
           ),
         ),
       ),
-      highlightLine: '看懂你的風險，拿回胰臟健康的掌控權——別讓最安靜的器官，成為健康最大的遺憾。',
-      image: doctorImage.id,
+      highlightLine: '看懂風險，是為了更從容地做選擇。',
       link: {
         type: 'custom',
         label: '了解更多',
