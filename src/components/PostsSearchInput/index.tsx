@@ -2,55 +2,47 @@
 
 import { Search as SearchIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useDebounce } from '@/utilities/useDebounce'
 import { cn } from '@/utilities/ui'
 
-type SearchProps = {
+type Props = {
   className?: string
-  id?: string
-  initialValue?: string
   placeholder?: string
-  variant?: 'default' | 'underline'
 }
 
-export const Search: React.FC<SearchProps> = ({
+export const PostsSearchInput: React.FC<Props> = ({
   className,
-  id = 'search',
-  initialValue = '',
   placeholder = '搜尋文章…',
-  variant = 'default',
 }) => {
-  const [value, setValue] = useState(initialValue)
+  const [value, setValue] = useState('')
   const router = useRouter()
   const debouncedValue = useDebounce(value)
-  const isFirstRun = useRef(true)
+  const [hasTyped, setHasTyped] = useState(false)
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    if (!hasTyped) return
 
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false
-      return
+    if (debouncedValue.trim()) {
+      router.push(`/search?q=${encodeURIComponent(debouncedValue.trim())}`)
     }
-
-    const trimmed = debouncedValue.trim()
-    router.push(trimmed ? `/search?q=${encodeURIComponent(trimmed)}` : '/search')
-  }, [debouncedValue, router])
+  }, [debouncedValue, hasTyped, router])
 
   return (
     <div className={cn('relative', className)}>
       <form
         onSubmit={(event) => {
           event.preventDefault()
+          const trimmed = value.trim()
+          if (trimmed) {
+            router.push(`/search?q=${encodeURIComponent(trimmed)}`)
+          }
         }}
       >
-        <Label className="sr-only" htmlFor={id}>
+        <Label className="sr-only" htmlFor="posts-search">
           搜尋文章
         </Label>
         <SearchIcon
@@ -58,15 +50,15 @@ export const Search: React.FC<SearchProps> = ({
           className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-brand-sage"
         />
         <Input
-          className={cn(variant === 'default' && 'border-brand-border pl-10')}
-          id={id}
+          className="border-brand-border pl-10"
+          id="posts-search"
           onChange={(event) => {
+            setHasTyped(true)
             setValue(event.target.value)
           }}
           placeholder={placeholder}
           type="search"
           value={value}
-          variant={variant}
         />
         <button className="sr-only" type="submit">
           搜尋
