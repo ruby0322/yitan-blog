@@ -238,16 +238,18 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 
 ### 3.6 依主題閱讀（Section 5 — `categoryNavBlock`）
 
-6 欄主題導覽，每格含編號、標題、箭頭；連結至 `/posts?category={slug}`。
+6 個主題 slide 的 horizontal carousel；每 slide 含標題、分類說明、top 3 文章 list preview；連結至 `/posts?category={slug}`。
 
 | 屬性 | 規格 |
 |------|------|
 | Wrapper | `Section variant="default" spacing="default"` |
 | Header | `SectionHeader`：`heading` + `sectionNumber` |
-| Grid | `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5` |
-| Item | 可點擊 card：`border border-brand-sage/20 bg-brand-bg rounded-md p-6`；hover `border-brand-sage bg-brand-hover`；左上 sage badge 編號；標題 serif；右下 Lucide `ArrowUpRight` |
-| Link | 整卡為 `<Link>`，seed URL：`/posts?category={分類 slug}` |
-| Mobile | 2-col（`sm:grid-cols-2`） |
+| Layout | Horizontal carousel：`snap-x snap-mandatory`；slide 寬 mobile ~88vw / desktop ~420–460px |
+| Auto-advance | 每 2.5s 切換下一 slide；`hover` / `focus` 暫停 |
+| Reduced motion | `prefers-reduced-motion: reduce` → 關閉 auto-advance，保留手動 scroll |
+| Slide | `border border-brand-sage/20 bg-brand-bg rounded-md p-6`；標題 serif + `ArrowUpRight`；`BodyText` 說明；文章 list（標題 + 日期）；`ReadMoreLink`「查看此主題」 |
+| 導覽 | 左右 chevron + dot indicators |
+| 資料 | `items[].category` relationship → `categories.description` + runtime top 3 posts |
 
 #### CMS fields
 
@@ -256,13 +258,15 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | `sectionNumber` | text | no，default `"03"` |
 | `heading` | text | no，default `"依主題閱讀"` |
 | `items` | array | yes，min 1 max 6 |
-| `items[].number` | text | yes，如 `"01"` |
+| `items[].category` | relationship → categories | yes |
 | `items[].title` | text | yes |
 | `items[].link` | link | yes |
 
+`categories.description`：textarea，分類頁 header 共用。
+
 #### Empty state
 
-`items` 空 → 不渲染。
+`items` 空 → 不渲染。slide 內無文章 → 顯示「此主題尚無文章」。
 
 ---
 

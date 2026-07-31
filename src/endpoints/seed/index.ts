@@ -14,7 +14,7 @@ import { post3 } from './post-3'
 import { post4 } from './post-4'
 import { post5 } from './post-5'
 import { post6 } from './post-6'
-import { TOPIC_CATEGORIES } from '@/constants/categories'
+import { TOPIC_CATEGORY_DATA } from '@/constants/categories'
 
 import { fetchLocalSeedFile } from './seed-media'
 
@@ -119,12 +119,13 @@ export const seed = async ({
   })
 
   const categoryDocs = await Promise.all(
-    TOPIC_CATEGORIES.map((category) =>
+    TOPIC_CATEGORY_DATA.map(({ title, description }) =>
       payload.create({
         collection: 'categories',
         data: {
-          title: category,
-          slug: category,
+          title,
+          description,
+          slug: title,
         },
       }),
     ),
@@ -271,6 +272,7 @@ export const seed = async ({
       context: { disableRevalidate: true },
       data: home({
         bookFlatImage: bookFlatDoc,
+        categoryByTitle,
         doctorImage: doctorPortraitDoc,
         featuredPostIds: [post1Doc.id, post2Doc.id, post3Doc.id],
         metaImage: doctorPortraitDoc,

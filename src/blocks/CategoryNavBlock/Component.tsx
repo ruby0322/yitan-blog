@@ -1,11 +1,13 @@
-import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
 import React from 'react'
 
-import type { CategoryNavBlock as CategoryNavBlockProps } from '@/payload-types'
+import type { Category, CategoryNavBlock as CategoryNavBlockProps } from '@/payload-types'
 
+import { CategoryNavCarousel } from '@/blocks/CategoryNavBlock/CategoryNavCarousel'
+import type { CategoryTopicSlide } from '@/blocks/CategoryNavBlock/types'
 import { SectionHeader } from '@/components/theme'
 import { Section } from '@/components/theme/section'
+import { postsCategoryUrl } from '@/constants/categories'
+import { getCategoryTopicPreviews } from '@/utilities/queryPosts'
 
 function resolveHref(link?: CategoryNavBlockProps['items'][0]['link']): string | null {
   if (!link) return null
@@ -26,42 +28,54 @@ function resolveHref(link?: CategoryNavBlockProps['items'][0]['link']): string |
   return null
 }
 
-export const CategoryNavBlockComponent: React.FC<CategoryNavBlockProps> = ({
+function resolveCategory(item: CategoryNavBlockProps['items'][0]): Category | null {
+  if (typeof item.category === 'object' && item.category !== null) {
+    return item.category
+  }
+
+  return null
+}
+
+export const CategoryNavBlockComponent = async ({
   heading,
   items,
   sectionNumber,
-}) => {
+}: CategoryNavBlockProps) => {
   if (!items || items.length === 0) return null
+
+  const slides: CategoryTopicSlide[] = await Promise.all(
+    items.map(async (item) => {
+      const category = resolveCategory(item)
+      const categoryId = typeof item.category === 'number' ? item.category : category?.id
+      const { category: resolvedCategory, posts } = await getCategoryTopicPreviews({
+        categoryId,
+        categorySlug: category?.slug,
+        limit: 3,
+      })
+
+      const slug = resolvedCategory?.slug ?? category?.slug
+      const href =
+        resolveHref(item.link) ?? (slug ? postsCategoryUrl(slug) : null) ?? '/posts'
+
+      return {
+        title: item.title,
+        description:
+          resolvedCategory?.description ?? category?.description ?? '依此主題閱讀相關文章。',
+        href,
+        posts: posts.map((post) => ({
+          title: post.title,
+          slug: post.slug,
+          publishedAt: post.publishedAt,
+        })),
+      }
+    }),
+  )
 
   return (
     <Section spacing="default" variant="default">
       <div className="container">
         <SectionHeader heading={heading || '依主題閱讀'} sectionNumber={sectionNumber} />
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {items.map(({ id, link, number, title }, index) => {
-            const href = resolveHref(link)
-            if (!href) return null
-
-            return (
-              <Link
-                className="group relative flex min-h-[120px] flex-col justify-between rounded-md border border-brand-sage/20 bg-brand-bg p-6 transition-colors hover:border-brand-sage hover:bg-brand-hover lg:min-h-[132px]"
-                href={href}
-                key={id || index}
-              >
-                <span className="inline-flex size-8 items-center justify-center rounded-full border border-brand-sage/30 bg-brand-sage/10 font-serif text-sm text-brand-sage">
-                  {number}
-                </span>
-                <div className="mt-4 flex items-end justify-between gap-3">
-                  <h4 className="font-serif text-lg font-semibold leading-snug tracking-wide text-brand-heading">
-                    {title}
-                  </h4>
-                  <ArrowUpRight className="size-5 shrink-0 text-brand-sage transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </div>
-              </Link>
-            )
-          })}
-        </div>
+        <CategoryNavCarousel slides={slides} />
       </div>
     </Section>
   )

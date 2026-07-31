@@ -94,3 +94,66 @@ export async function queryPosts({
     posts,
   }
 }
+
+type CategoryTopicPreviewArgs = {
+  categoryId?: number
+  categorySlug?: string
+  limit?: number
+}
+
+export async function getCategoryTopicPreviews({
+  categoryId,
+  categorySlug,
+  limit = 3,
+}: CategoryTopicPreviewArgs): Promise<{
+  category: Category | null
+  posts: PostListItem[]
+}> {
+  const payload = await getPayload({ config: configPromise })
+
+  let category: Category | null = null
+
+  if (categoryId) {
+    const result = await payload.find({
+      collection: 'categories',
+      depth: 0,
+      limit: 1,
+      overrideAccess: false,
+      where: {
+        id: {
+          equals: categoryId,
+        },
+      },
+    })
+    category = result.docs[0] ?? null
+  } else if (categorySlug) {
+    category = await findCategoryBySlug(categorySlug)
+  }
+
+  if (!category) {
+    return { category: null, posts: [] }
+  }
+
+  const posts = await payload.find({
+    collection: 'posts',
+    depth: 0,
+    limit,
+    overrideAccess: false,
+    sort: '-publishedAt',
+    where: {
+      categories: {
+        contains: category.id,
+      },
+    },
+    select: {
+      title: true,
+      slug: true,
+      publishedAt: true,
+    },
+  })
+
+  return {
+    category,
+    posts: posts.docs,
+  }
+}

@@ -4,11 +4,16 @@ import React from 'react'
 import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
 
 type Props = {
+  categoryDescription?: string | null
   categoryTitle?: string | null
   totalDocs?: number
 }
 
-export const PostsPageHeader: React.FC<Props> = ({ categoryTitle, totalDocs }) => {
+export const PostsPageHeader: React.FC<Props> = ({
+  categoryDescription,
+  categoryTitle,
+  totalDocs,
+}) => {
   const isFiltered = Boolean(categoryTitle)
 
   return (
@@ -20,7 +25,7 @@ export const PostsPageHeader: React.FC<Props> = ({ categoryTitle, totalDocs }) =
         </h1>
         <p className="text-lg text-muted-foreground">
           {isFiltered
-            ? `依「${categoryTitle}」主題整理的文章。`
+            ? categoryDescription || `依「${categoryTitle}」主題整理的文章。`
             : `以臨床經驗與醫學證據整理胰臟相關知識，包含${TOPIC_CATEGORIES_DESCRIPTION}。`}
         </p>
         {typeof totalDocs === 'number' && (

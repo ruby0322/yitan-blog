@@ -45,7 +45,11 @@ export default async function Page({ params: paramsPromise, searchParams: search
   return (
     <div className="pt-24 pb-24">
       <PageClient />
-      <PostsPageHeader categoryTitle={category?.title} totalDocs={posts.totalDocs} />
+      <PostsPageHeader
+        categoryDescription={category?.description}
+        categoryTitle={category?.title}
+        totalDocs={posts.totalDocs}
+      />
 
       {posts.totalDocs > 0 ? (
         <>
@@ -105,7 +109,7 @@ export async function generateMetadata({
 
     return {
       title: `${category.title} | 部落格 - 第 ${pageNumber} 頁`,
-      description: `閱讀「${category.title}」主題文章，了解胰臟相關的${category.title}資訊。`,
+      description: category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
     }
   }
 

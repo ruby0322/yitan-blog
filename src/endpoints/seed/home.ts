@@ -1,10 +1,11 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
-import type { Media } from '@/payload-types'
-import { TOPIC_CATEGORIES, postsCategoryUrl } from '@/constants/categories'
+import type { Category, Media } from '@/payload-types'
+import { TOPIC_CATEGORY_DATA, postsCategoryUrl } from '@/constants/categories'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type HomeArgs = {
   bookFlatImage: Media
+  categoryByTitle: Record<string, Category>
   doctorImage: Media
   featuredPostIds: number[]
   metaImage: Media
@@ -15,6 +16,7 @@ const BRAND_INTRO =
 
 export const home = ({
   bookFlatImage,
+  categoryByTitle,
   doctorImage,
   featuredPostIds,
   metaImage,
@@ -115,9 +117,9 @@ export const home = ({
       blockName: 'Category Navigation',
       sectionNumber: '03',
       heading: '依主題閱讀',
-      items: TOPIC_CATEGORIES.map((title, index) => ({
-        number: String(index + 1).padStart(2, '0'),
+      items: TOPIC_CATEGORY_DATA.map(({ title }) => ({
         title,
+        category: categoryByTitle[title].id,
         link: {
           type: 'custom' as const,
           label: title,

@@ -417,6 +417,7 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
+  description?: string | null;
   slug: string;
   parent?: (number | null) | Category;
   breadcrumbs?:
@@ -520,7 +521,7 @@ export interface CategoryNavBlock {
   sectionNumber?: string | null;
   heading?: string | null;
   items: {
-    number: string;
+    category: number | Category;
     title: string;
     link: {
       type?: ('reference' | 'custom') | null;
@@ -1369,7 +1370,7 @@ export interface CategoryNavBlockSelect<T extends boolean = true> {
   items?:
     | T
     | {
-        number?: T;
+        category?: T;
         title?: T;
         link?:
           | T
@@ -1660,6 +1661,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   slug?: T;
   parent?: T;
   breadcrumbs?:

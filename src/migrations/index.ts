@@ -9,6 +9,8 @@ import * as migration_20260730_220000_about_teaser_editorial_fields from './2026
 import * as migration_20260730_230000_footer_link_groups from './20260730_230000_footer_link_groups'
 import * as migration_20260731_120000_features_block from './20260731_120000_features_block'
 
+import * as migration_20260731_123000_category_nav_carousel from './20260731_123000_category_nav_carousel'
+
 export const migrations = [
   {
     up: migration_20260409_155721_initial.up,
@@ -59,5 +61,10 @@ export const migrations = [
     up: migration_20260731_120000_features_block.up,
     down: migration_20260731_120000_features_block.down,
     name: '20260731_120000_features_block',
+  },
+  {
+    up: migration_20260731_123000_category_nav_carousel.up,
+    down: migration_20260731_123000_category_nav_carousel.down,
+    name: '20260731_123000_category_nav_carousel',
   },
 ]

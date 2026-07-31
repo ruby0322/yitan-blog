@@ -26,6 +26,11 @@ export const Categories: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'description',
+      type: 'textarea',
+      label: '說明',
+    },
     slugField(),
   ],
 }

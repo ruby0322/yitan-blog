@@ -27,10 +27,11 @@ export const CategoryNavBlockConfig: Block = {
       label: '導覽項目',
       fields: [
         {
-          name: 'number',
-          type: 'text',
+          name: 'category',
+          type: 'relationship',
+          relationTo: 'categories',
           required: true,
-          label: '編號',
+          label: '分類',
         },
         {
           name: 'title',
