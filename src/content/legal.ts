@@ -19,4 +19,9 @@ export const LEGAL = {
   ] as const,
   termsPageTitle: '著作權與使用條款',
   contactPath: '/about',
+  contact: {
+    heading: '聯絡方式',
+    description: '商業合作與網頁回饋',
+    email: 'hello@pancrease.com',
+  },
 } as const

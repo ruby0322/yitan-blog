@@ -26,29 +26,41 @@ export async function Footer() {
             <Logo size="lg" variant="inverse" />
           </Link>
 
-          {linkGroups.length > 0 ? (
-            <div className="grid gap-8 sm:grid-cols-2 lg:ml-auto lg:grid-cols-3 lg:gap-x-10 xl:gap-x-12">
-              {linkGroups.map(({ id, items, label }, groupIndex) => (
-                <nav aria-label={label || undefined} key={id || groupIndex}>
-                  {label ? (
-                    <p className="mb-3 font-sans text-xs tracking-[0.2em] text-brand-inverse-fg/55 uppercase">
-                      {label}
-                    </p>
-                  ) : null}
-                  <ul className="flex flex-col gap-2.5">
-                    {(items || []).map(({ id: itemId, link }, itemIndex) => (
-                      <li key={itemId || itemIndex}>
-                        <CMSLink
-                          className="text-sm text-brand-inverse-fg/85 underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"
-                          {...link}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              ))}
-            </div>
-          ) : null}
+          <div className="grid gap-8 sm:grid-cols-2 lg:ml-auto lg:grid-cols-4 lg:gap-x-10 xl:gap-x-12">
+            {linkGroups.map(({ id, items, label }, groupIndex) => (
+              <nav aria-label={label || undefined} key={id || groupIndex}>
+                {label ? (
+                  <p className="mb-3 font-sans text-xs tracking-[0.2em] text-brand-inverse-fg/55 uppercase">
+                    {label}
+                  </p>
+                ) : null}
+                <ul className="flex flex-col gap-2.5">
+                  {(items || []).map(({ id: itemId, link }, itemIndex) => (
+                    <li key={itemId || itemIndex}>
+                      <CMSLink
+                        className="text-sm text-brand-inverse-fg/85 underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"
+                        {...link}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+            <nav aria-label={LEGAL.contact.heading}>
+              <p className="mb-3 font-sans text-xs tracking-[0.2em] text-brand-inverse-fg/55 uppercase">
+                {LEGAL.contact.heading}
+              </p>
+              <p className="mb-2.5 text-sm text-brand-inverse-fg/75">
+                {LEGAL.contact.description}
+              </p>
+              <a
+                className="text-sm text-brand-inverse-fg/85 underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"
+                href={`mailto:${LEGAL.contact.email}`}
+              >
+                {LEGAL.contact.email}
+              </a>
+            </nav>
+          </div>
         </div>
 
         <div className="space-y-2 border-t border-brand-inverse-fg/15 pt-6 text-sm text-brand-inverse-fg/75">
