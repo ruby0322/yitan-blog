@@ -4,6 +4,7 @@ import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
 import { buildMetadata } from '@/utilities/buildMetadata'
 import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
+import { querySearchPosts } from '@/utilities/querySearch'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import PageClient from './page.client'
@@ -13,17 +14,43 @@ export const revalidate = 600
 type Args = {
   searchParams: Promise<{
     category?: string
+    q?: string
   }>
 }
 
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
-  const { category: categorySlug } = await searchParamsPromise
-  const [{ category, notFound: categoryNotFound, posts }, categories] = await Promise.all([
+  const { category: categorySlug, q: query = '' } = await searchParamsPromise
+  const trimmedQuery = query.trim()
+  const categories = await queryAllCategories()
+
+  if (trimmedQuery) {
+    const { category, notFound: searchNotFound, posts } = await querySearchPosts({
+      categorySlug,
+      page: 1,
+      q: trimmedQuery,
+    })
+
+    if (searchNotFound || !posts) {
+      notFound()
+    }
+
+    return (
+      <PostsArchiveLayout
+        categories={categories}
+        category={category}
+        categorySlug={categorySlug}
+        pageClient={<PageClient />}
+        posts={posts}
+        query={trimmedQuery}
+      />
+    )
+  }
+
+  const [{ category, notFound: categoryNotFound, posts }] = await Promise.all([
     queryPosts({
       categorySlug,
       page: 1,
     }),
-    queryAllCategories(),
   ])
 
   if (categoryNotFound || !posts) {
@@ -44,7 +71,22 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 export async function generateMetadata({
   searchParams: searchParamsPromise,
 }: Args): Promise<Metadata> {
-  const { category: categorySlug } = await searchParamsPromise
+  const { category: categorySlug, q: query = '' } = await searchParamsPromise
+  const trimmedQuery = query.trim()
+
+  if (trimmedQuery) {
+    const params = new URLSearchParams({ q: trimmedQuery })
+    if (categorySlug) {
+      params.set('category', categorySlug)
+    }
+
+    return buildMetadata({
+      title: `搜尋「${trimmedQuery}」| 部落格`,
+      description: `在胰探究竟搜尋「${trimmedQuery}」相關的胰臟衛教文章。`,
+      path: `/posts?${params.toString()}`,
+      noIndex: true,
+    })
+  }
 
   if (categorySlug) {
     const { category, notFound: categoryNotFound } = await queryPosts({

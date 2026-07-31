@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-import { postsCategoryUrl } from '@/constants/categories'
+import { buildPostsPagePath } from '@/utilities/buildPostsPagePath'
 import { cn } from '@/utilities/ui'
 
 export type CategoryFilterItem = {
@@ -14,9 +14,10 @@ export type CategoryFilterItem = {
 type Props = {
   activeSlug?: string | null
   categories: CategoryFilterItem[]
+  query?: string
 }
 
-export const PostsCategoryFilter: React.FC<Props> = ({ activeSlug, categories }) => {
+export const PostsCategoryFilter: React.FC<Props> = ({ activeSlug, categories, query }) => {
   const isAllActive = !activeSlug
 
   return (
@@ -30,7 +31,7 @@ export const PostsCategoryFilter: React.FC<Props> = ({ activeSlug, categories })
                 ? 'border-brand-sage font-medium text-brand-heading'
                 : 'border-transparent text-brand-body hover:text-brand-heading',
             )}
-            href="/posts"
+            href={buildPostsPagePath({ page: 1, q: query })}
           >
             全部
           </Link>
@@ -47,7 +48,11 @@ export const PostsCategoryFilter: React.FC<Props> = ({ activeSlug, categories })
                     ? 'border-brand-sage font-medium text-brand-heading'
                     : 'border-transparent text-brand-body hover:text-brand-heading',
                 )}
-                href={postsCategoryUrl(category.slug)}
+                href={buildPostsPagePath({
+                  categorySlug: category.slug,
+                  page: 1,
+                  q: query,
+                })}
               >
                 {category.title}
               </Link>

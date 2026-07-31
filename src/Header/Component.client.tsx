@@ -2,11 +2,12 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { SearchOverlay } from '@/components/SearchOverlay'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
@@ -16,6 +17,7 @@ interface HeaderClientProps {
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
 
@@ -29,17 +31,27 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  useEffect(() => {
+    setSearchOpen(false)
+  }, [pathname])
+
   return (
-    <header
-      className="sticky top-0 z-20 border-b border-border/60 bg-background/95 backdrop-blur"
-      {...(theme ? { 'data-theme': theme } : {})}
-    >
-      <div className="container relative flex items-center justify-between py-4 md:py-5">
-        <Link href="/">
-          <Logo className="text-primary" />
-        </Link>
-        <HeaderNav data={data} />
-      </div>
-    </header>
+    <>
+      <header
+        className="sticky top-0 z-20 border-b border-border/60 bg-background/95 backdrop-blur"
+        {...(theme ? { 'data-theme': theme } : {})}
+      >
+        <div className="container relative flex items-center justify-between py-4 md:py-5">
+          <Link href="/">
+            <Logo className="text-primary" />
+          </Link>
+          <HeaderNav data={data} onOpenSearch={() => setSearchOpen(true)} />
+        </div>
+      </header>
+
+      <Suspense fallback={null}>
+        <SearchOverlay onClose={() => setSearchOpen(false)} open={searchOpen} />
+      </Suspense>
+    </>
   )
 }

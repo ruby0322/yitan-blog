@@ -24,6 +24,7 @@ type Props = {
   categorySlug?: string | null
   pageClient: React.ReactNode
   posts: PostsResult
+  query?: string
 }
 
 export const PostsArchiveLayout: React.FC<Props> = ({
@@ -32,16 +33,24 @@ export const PostsArchiveLayout: React.FC<Props> = ({
   categorySlug,
   pageClient,
   posts,
+  query,
 }) => {
+  const isSearching = Boolean(query)
+
   return (
     <article className="bg-brand-warm-white pb-16 pt-24">
       {pageClient}
       <PostsPageHeader
         categoryDescription={category?.description}
         categoryTitle={category?.title}
+        query={query}
         totalDocs={posts.totalDocs}
       />
-      <PostsToolbar activeCategorySlug={categorySlug} categories={categories} />
+      <PostsToolbar
+        activeCategorySlug={categorySlug}
+        categories={categories}
+        initialQuery={query}
+      />
 
       {posts.totalDocs > 0 ? (
         <>
@@ -65,6 +74,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
               <Pagination
                 categorySlug={categorySlug ?? undefined}
                 page={posts.page}
+                query={query}
                 totalPages={posts.totalPages}
               />
             )}
@@ -72,7 +82,11 @@ export const PostsArchiveLayout: React.FC<Props> = ({
         </>
       ) : (
         <div className="container">
-          <BodyText>此主題目前尚無文章，請稍後再來看看。</BodyText>
+          <BodyText>
+            {isSearching
+              ? `找不到與「${query}」相關的文章，請試試其他關鍵字。`
+              : '此主題目前尚無文章，請稍後再來看看。'}
+          </BodyText>
         </div>
       )}
     </article>

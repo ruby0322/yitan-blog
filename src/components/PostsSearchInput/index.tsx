@@ -2,44 +2,54 @@
 
 import { Search as SearchIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 
+import { useImeSafeDebouncedSearch } from '@/hooks/useImeSafeDebouncedSearch'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useDebounce } from '@/utilities/useDebounce'
+import { buildPostsPagePath } from '@/utilities/buildPostsPagePath'
 import { cn } from '@/utilities/ui'
 
 type Props = {
+  categorySlug?: string | null
   className?: string
+  initialQuery?: string
   placeholder?: string
 }
 
 export const PostsSearchInput: React.FC<Props> = ({
+  categorySlug,
   className,
+  initialQuery = '',
   placeholder = '搜尋文章…',
 }) => {
-  const [value, setValue] = useState('')
   const router = useRouter()
-  const debouncedValue = useDebounce(value)
-  const [hasTyped, setHasTyped] = useState(false)
 
-  useEffect(() => {
-    if (!hasTyped) return
+  const navigateToQuery = useCallback(
+    (query: string) => {
+      const trimmed = query.trim()
+      router.replace(
+        buildPostsPagePath({
+          categorySlug,
+          page: 1,
+          q: trimmed || null,
+        }),
+      )
+    },
+    [categorySlug, router],
+  )
 
-    if (debouncedValue.trim()) {
-      router.push(`/search?q=${encodeURIComponent(debouncedValue.trim())}`)
-    }
-  }, [debouncedValue, hasTyped, router])
+  const { inputProps } = useImeSafeDebouncedSearch({
+    externalValue: initialQuery,
+    onDebouncedChange: navigateToQuery,
+  })
 
   return (
     <div className={cn('relative', className)}>
       <form
         onSubmit={(event) => {
           event.preventDefault()
-          const trimmed = value.trim()
-          if (trimmed) {
-            router.push(`/search?q=${encodeURIComponent(trimmed)}`)
-          }
+          navigateToQuery(inputProps.value)
         }}
       >
         <Label className="sr-only" htmlFor="posts-search">
@@ -50,15 +60,11 @@ export const PostsSearchInput: React.FC<Props> = ({
           className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-brand-sage"
         />
         <Input
+          {...inputProps}
           className="border-brand-border pl-10"
           id="posts-search"
-          onChange={(event) => {
-            setHasTyped(true)
-            setValue(event.target.value)
-          }}
           placeholder={placeholder}
           type="search"
-          value={value}
         />
         <button className="sr-only" type="submit">
           搜尋

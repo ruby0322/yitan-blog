@@ -17,11 +17,12 @@ export const Pagination: React.FC<{
   categorySlug?: string | null
   className?: string
   page: number
+  query?: string
   totalPages: number
 }> = (props) => {
   const router = useRouter()
 
-  const { categorySlug, className, page, totalPages } = props
+  const { categorySlug, className, page, query, totalPages } = props
   const hasNextPage = page < totalPages
   const hasPrevPage = page > 1
 
@@ -29,7 +30,13 @@ export const Pagination: React.FC<{
   const hasExtraNextPages = page + 1 < totalPages
 
   const goToPage = (targetPage: number) => {
-    router.push(buildPostsPagePath(targetPage, categorySlug))
+    router.push(
+      buildPostsPagePath({
+        categorySlug,
+        page: targetPage,
+        q: query,
+      }),
+    )
   }
 
   return (

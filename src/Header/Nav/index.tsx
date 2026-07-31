@@ -1,15 +1,19 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 import type { Header as HeaderType } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
-import Link from 'next/link'
 import { Menu, SearchIcon, X } from 'lucide-react'
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
+type HeaderNavProps = {
+  data: HeaderType
+  onOpenSearch: () => void
+}
+
+export const HeaderNav: React.FC<HeaderNavProps> = ({ data, onOpenSearch }) => {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const navItems = data?.navItems || []
@@ -24,17 +28,25 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         {navItems.map(({ link }, i) => {
           return <CMSLink key={i} {...link} appearance="link" />
         })}
-        <Link href="/search">
-          <span className="sr-only">Search</span>
-          <SearchIcon className="w-5 text-primary" />
-        </Link>
+        <button
+          aria-label="搜尋"
+          className="inline-flex cursor-pointer items-center justify-center rounded-md p-1 text-primary hover:bg-muted"
+          onClick={onOpenSearch}
+          type="button"
+        >
+          <SearchIcon className="w-5" />
+        </button>
       </nav>
 
       <div className="flex items-center gap-3 md:hidden">
-        <Link href="/search">
-          <span className="sr-only">Search</span>
-          <SearchIcon className="w-5 text-primary" />
-        </Link>
+        <button
+          aria-label="搜尋"
+          className="inline-flex cursor-pointer items-center justify-center rounded-md p-1 text-primary hover:bg-muted"
+          onClick={onOpenSearch}
+          type="button"
+        >
+          <SearchIcon className="w-5" />
+        </button>
         <button
           aria-expanded={open}
           aria-label={open ? '關閉選單' : '開啟選單'}

@@ -216,13 +216,6 @@ export const seed = async ({
                   url: '/posts',
                 },
               },
-              {
-                link: {
-                  type: 'custom',
-                  label: '搜尋',
-                  url: '/search',
-                },
-              },
             ],
           },
           {
