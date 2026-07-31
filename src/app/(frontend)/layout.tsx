@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Analytics } from '@vercel/analytics/next'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
           <Footer />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
