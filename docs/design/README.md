@@ -9,6 +9,7 @@
 | [`spec.md`](spec.md) | Developer reference (single source of truth for theme implementation) |
 | [`spec-home.md`](spec-home.md) | Home page SDD sub-spec (sections, CMS blocks, HeaderTheme) |
 | [`spec-book-marketing.md`](spec-book-marketing.md) | 《攔截胰臟癌》行銷文案（PDF 結構化 + 首頁 seed mapping） |
+| [`spec-legal.md`](spec-legal.md) | 著作權與醫療聲明文案（三處放置規則） |
 | [`book-marketing.pdf`](book-marketing.pdf) | 天下雜誌出版行銷稿（封面 + 封底 + 作者簡介） |
 | [`spec-client.html`](spec-client.html) | Client-facing A4 preview (open in browser or export to PNG) |
 | [`assets/`](assets/) | Shared reference assets (layout mockup, sample images) |
