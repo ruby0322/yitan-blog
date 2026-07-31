@@ -280,6 +280,15 @@
   .post-page-prose.prose :where(h2:first-child) {
     @apply mt-0;
   }
+
+  .about-page-prose.prose :where(h2)::before {
+    content: none;
+    display: none;
+  }
+
+  .about-page-prose.prose :where(h2) {
+    @apply block;
+  }
 }
 
 html {

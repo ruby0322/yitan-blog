@@ -22,7 +22,12 @@ export const postPageProseClassName = cn(
   'prose-a:transition-[color,text-decoration-color] hover:prose-a:decoration-brand-sage',
 )
 
-/** Legal / policy pages — CMS content prose + inline link tokens */
+/** About page body — post typography without h2 sage bars */
+export const aboutPageProseClassName = cn(
+  postPageProseClassName,
+  'about-page-prose',
+)
+
 export const legalPageProseClassName = cn(
   themeRichTextClassName,
   'prose-h1:mb-4 prose-h1:md:mb-6',

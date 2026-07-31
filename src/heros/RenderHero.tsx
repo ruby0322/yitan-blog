@@ -12,8 +12,8 @@ const heroes = {
   mediumImpact: MediumImpactHero,
 }
 
-export const RenderHero: React.FC<Page['hero']> = (props) => {
-  const { type } = props || {}
+export const RenderHero: React.FC<Page['hero'] & { variant?: 'default' | 'article' }> = (props) => {
+  const { type, variant = 'default' } = props || {}
 
   if (!type || type === 'none') return null
 
@@ -21,5 +21,5 @@ export const RenderHero: React.FC<Page['hero']> = (props) => {
 
   if (!HeroToRender) return null
 
-  return <HeroToRender {...props} />
+  return <HeroToRender {...props} variant={variant} />
 }

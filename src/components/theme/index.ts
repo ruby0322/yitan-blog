@@ -2,7 +2,7 @@ export {
   ArticleCard,
   type ArticleCardPostData,
 } from './article-card'
-export { heroRichTextClassName, inverseRichTextClassName, legalPageProseClassName, postPageProseClassName, themeRichTextClassName } from './rich-text-classes'
+export { heroRichTextClassName, aboutPageProseClassName, inverseRichTextClassName, legalPageProseClassName, postPageProseClassName, themeRichTextClassName } from './rich-text-classes'
 export { NewsletterForm } from './newsletter-form'
 export { NumberedHeading } from './numbered-heading'
 export { QuoteBlock } from './quote-block'

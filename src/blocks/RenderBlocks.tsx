@@ -32,8 +32,9 @@ const blockComponents = {
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
+  layoutVariant?: 'default' | 'article'
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, layoutVariant = 'default' } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -47,11 +48,23 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType as keyof typeof blockComponents]
 
             if (Block) {
+              const blockProps =
+                blockType === 'content' && layoutVariant === 'article'
+                  ? { ...block, layoutVariant: 'article' as const }
+                  : block
+
               return (
-                <Fragment key={index}>
+                <div
+                  className={
+                    layoutVariant === 'article' && index > 0
+                      ? 'mt-12 border-t border-brand-border pt-8'
+                      : undefined
+                  }
+                  key={index}
+                >
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
-                </Fragment>
+                  <Block {...blockProps} disableInnerContainer />
+                </div>
               )
             }
           }

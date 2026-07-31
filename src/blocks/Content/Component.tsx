@@ -4,16 +4,50 @@ import RichText from '@/components/RichText'
 
 import type { ContentBlock as ContentBlockProps } from '@/payload-types'
 
+import { postPageProseClassName } from '@/components/theme'
 import { CMSLink } from '../../components/Link'
 
-export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
-  const { columns } = props
+type ContentBlockComponentProps = ContentBlockProps & {
+  layoutVariant?: 'default' | 'article'
+}
+
+export const ContentBlock: React.FC<ContentBlockComponentProps> = (props) => {
+  const { columns, layoutVariant = 'default' } = props
 
   const colsSpanClasses = {
     full: '12',
     half: '6',
     oneThird: '4',
     twoThirds: '8',
+  }
+
+  if (layoutVariant === 'article') {
+    return (
+      <>
+        {columns &&
+          columns.length > 0 &&
+          columns.map((col, index) => {
+            const { enableLink, link, richText } = col
+
+            return (
+              <div
+                className={cn(index > 0 && 'mt-12 border-t border-brand-border pt-8')}
+                key={index}
+              >
+                {richText && (
+                  <RichText
+                    className={postPageProseClassName}
+                    data={richText}
+                    enableGutter={false}
+                  />
+                )}
+
+                {enableLink && <CMSLink {...link} />}
+              </div>
+            )
+          })}
+      </>
+    )
   }
 
   return (

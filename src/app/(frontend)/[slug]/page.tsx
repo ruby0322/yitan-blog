@@ -8,6 +8,7 @@ import React from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
 import { aboutStatic } from '@/endpoints/seed/about-static'
 
+import { AboutArticleBody } from '@/components/AboutArticleBody'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
@@ -88,17 +89,26 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
   const isHome = decodedSlug === 'home'
+  const isAbout = decodedSlug === 'about'
 
   return (
-    <div className={isHome ? undefined : 'pb-24 pt-16'}>
+    <div className={isHome ? undefined : isAbout ? 'bg-brand-warm-white pb-16' : 'pb-24 pt-16'}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      <RenderHero {...hero} variant={isAbout ? 'article' : 'default'} />
+      {isAbout ? (
+        <div className="container pt-8">
+          <div className="mx-auto w-full max-w-[48rem]">
+            <AboutArticleBody />
+          </div>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
     </div>
   )
 }
