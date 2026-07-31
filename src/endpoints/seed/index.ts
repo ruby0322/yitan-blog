@@ -7,6 +7,7 @@ import { imageBrandHero } from './image-brand-hero'
 import { featuredPostIdsFromClientPosts, seedClientPosts } from './seed-client-posts'
 import { TOPIC_CATEGORY_DATA } from '@/constants/categories'
 
+import { clearMediaCollection, clearOrphanedVercelBlobs } from './clear-media-storage'
 import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
@@ -44,6 +45,15 @@ export const seed = async ({
       },
     }),
   ])
+
+  payload.logger.info(`— Clearing media storage...`)
+
+  await clearMediaCollection({ payload, req })
+
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+  if (blobToken) {
+    await clearOrphanedVercelBlobs(blobToken)
+  }
 
   for (const collection of collections) {
     await payload.db.deleteMany({ collection, req, where: {} })
