@@ -6,6 +6,26 @@ import { getPayload } from 'payload'
 
 type PostListItem = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'publishedAt'>
 
+type CategoryListItem = Pick<Category, 'title' | 'slug'>
+
+export async function queryAllCategories(): Promise<CategoryListItem[]> {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'categories',
+    depth: 0,
+    limit: 100,
+    overrideAccess: false,
+    sort: 'title',
+    select: {
+      title: true,
+      slug: true,
+    },
+  })
+
+  return result.docs
+}
+
 export async function findCategoryBySlug(slug: string): Promise<Category | null> {
   const payload = await getPayload({ config: configPromise })
 
