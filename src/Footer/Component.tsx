@@ -5,6 +5,7 @@ import React from 'react'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 import { Section } from '@/components/theme/section'
+import { LEGAL } from '@/content/legal'
 
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
@@ -51,9 +52,17 @@ export async function Footer() {
         </div>
 
         <div className="space-y-2 border-t border-brand-inverse-fg/15 pt-6 text-sm text-brand-inverse-fg/75">
-          <p>© {new Date().getFullYear()} 胰探究竟－章醫師的胰臟日常</p>
+          <p>{LEGAL.footerShort.copyright}</p>
           <p>
-            本網站資訊僅供衛教參考，不能取代醫師面對面的診斷與治療建議。若有身體不適，請盡快就醫。
+            {LEGAL.footerShort.usage}
+            {' '}
+            <Link
+              className="underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"
+              href="/terms"
+            >
+              詳見著作權與使用條款
+            </Link>
+            。
           </p>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
+import { LEGAL } from '@/content/legal'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 const BRAND_INTRO =
@@ -36,9 +37,9 @@ export const aboutStatic: RequiredDataFromCollectionSlug<'pages'> = {
                 '胰臟相關問題常被誤解，許多資訊不是過於艱澀，就是充滿未經證實的說法。章醫師希望透過這個平台，把真正重要的胰臟知識整理成一般民眾也能理解的內容。',
               ),
             ),
-            heading('h2', '免責聲明'),
+            heading('h2', '醫療資訊聲明'),
             paragraph(
-              text('本網站資訊僅供衛教參考，不能取代醫師面對面的診斷與治療建議。若有身體不適或疑似胰臟相關問題，請盡快就醫。'),
+              text(LEGAL.medicalDisclaimer),
             ),
           ),
         },

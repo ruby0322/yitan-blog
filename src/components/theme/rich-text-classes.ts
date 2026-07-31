@@ -8,7 +8,13 @@ export const themeRichTextClassName = cn(
   'prose-p:font-sans prose-p:text-brand-body prose-p:leading-loose prose-p:tracking-wide',
 )
 
-/** Hero copy — tuned for mobile readability and magazine headline rhythm */
+/** Legal / policy pages — CMS content prose + inline link tokens */
+export const legalPageProseClassName = cn(
+  themeRichTextClassName,
+  'prose-h1:mb-4 prose-h1:md:mb-6',
+  'prose-a:font-sans prose-a:text-brand-heading prose-a:underline prose-a:decoration-brand-border prose-a:underline-offset-[0.25em]',
+  'prose-a:transition-[color,text-decoration-color] hover:prose-a:decoration-brand-sage',
+)
 export const heroRichTextClassName = cn(
   'prose max-w-none',
   'prose-headings:font-serif prose-headings:font-semibold prose-headings:text-brand-heading',

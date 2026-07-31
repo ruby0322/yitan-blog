@@ -10,6 +10,7 @@ import { cache } from 'react'
 
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { PostLegalNotice } from '@/components/PostLegalNotice'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
@@ -65,6 +66,7 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="container">
           <div className="mx-auto w-full max-w-[48rem]">
             <RichText data={post.content} enableGutter={false} />
+            <PostLegalNotice />
             {post.relatedPosts && post.relatedPosts.length > 0 && (
               <RelatedPosts
                 docs={post.relatedPosts.filter((post) => typeof post === 'object')}

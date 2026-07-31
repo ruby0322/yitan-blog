@@ -352,6 +352,13 @@ export const seed = async ({
                   url: '/search',
                 },
               },
+              {
+                link: {
+                  type: 'custom',
+                  label: '著作權與使用條款',
+                  url: '/terms',
+                },
+              },
             ],
           },
           {

@@ -1,5 +1,6 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Media } from '@/payload-types'
+import { LEGAL } from '@/content/legal'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
 type AboutArgs = {
@@ -89,9 +90,9 @@ export const about = ({ doctorImage, metaImage }: AboutArgs): RequiredDataFromCo
         {
           size: 'full',
           richText: richTextRoot(
-            heading('h2', '免責聲明'),
+            heading('h2', '醫療資訊聲明'),
             paragraph(
-              text('本網站資訊僅供衛教參考，不能取代醫師面對面的診斷與治療建議。若有身體不適或疑似胰臟相關問題，請盡快就醫。'),
+              text(LEGAL.medicalDisclaimer),
             ),
           ),
         },
