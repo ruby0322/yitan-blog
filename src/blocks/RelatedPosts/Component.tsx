@@ -1,4 +1,5 @@
 import RichText from '@/components/RichText'
+import { BodyText, SectionHeading } from '@/components/theme/typography'
 import { cn } from '@/utilities/ui'
 import React from 'react'
 
@@ -19,12 +20,14 @@ export const RelatedPosts: React.FC<RelatedPostsProps> = (props) => {
   if (!docs?.length) return null
 
   return (
-    <section className={cn('mt-12 w-full border-t border-border pt-12', className)}>
+    <section className={cn('mt-12 w-full border-t border-brand-border pt-12', className)}>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">相關文章</h2>
-        <p className="mt-2 text-muted-foreground">
+        <SectionHeading as="h2" className="text-brand-heading">
+          相關文章
+        </SectionHeading>
+        <BodyText className="mt-2 text-sm md:text-base">
           延伸閱讀主題相近的文章，協助您更完整理解相關知識。
-        </p>
+        </BodyText>
       </div>
 
       {introContent && <RichText className="mb-8" data={introContent} enableGutter={false} />}

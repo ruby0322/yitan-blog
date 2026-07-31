@@ -10,7 +10,9 @@ import { cache } from 'react'
 
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { PostFaq } from '@/components/PostFaq'
 import { PostLegalNotice } from '@/components/PostLegalNotice'
+import { postPageProseClassName } from '@/components/theme'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
@@ -52,7 +54,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   if (!post) return <PayloadRedirects url={url} />
 
   return (
-    <article className="pb-16 pt-0 md:pt-16">
+    <article className="bg-brand-warm-white pb-16">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -62,17 +64,14 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       <PostHero post={post} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <div className="mx-auto w-full max-w-[48rem]">
-            <RichText data={post.content} enableGutter={false} />
-            <PostLegalNotice />
-            {post.relatedPosts && post.relatedPosts.length > 0 && (
-              <RelatedPosts
-                docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-              />
-            )}
-          </div>
+      <div className="container pt-8">
+        <div className="mx-auto w-full max-w-[48rem]">
+          <RichText className={postPageProseClassName} data={post.content} enableGutter={false} />
+          {post.faq && post.faq.length > 0 && <PostFaq items={post.faq} />}
+          <PostLegalNotice />
+          {post.relatedPosts && post.relatedPosts.length > 0 && (
+            <RelatedPosts docs={post.relatedPosts.filter((post) => typeof post === 'object')} />
+          )}
         </div>
       </div>
     </article>

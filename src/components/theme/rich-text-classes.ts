@@ -8,6 +8,20 @@ export const themeRichTextClassName = cn(
   'prose-p:font-sans prose-p:text-brand-body prose-p:leading-loose prose-p:tracking-wide',
 )
 
+/** Article body on /posts/[slug] — aligns with spec.md §三 and spec-client type-live-body */
+export const postPageProseClassName = cn(
+  'post-page-prose',
+  themeRichTextClassName,
+  'prose-p:text-base prose-p:leading-[1.9] prose-p:tracking-wide',
+  'md:prose-p:text-base md:prose-p:leading-loose',
+  'prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-xl',
+  'prose-li:font-sans prose-li:text-brand-body prose-li:leading-[1.9] prose-li:tracking-wide',
+  'prose-ul:my-6 prose-ol:my-6',
+  'prose-strong:font-sans prose-strong:font-bold prose-strong:text-brand-subtitle',
+  'prose-a:font-sans prose-a:text-brand-heading prose-a:underline prose-a:decoration-brand-border prose-a:underline-offset-[0.25em]',
+  'prose-a:transition-[color,text-decoration-color] hover:prose-a:decoration-brand-sage',
+)
+
 /** Legal / policy pages — CMS content prose + inline link tokens */
 export const legalPageProseClassName = cn(
   themeRichTextClassName,

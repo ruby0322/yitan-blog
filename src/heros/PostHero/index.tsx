@@ -4,72 +4,69 @@ import React from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { Caption } from '@/components/theme/typography'
 import { formatAuthors } from '@/utilities/formatAuthors'
 
 export const PostHero: React.FC<{
   post: Post
 }> = ({ post }) => {
-  const { categories, heroImage, populatedAuthors, publishedAt, title } = post
+  const { categories, excerpt, heroImage, populatedAuthors, publishedAt, title } = post
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
 
   return (
-    <div className="relative flex min-h-[50vh] items-end text-white md:-mt-[10.4rem] md:min-h-[70vh]">
-      <div className="absolute inset-0 select-none">
-        {heroImage && typeof heroImage !== 'string' && (
-          <Media fill priority imgClassName="object-cover" resource={heroImage} />
-        )}
-        <div className="absolute inset-0 bg-black/35" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-linear-to-t from-black to-transparent" />
-      </div>
+    <header className="border-b border-brand-border bg-brand-warm-white pt-8 md:pt-12">
+      <div className="container">
+        <div className="mx-auto w-full max-w-[48rem]">
+          {categories && categories.length > 0 && (
+            <Caption className="mb-4 block uppercase tracking-[0.14em]">
+              {categories
+                .map((category) => {
+                  if (typeof category === 'object' && category !== null) {
+                    return category.title || 'Untitled category'
+                  }
+                  return null
+                })
+                .filter(Boolean)
+                .join(' · ')}
+            </Caption>
+          )}
 
-      <div className="container relative z-10 pb-8 pt-6 md:pb-8 md:pt-24 lg:grid lg:grid-cols-[1fr_48rem_1fr]">
-        <div className="col-span-1 col-start-1 md:col-span-2 md:col-start-2">
-          <div className="mb-6 text-sm uppercase">
-            {categories?.map((category, index) => {
-              if (typeof category === 'object' && category !== null) {
-                const { title: categoryTitle } = category
+          <h1 className="font-serif text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-[1.2] tracking-wide text-brand-heading md:text-4xl md:leading-[1.15]">
+            {title}
+          </h1>
 
-                const titleToUse = categoryTitle || 'Untitled category'
+          {heroImage && typeof heroImage !== 'string' && (
+            <div className="relative mt-6 aspect-video w-full overflow-hidden bg-brand-card">
+              <Media fill priority imgClassName="object-cover" resource={heroImage} />
+            </div>
+          )}
 
-                const isLast = index === categories.length - 1
+          {excerpt && (
+            <p className="mt-4 font-serif text-base leading-relaxed tracking-wide text-brand-body md:text-lg md:leading-loose">
+              {excerpt}
+            </p>
+          )}
 
-                return (
-                  <React.Fragment key={index}>
-                    {titleToUse}
-                    {!isLast && <React.Fragment>, &nbsp;</React.Fragment>}
-                  </React.Fragment>
-                )
-              }
-              return null
-            })}
-          </div>
-
-          <div>
-            <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">{title}</h1>
-          </div>
-
-          <div className="flex flex-col gap-4 md:flex-row md:gap-16">
+          <div className="mt-6 flex flex-col gap-3 border-b border-brand-border pb-8 font-sans text-sm text-brand-body md:flex-row md:gap-10">
             {hasAuthors && (
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm">作者</p>
-
-                  <p>{formatAuthors(populatedAuthors)}</p>
-                </div>
+              <div>
+                <Caption as="span">作者</Caption>
+                <span className="mx-2">·</span>
+                <span>{formatAuthors(populatedAuthors)}</span>
               </div>
             )}
             {publishedAt && (
-              <div className="flex flex-col gap-1">
-                <p className="text-sm">發布日期</p>
-
+              <div>
+                <Caption as="span">發布日期</Caption>
+                <span className="mx-2">·</span>
                 <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </header>
   )
 }

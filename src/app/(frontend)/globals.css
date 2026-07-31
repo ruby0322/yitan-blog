@@ -262,6 +262,26 @@
   }
 }
 
+@layer components {
+  .heading-sage-bar {
+    @apply flex items-center gap-3;
+  }
+
+  .heading-sage-bar::before,
+  .post-page-prose.prose :where(h2)::before {
+    content: '';
+    @apply mt-[0.12em] h-[0.88em] w-[3px] shrink-0 rounded-sm bg-brand-sage;
+  }
+
+  .post-page-prose.prose :where(h2) {
+    @apply mt-10 mb-4 flex items-center gap-3 border-0 pl-0 font-serif text-2xl font-semibold tracking-wide text-brand-heading md:text-3xl;
+  }
+
+  .post-page-prose.prose :where(h2:first-child) {
+    @apply mt-0;
+  }
+}
+
 html {
   opacity: 0;
   scroll-behavior: smooth;
