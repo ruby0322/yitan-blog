@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { buildPostsPagePath } from '@/utilities/queryPosts'
+import { buildPostsPagePath } from '@/utilities/buildPostsPagePath'
 import { cn } from '@/utilities/ui'
 import { useRouter } from 'next/navigation'
 import React from 'react'
