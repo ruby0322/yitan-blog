@@ -102,3 +102,30 @@ Vercel build 的 `pnpm run ci` 會自動執行 `payload migrate`。
 - **備份**：Neon 免費版含自動備份
 - **更新**：push 至 main 即自動重新部署
 - **監控**：Vercel Dashboard 查看 build log 與流量
+
+## 八、圖片／媒體沒出現（troubleshooting）
+
+本站圖片**不是**從 git 直接當靜態檔部署，而是：
+
+1. Build 跑 `pnpm ci` → `payload migrate` → **`pnpm seed`** → `next build`
+2. Seed 讀取 `materials/posts/` 與 `public/seed-media/`，上傳至 Payload **Media**
+3. 正式環境 Media 檔案存於 **Vercel Blob**（需 `BLOB_READ_WRITE_TOKEN`）
+
+因此「程式碼有上去、圖沒有」通常是 **seed 沒成功** 或 **Blob 沒接好**。
+
+### 檢查清單
+
+| 項目 | 做法 |
+|------|------|
+| `materials/` 已在 repo | 需含 `materials/posts/`（client 封面與 inline 圖），否則 seed 會 ENOENT |
+| Vercel Blob 已連接 | Project → **Storage** → 新增 **Blob**，會自動注入 `BLOB_READ_WRITE_TOKEN` |
+| Build log | 搜尋 `Seed completed successfully`；若有 `ENOENT` / `Seed failed` 代表媒體沒灌進 DB |
+| 手動重跑 seed | 部署成功後，以 admin 登入，對 `POST /next/seed` 觸發（會清空並重建 posts/media） |
+
+### 常見原因
+
+- **第一次 deploy 時還沒 push `materials/`** → 重 push 含 materials 的 commit 後再 deploy
+- **沒接 Vercel Blob** → 上傳無持久化，runtime 讀不到檔案
+- **Build 有 seed 錯誤但被忽略** → 修正後在 Vercel 按 **Redeploy**
+
+`public/media/` 已在 `.gitignore`，不應期待把本機上傳檔 push 上去；正式環境一律走 Blob。
