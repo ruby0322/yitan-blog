@@ -1,10 +1,11 @@
-const copyrightNotice =
-  '© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常。版權所有，未經授權不得轉載、重製或改作。'
+import { SITE_FULL_NAME } from '@/constants/site'
+
+const copyrightNotice = `© 2026 章明珠醫師／${SITE_FULL_NAME}。版權所有，未經授權不得轉載、重製或改作。`
 
 const trademarkNotice = '「胰探究竟®」為章明珠醫師之註冊商標。'
 
 export const LEGAL = {
-  siteName: '胰探究竟 - 章醫師的胰臟日常',
+  siteName: SITE_FULL_NAME,
   copyrightHolder: '章明珠醫師',
   copyrightYear: 2026,
   copyrightNotice,
