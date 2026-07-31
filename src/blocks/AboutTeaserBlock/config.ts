@@ -34,9 +34,13 @@ export const AboutTeaserBlockConfig: Block = {
     },
     {
       name: 'credentialsLine',
-      type: 'text',
+      type: 'textarea',
       label: '職稱',
-      defaultValue: '台大醫學院臨床副教授 · 台大醫院內科部消化系主治醫師',
+      admin: {
+        description: '每行一項，前台以條列顯示。',
+      },
+      defaultValue:
+        '台大醫學院臨床副教授\n台大醫院內科部專任主治醫師\n台大醫院綜合診療部超音波科主任\n國家衛生研究院 TCOG 胰臟疾病委員會委員',
     },
     {
       name: 'body',
