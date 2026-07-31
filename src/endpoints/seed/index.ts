@@ -2,32 +2,15 @@ import type { CollectionSlug, Payload, PayloadRequest } from 'payload'
 
 import { about } from './about'
 import { home } from './home'
-import { image1 } from './image-1'
-import { image2 } from './image-2'
-import { image3, image4, image5, image6, imageInlineDiet } from './image-3'
 import { imageBookFlatMeta } from './image-book'
 import { imageBrandHero } from './image-brand-hero'
 import { imageDoctorPortraitMeta } from './image-doctor-portrait'
-import { post1 } from './post-1'
-import { post2 } from './post-2'
-import { post3 } from './post-3'
-import { post4 } from './post-4'
-import { post5 } from './post-5'
-import { post6 } from './post-6'
+import { featuredPostIdsFromClientPosts, seedClientPosts } from './seed-client-posts'
 import { TOPIC_CATEGORY_DATA } from '@/constants/categories'
 
 import { fetchLocalSeedFile } from './seed-media'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'search']
-
-const PUBLISHED_AT = {
-  post1: '2026-06-20T08:00:00.000Z',
-  post2: '2026-06-28T08:00:00.000Z',
-  post3: '2026-07-05T08:00:00.000Z',
-  post4: '2026-07-10T08:00:00.000Z',
-  post5: '2026-07-15T08:00:00.000Z',
-  post6: '2026-07-20T08:00:00.000Z',
-} as const
 
 export const seed = async ({
   payload,
@@ -85,28 +68,10 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding media...`)
 
-  const [
-    brandHeroBuffer,
-    doctorPortraitBuffer,
-    bookFlatBuffer,
-    post1Buffer,
-    post2Buffer,
-    post3Buffer,
-    post4Buffer,
-    post5Buffer,
-    post6Buffer,
-    inlineDietBuffer,
-  ] = await Promise.all([
+  const [brandHeroBuffer, doctorPortraitBuffer, bookFlatBuffer] = await Promise.all([
     fetchLocalSeedFile('brand-hero.webp'),
     fetchLocalSeedFile('doctor-portrait.webp'),
     fetchLocalSeedFile('book-flat.JPG'),
-    fetchLocalSeedFile('post-1.webp'),
-    fetchLocalSeedFile('post-2.webp'),
-    fetchLocalSeedFile('post-3.webp'),
-    fetchLocalSeedFile('post-4.webp'),
-    fetchLocalSeedFile('post-5.webp'),
-    fetchLocalSeedFile('post-6.webp'),
-    fetchLocalSeedFile('inline-diet.webp'),
   ])
 
   const demoAuthor = await payload.create({
@@ -137,13 +102,6 @@ export const seed = async ({
     { data: imageBrandHero, file: brandHeroBuffer },
     { data: imageDoctorPortraitMeta, file: doctorPortraitBuffer },
     { data: imageBookFlatMeta, file: bookFlatBuffer },
-    { data: image1, file: post1Buffer },
-    { data: image2, file: post2Buffer },
-    { data: image3, file: post3Buffer },
-    { data: image4, file: post4Buffer },
-    { data: image5, file: post5Buffer },
-    { data: image6, file: post6Buffer },
-    { data: imageInlineDiet, file: inlineDietBuffer },
   ] as const
 
   const mediaDocs = []
@@ -158,110 +116,15 @@ export const seed = async ({
     )
   }
 
-  const [
-    _brandHeroDoc,
-    doctorPortraitDoc,
-    bookFlatDoc,
-    image1Doc,
-    image2Doc,
-    image3Doc,
-    image4Doc,
-    image5Doc,
-    image6Doc,
-    inlineDietDoc,
-  ] = mediaDocs
+  const [_brandHeroDoc, doctorPortraitDoc, bookFlatDoc] = mediaDocs
 
-  payload.logger.info(`— Seeding posts...`)
+  payload.logger.info(`— Seeding client posts...`)
 
-  const postArgs = {
+  const clientPosts = await seedClientPosts({
     author: demoAuthor,
-  }
-
-  const post1Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post1({
-      ...postArgs,
-      category: categoryByTitle['基礎知識'],
-      heroImage: image1Doc,
-      publishedAt: PUBLISHED_AT.post1,
-    }),
+    categoryByTitle,
+    payload,
   })
-
-  const post2Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post2({
-      ...postArgs,
-      category: categoryByTitle['基礎知識'],
-      heroImage: image2Doc,
-      publishedAt: PUBLISHED_AT.post2,
-    }),
-  })
-
-  const post3Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post3({
-      ...postArgs,
-      category: categoryByTitle['飲食保健'],
-      heroImage: image3Doc,
-      publishedAt: PUBLISHED_AT.post3,
-    }),
-  })
-
-  const post4Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post4({
-      ...postArgs,
-      category: categoryByTitle['基礎知識'],
-      heroImage: image4Doc,
-      publishedAt: PUBLISHED_AT.post4,
-    }),
-  })
-
-  const post5Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post5({
-      ...postArgs,
-      category: categoryByTitle['飲食保健'],
-      heroImage: image5Doc,
-      inlineImage: inlineDietDoc,
-      publishedAt: PUBLISHED_AT.post5,
-    }),
-  })
-
-  const post6Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: { disableRevalidate: true },
-    data: post6({
-      ...postArgs,
-      category: categoryByTitle['基礎知識'],
-      heroImage: image6Doc,
-      publishedAt: PUBLISHED_AT.post6,
-    }),
-  })
-
-  const allPosts = [post1Doc, post2Doc, post3Doc, post4Doc, post5Doc, post6Doc]
-
-  for (const post of allPosts) {
-    await payload.update({
-      id: post.id,
-      collection: 'posts',
-      context: { disableRevalidate: true },
-      data: {
-        relatedPosts: allPosts.filter((related) => related.id !== post.id).map((related) => related.id),
-      },
-    })
-  }
 
   payload.logger.info(`— Seeding pages...`)
 
@@ -274,7 +137,7 @@ export const seed = async ({
         bookFlatImage: bookFlatDoc,
         categoryByTitle,
         doctorImage: doctorPortraitDoc,
-        featuredPostIds: [post1Doc.id, post2Doc.id, post3Doc.id],
+        featuredPostIds: featuredPostIdsFromClientPosts(clientPosts),
         metaImage: doctorPortraitDoc,
       }),
     }),

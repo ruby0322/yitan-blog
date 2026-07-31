@@ -20,7 +20,7 @@ type BlockNode = {
   version: 2
 }
 
-type ContentNode =
+export type ContentNode =
   | ReturnType<typeof heading>
   | ReturnType<typeof paragraph>
   | ReturnType<typeof table>
