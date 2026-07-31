@@ -18,9 +18,15 @@ async function getGlobal<T extends Global>(slug: T, depth = 0): Promise<DataFrom
 }
 
 /**
- * Returns a unstable_cache function mapped with the cache tag for the slug
+ * Returns a cached global fetcher. In development, always reads fresh data so
+ * CLI seed updates are visible without restarting the dev server.
  */
-export const getCachedGlobal = <T extends Global>(slug: T, depth = 0) =>
-  unstable_cache(async () => getGlobal<T>(slug, depth), [slug, String(depth)], {
+export const getCachedGlobal = <T extends Global>(slug: T, depth = 0) => {
+  if (process.env.NODE_ENV === 'development') {
+    return () => getGlobal<T>(slug, depth)
+  }
+
+  return unstable_cache(async () => getGlobal<T>(slug, depth), [slug, String(depth)], {
     tags: [`global_${slug}`],
   })
+}

@@ -223,41 +223,6 @@ export const seed = async ({
                   url: '/search',
                 },
               },
-              {
-                link: {
-                  type: 'custom',
-                  label: '著作權與使用條款',
-                  url: '/terms',
-                },
-              },
-            ],
-          },
-          {
-            label: '章明珠醫師',
-            items: [
-              {
-                link: {
-                  type: 'custom',
-                  label: '認識章醫師',
-                  url: '/about',
-                },
-              },
-              {
-                link: {
-                  type: 'custom',
-                  label: '台大醫院個人頁',
-                  url: 'https://www.ntuh.gov.tw/Med/Vcard.action?q_type=A03&q_itemCode=180',
-                  newTab: true,
-                },
-              },
-              {
-                link: {
-                  type: 'custom',
-                  label: '台大醫院內科部',
-                  url: 'https://www.ntuh.gov.tw/',
-                  newTab: true,
-                },
-              },
             ],
           },
           {

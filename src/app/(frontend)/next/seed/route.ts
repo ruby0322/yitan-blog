@@ -1,5 +1,6 @@
 import { createLocalReq, getPayload } from 'payload'
 import { seed } from '@/endpoints/seed'
+import { revalidateGlobals } from '@/utilities/revalidateGlobals'
 import config from '@payload-config'
 import { headers } from 'next/headers'
 
@@ -22,6 +23,7 @@ export async function POST(): Promise<Response> {
     const payloadReq = await createLocalReq({ user }, payload)
 
     await seed({ payload, req: payloadReq })
+    revalidateGlobals()
 
     return Response.json({ success: true })
   } catch (e) {

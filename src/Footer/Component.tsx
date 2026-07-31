@@ -26,7 +26,7 @@ export async function Footer() {
             <Logo size="lg" variant="inverse" />
           </Link>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:ml-auto lg:grid-cols-4 lg:gap-x-10 xl:gap-x-12">
+          <div className="flex flex-col gap-10 sm:flex-row sm:flex-wrap lg:ml-auto lg:justify-end lg:gap-x-12 xl:gap-x-16">
             {linkGroups.map(({ id, items, label }, groupIndex) => (
               <nav aria-label={label || undefined} key={id || groupIndex}>
                 {label ? (
