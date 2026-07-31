@@ -18,15 +18,14 @@ export function useImeSafeDebouncedSearch({
   onDebouncedChange,
 }: UseImeSafeDebouncedSearchArgs = {}) {
   const [value, setValue] = useState(externalValue)
-  const [isFocused, setIsFocused] = useState(false)
   const isComposingRef = useRef(false)
   const debouncedValue = useDebounce(value, delay)
 
+  // Sync when the parent value changes (e.g. URL ?q=), not on input blur.
   useEffect(() => {
-    if (!isFocused && !isComposingRef.current) {
-      setValue(externalValue)
-    }
-  }, [externalValue, isFocused])
+    if (isComposingRef.current) return
+    setValue(externalValue)
+  }, [externalValue])
 
   const isFirstRunRef = useRef(true)
 
@@ -59,20 +58,10 @@ export function useImeSafeDebouncedSearch({
     [onDebouncedChange],
   )
 
-  const handleFocus = useCallback(() => {
-    setIsFocused(true)
-  }, [])
-
-  const handleBlur = useCallback(() => {
-    setIsFocused(false)
-  }, [])
-
   const inputProps = {
-    onBlur: handleBlur,
     onChange: handleChange,
     onCompositionEnd: handleCompositionEnd,
     onCompositionStart: handleCompositionStart,
-    onFocus: handleFocus,
     value,
   }
 
