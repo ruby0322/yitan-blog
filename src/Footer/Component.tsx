@@ -66,7 +66,7 @@ export async function Footer() {
         <div className="space-y-2 border-t border-brand-inverse-fg/15 pt-6 text-sm text-brand-inverse-fg/75">
           <p>{LEGAL.footerShort.copyright}</p>
           <p>
-            {LEGAL.footerShort.usage}
+            {LEGAL.footerShort.trademark}
             {' '}
             <Link
               className="underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"

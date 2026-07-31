@@ -20,9 +20,11 @@
 ### 2.1 頁尾精簡版（`footerShort`）
 
 ```
-© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常 版權所有。
-未經授權，請勿重製、轉載、改作、剪輯或作為商業用途。
+© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常。版權所有，未經授權不得轉載、重製或改作。
+「胰探究竟®」為章明珠醫師之註冊商標。詳見著作權與使用條款。
 ```
+
+第二行末尾「詳見著作權與使用條款」連結至 `/terms`。
 
 ### 2.2 文章末尾版（`articleEnd`）
 
@@ -36,12 +38,26 @@
 本站內容僅供一般醫療知識與健康教育參考，不能取代醫師的診斷、治療或個別醫療建議。每位讀者的健康狀況不同，如有症狀、檢查異常或治療需求，請諮詢合格醫療專業人員。
 ```
 
-### 2.4 建議正式版（`termsFull`，用於 `/terms`）
+### 2.4 建議正式版（`termsFull` + 開頭聲明，用於 `/terms`）
+
+開頭（`copyrightNotice` + `trademarkNotice`）：
 
 ```
-© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常 版權所有。
+© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常。版權所有，未經授權不得轉載、重製或改作。
+「胰探究竟®」為章明珠醫師之註冊商標。
+```
+
+詳述（`termsFull`）：
+
+```
 本網站之文章、文字、圖表、投影片、插畫、影像及其他原創內容，除另有註明外，均受著作權法保護。未經書面授權，不得擅自重製、轉載、改作、剪輯、公開傳輸或作為商業用途。
 如需引用，請註明作者、文章名稱及原始文章連結。若有合作、媒體引用或內容授權需求，請與本網站聯絡。
+```
+
+### 2.5 註冊商標聲明（`trademarkNotice`）
+
+```
+「胰探究竟®」為章明珠醫師之註冊商標。
 ```
 
 ---
@@ -50,9 +66,9 @@
 
 | 位置 | 內容 | 實作 |
 |------|------|------|
-| 全站頁尾 | 頁尾精簡版 only | `src/Footer/Component.tsx` |
+| 全站頁尾 | 著作權 + 註冊商標 + terms 連結 | `src/Footer/Component.tsx` |
 | 每篇文章末尾 | 醫療資訊聲明 → 著作權聲明（文章末尾版） | `src/components/PostLegalNotice` |
-| `/terms` 獨立頁 | 建議正式版 + 醫療資訊聲明 | `src/app/(frontend)/terms/page.tsx` |
+| `/terms` 獨立頁 | 著作權 + 註冊商標 + 詳述 + 醫療資訊聲明 | `src/app/(frontend)/terms/page.tsx` |
 
 ### 行為變更
 
@@ -76,7 +92,7 @@
 ### 4.2 頁尾
 
 - 維持 inverse section 既有樣式：`text-sm text-brand-inverse-fg/75`
-- 第二段末尾附「詳見著作權與使用條款」連結至 `/terms`
+- 兩行：`copyrightNotice` → `trademarkNotice` +「詳見著作權與使用條款」連結（同一行）至 `/terms`
 
 ### 4.3 `/terms` 頁
 
@@ -85,7 +101,7 @@
 - 版型：`pb-24 pt-16` + `container` + `max-w-[48rem] lg:max-w-[40rem] mx-auto`
 - 全頁 prose：`legalPageProseClassName`（`themeRichTextClassName` + 內文連結樣式）
 - 頁首：單一 `h1` + 導言 `p`，無額外 kicker / 分隔線
-- 著作權內文：連續 `p` 段落，`leading-loose`、`text-brand-body`
+- 著作權內文：`copyrightNotice` + `trademarkNotice` + `termsFull` 段落
 - 醫療資訊：`NumberedHeading` `variant="bar"`（spec §NumberedHeading）+ 同 prose 內文
 - 末段「本網站」連結至 `/about`
 

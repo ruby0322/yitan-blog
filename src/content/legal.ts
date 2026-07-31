@@ -1,19 +1,23 @@
+const copyrightNotice =
+  '© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常。版權所有，未經授權不得轉載、重製或改作。'
+
+const trademarkNotice = '「胰探究竟®」為章明珠醫師之註冊商標。'
+
 export const LEGAL = {
   siteName: '胰探究竟 - 章醫師的胰臟日常',
   copyrightHolder: '章明珠醫師',
   copyrightYear: 2026,
+  copyrightNotice,
+  trademarkNotice,
   footerShort: {
-    copyright:
-      '© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常 版權所有。',
-    usage:
-      '未經授權，請勿重製、轉載、改作、剪輯或作為商業用途。',
+    copyright: copyrightNotice,
+    trademark: trademarkNotice,
   },
   articleEnd:
     '本文內容為章明珠醫師原創，歡迎分享本文原始連結；未經書面授權，請勿全文轉載、擷取圖表、改作、剪輯或重新發布。',
   medicalDisclaimer:
     '本站內容僅供一般醫療知識與健康教育參考，不能取代醫師的診斷、治療或個別醫療建議。每位讀者的健康狀況不同，如有症狀、檢查異常或治療需求，請諮詢合格醫療專業人員。',
   termsFull: [
-    '© 2026 章明珠醫師／胰探究竟 - 章醫師的胰臟日常 版權所有。',
     '本網站之文章、文字、圖表、投影片、插畫、影像及其他原創內容，除另有註明外，均受著作權法保護。未經書面授權，不得擅自重製、轉載、改作、剪輯、公開傳輸或作為商業用途。',
     '如需引用，請註明作者、文章名稱及原始文章連結。若有合作、媒體引用或內容授權需求，請與本網站聯絡。',
   ] as const,
