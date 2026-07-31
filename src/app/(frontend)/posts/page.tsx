@@ -1,12 +1,9 @@
 import type { Metadata } from 'next/types'
 
-import { CollectionArchive } from '@/components/CollectionArchive'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
-import { PostsPageHeader } from '@/components/PostsPageHeader'
+import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
 import { buildMetadata } from '@/utilities/buildMetadata'
-import { queryPosts } from '@/utilities/queryPosts'
+import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import PageClient from './page.client'
@@ -21,53 +18,26 @@ type Args = {
 
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { category: categorySlug } = await searchParamsPromise
-  const { category, notFound: categoryNotFound, posts } = await queryPosts({
-    categorySlug,
-    page: 1,
-  })
+  const [{ category, notFound: categoryNotFound, posts }, categories] = await Promise.all([
+    queryPosts({
+      categorySlug,
+      page: 1,
+    }),
+    queryAllCategories(),
+  ])
 
   if (categoryNotFound || !posts) {
     notFound()
   }
 
   return (
-    <div className="pt-24 pb-24">
-      <PageClient />
-      <PostsPageHeader
-        categoryDescription={category?.description}
-        categoryTitle={category?.title}
-        totalDocs={posts.totalDocs}
-      />
-
-      {posts.totalDocs > 0 ? (
-        <>
-          <div className="container mb-8">
-            <PageRange
-              collection="posts"
-              collectionLabels={{
-                plural: '篇文章',
-                singular: '篇文章',
-              }}
-              currentPage={posts.page}
-              limit={posts.limit}
-              totalDocs={posts.totalDocs}
-            />
-          </div>
-
-          <CollectionArchive posts={posts.docs} />
-
-          <div className="container">
-            {posts.totalPages > 1 && posts.page && (
-              <Pagination categorySlug={categorySlug} page={posts.page} totalPages={posts.totalPages} />
-            )}
-          </div>
-        </>
-      ) : (
-        <div className="container">
-          <p className="text-muted-foreground">此主題目前尚無文章，請稍後再來看看。</p>
-        </div>
-      )}
-    </div>
+    <PostsArchiveLayout
+      categories={categories}
+      category={category}
+      categorySlug={categorySlug}
+      pageClient={<PageClient />}
+      posts={posts}
+    />
   )
 }
 
