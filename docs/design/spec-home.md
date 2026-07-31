@@ -350,7 +350,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | `description` | textarea | no |
 | `highlightLine` | text | no（重點引述，如存活率數據） |
 | `authorLine` | text | no |
-| `coverImage` | upload → media | no（seed：`book-flat.JPG`） |
+| `coverImage` | upload → media | no（Admin 上傳書封，seed 不預填） |
 | `buyLink` | link group | yes（外部購買 URL + label） |
 
 #### Seed copy
@@ -481,7 +481,7 @@ layout:
 |------|------|-----------|
 | Hero H1 / 副標 / CTA | seed `home.ts` | Payload Admin → Pages → Home → hero |
 | Quote / Book Sales 文案 | seed（標註「客戶可替換文案」） | Admin → layout blocks |
-| 書封圖片 | seed `book-flat.JPG`（書籍區塊） | Admin → bookSalesBlock coverImage |
+| 書封圖片 | Admin → bookSalesBlock coverImage | 部署後於 Payload Admin 上傳 |
 | Category nav 標籤 | seed | Admin → categoryNavBlock items |
 | 文章卡無圖 | `EditorialImagePlaceholder`（runtime fallback） | 上傳 post meta.image |
 | About 無圖 | `EditorialImagePlaceholder oval` | 上傳 aboutTeaserBlock image |
