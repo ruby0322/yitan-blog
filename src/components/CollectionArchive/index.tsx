@@ -1,10 +1,10 @@
 import { cn } from '@/utilities/ui'
 import React from 'react'
 
-import { Card, CardPostData } from '@/components/Card'
+import { ArticleCard, type ArticleCardPostData } from '@/components/theme'
 
 export type Props = {
-  posts: CardPostData[]
+  posts: ArticleCardPostData[]
 }
 
 export const CollectionArchive: React.FC<Props> = (props) => {
@@ -12,11 +12,17 @@ export const CollectionArchive: React.FC<Props> = (props) => {
 
   return (
     <div className={cn('container')}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {posts?.map((result, index) => {
           if (typeof result === 'object' && result !== null) {
             return (
-              <Card className="h-full" doc={result} key={index} relationTo="posts" showCategories />
+              <ArticleCard
+                className="h-full"
+                doc={result}
+                key={result.slug ?? index}
+                relationTo="posts"
+                showCategories
+              />
             )
           }
 

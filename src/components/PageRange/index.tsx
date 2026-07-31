@@ -1,3 +1,4 @@
+import { cn } from '@/utilities/ui'
 import React from 'react'
 
 const defaultLabels = {
@@ -45,13 +46,18 @@ export const PageRange: React.FC<{
     {}
 
   return (
-    <div className={[className, 'font-semibold'].filter(Boolean).join(' ')}>
+    <p
+      className={cn(
+        'font-sans text-sm text-brand-body',
+        className,
+      )}
+    >
       {(typeof totalDocs === 'undefined' || totalDocs === 0) && '找不到符合條件的文章。'}
       {typeof totalDocs !== 'undefined' &&
         totalDocs > 0 &&
         `顯示第 ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ''} 篇，共 ${totalDocs} ${
           totalDocs > 1 ? plural : singular
         }`}
-    </div>
+    </p>
   )
 }
