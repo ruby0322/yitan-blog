@@ -14,7 +14,9 @@ import { PostFaq } from '@/components/PostFaq'
 import { PostLegalNotice } from '@/components/PostLegalNotice'
 import { postPageProseClassName } from '@/components/theme'
 import { PostHero } from '@/heros/PostHero'
+import { StructuredData } from '@/components/StructuredData'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getPostStructuredData } from '@/utilities/structuredData'
 import PageClient from './page.client'
 
 export async function generateStaticParams() {
@@ -55,6 +57,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   return (
     <article className="bg-brand-warm-white pb-16">
+      <StructuredData data={getPostStructuredData(post)} />
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -84,7 +87,11 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const decodedSlug = decodeURIComponent(slug)
   const post = await queryPostBySlug({ slug: decodedSlug })
 
-  return generateMeta({ doc: post })
+  return generateMeta({
+    doc: post,
+    ogType: 'article',
+    path: `/posts/${decodedSlug}`,
+  })
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {

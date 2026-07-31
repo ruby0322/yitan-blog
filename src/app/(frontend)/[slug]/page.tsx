@@ -112,10 +112,13 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
       slug: decodedSlug,
     })
 
-    return generateMeta({ doc: page })
+    const path = decodedSlug === 'home' ? '/' : `/${decodedSlug}`
+
+    return generateMeta({ doc: page, path })
   } catch (error) {
     console.warn(`[pages] generateMetadata skipped for "${decodedSlug}" — database unavailable.`, error)
-    return generateMeta({ doc: null })
+    const path = decodedSlug === 'home' ? '/' : `/${decodedSlug}`
+    return generateMeta({ doc: null, path })
   }
 }
 

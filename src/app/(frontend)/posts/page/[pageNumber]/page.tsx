@@ -6,6 +6,7 @@ import { Pagination } from '@/components/Pagination'
 import { PostsPageHeader } from '@/components/PostsPageHeader'
 import { POSTS_PER_PAGE } from '@/constants/posts'
 import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
+import { buildMetadata } from '@/utilities/buildMetadata'
 import { queryPosts } from '@/utilities/queryPosts'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -93,6 +94,8 @@ export async function generateMetadata({
 }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
   const { category: categorySlug } = await searchParamsPromise
+  const pageNum = Number(pageNumber)
+  const noIndex = pageNum > 1
 
   if (categorySlug) {
     const { category, notFound: categoryNotFound } = await queryPosts({
@@ -102,21 +105,28 @@ export async function generateMetadata({
     })
 
     if (categoryNotFound || !category) {
-      return {
+      return buildMetadata({
         title: '找不到分類',
-      }
+        path: `/posts/page/${pageNumber}`,
+        noIndex,
+      })
     }
 
-    return {
+    return buildMetadata({
       title: `${category.title} | 部落格 - 第 ${pageNumber} 頁`,
-      description: category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
-    }
+      description:
+        category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
+      path: `/posts/page/${pageNumber}?category=${encodeURIComponent(categorySlug)}`,
+      noIndex,
+    })
   }
 
-  return {
+  return buildMetadata({
     title: `部落格 - 第 ${pageNumber} 頁`,
     description: `閱讀胰探究竟的最新文章，了解${TOPIC_CATEGORIES_DESCRIPTION}等主題。`,
-  }
+    path: `/posts/page/${pageNumber}`,
+    noIndex,
+  })
 }
 
 export async function generateStaticParams() {

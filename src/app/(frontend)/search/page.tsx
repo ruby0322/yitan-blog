@@ -3,6 +3,7 @@ import type { Metadata } from 'next/types'
 import { CardPostData } from '@/components/Card'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { Search } from '@/search/Component'
+import { buildMetadata } from '@/utilities/buildMetadata'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import PageClient from './page.client'
@@ -81,7 +82,10 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: `Payload Website Template Search`,
-  }
+  return buildMetadata({
+    title: '搜尋',
+    description: '在胰探究竟搜尋胰臟相關衛教文章，包含基礎知識、胰臟癌、胰臟發炎、飲食保健與健檢判讀等主題。',
+    path: '/search',
+    noIndex: true,
+  })
 }

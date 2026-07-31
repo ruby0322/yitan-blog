@@ -5,6 +5,7 @@ import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import { PostsPageHeader } from '@/components/PostsPageHeader'
 import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
+import { buildMetadata } from '@/utilities/buildMetadata'
 import { queryPosts } from '@/utilities/queryPosts'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -83,19 +84,23 @@ export async function generateMetadata({
     })
 
     if (categoryNotFound || !category) {
-      return {
+      return buildMetadata({
         title: '找不到分類',
-      }
+        path: '/posts',
+      })
     }
 
-    return {
+    return buildMetadata({
       title: `${category.title} | 部落格`,
-      description: category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
-    }
+      description:
+        category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
+      path: `/posts?category=${encodeURIComponent(categorySlug)}`,
+    })
   }
 
-  return {
+  return buildMetadata({
     title: '部落格',
     description: `閱讀胰探究竟的最新文章，了解${TOPIC_CATEGORIES_DESCRIPTION}等主題。`,
-  }
+    path: '/posts',
+  })
 }

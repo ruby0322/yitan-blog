@@ -4,13 +4,15 @@ import React from 'react'
 
 import { legalPageProseClassName, NumberedHeading } from '@/components/theme'
 import { LEGAL } from '@/content/legal'
+import { buildMetadata } from '@/utilities/buildMetadata'
 import { cn } from '@/utilities/ui'
 
-export const metadata: Metadata = {
-  title: `${LEGAL.termsPageTitle} | ${LEGAL.siteName}`,
+export const metadata: Metadata = buildMetadata({
+  title: LEGAL.termsPageTitle,
   description:
     '胰探究竟著作權與使用條款、註冊商標與醫療資訊聲明：本網站原創內容之版權歸屬、引用規範與授權聯絡方式。',
-}
+  path: '/terms',
+})
 
 export default function TermsPage() {
   const [protectionLine] = LEGAL.termsFull

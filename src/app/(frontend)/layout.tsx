@@ -3,11 +3,21 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
+import { StructuredData } from '@/components/StructuredData'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import {
+  ICON_PATH,
+  SITE_AUTHOR,
+  SITE_DESCRIPTION,
+  SITE_FULL_NAME,
+  SITE_KEYWORDS,
+} from '@/constants/site'
+import { getServerSideURL } from '@/utilities/getURL'
+import { mergeOpenGraph, mergeTwitter } from '@/utilities/mergeOpenGraph'
+import { getSiteStructuredData } from '@/utilities/structuredData'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
@@ -17,7 +27,6 @@ import '@fontsource/noto-sans-tc/700.css'
 import '@fontsource/noto-serif-tc/400.css'
 import '@fontsource/noto-serif-tc/600.css'
 import '@fontsource/noto-serif-tc/700.css'
-import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
@@ -26,8 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="zh-Hant" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <StructuredData data={getSiteStructuredData()} />
       </head>
       <body className="font-sans">
         <Providers>
@@ -49,10 +57,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
   title: {
-    default: '胰探究竟－章醫師的胰臟日常',
+    default: SITE_FULL_NAME,
     template: '%s | 胰探究竟',
   },
-  description:
-    '以臨床經驗結合最新醫學證據，分享真正重要的胰臟知識，破解迷思，傳遞正確且容易理解的醫學資訊。',
+  description: SITE_DESCRIPTION,
+  keywords: [...SITE_KEYWORDS],
+  authors: [{ name: SITE_AUTHOR }],
+  creator: SITE_AUTHOR,
+  publisher: SITE_FULL_NAME,
+  icons: {
+    icon: [
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: ICON_PATH, sizes: '512x512', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: mergeOpenGraph(),
+  twitter: mergeTwitter({ title: SITE_FULL_NAME, description: SITE_DESCRIPTION }),
 }

@@ -11,19 +11,23 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
+import { SITE_FULL_NAME, SITE_NAME } from '@/constants/site'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const SITE_NAME = '胰探究竟－章醫師的胰臟日常'
-
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | ${SITE_NAME}` : SITE_NAME
+  return doc?.title ? `${doc.title} | ${SITE_NAME}` : SITE_FULL_NAME
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+const generateURL: GenerateURL<Post | Page> = ({ doc, collectionSlug }) => {
   const url = getServerSideURL()
 
-  return doc?.slug ? `${url}/${doc.slug}` : url
+  if (!doc?.slug) return url
+
+  if (collectionSlug === 'posts') return `${url}/posts/${doc.slug}`
+  if (doc.slug === 'home') return url
+
+  return `${url}/${doc.slug}`
 }
 
 export const plugins: Plugin[] = [
