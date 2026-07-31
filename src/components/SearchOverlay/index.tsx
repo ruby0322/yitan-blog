@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, Search as SearchIcon } from 'lucide-react'
+import { CornerDownLeft, Loader2, Search as SearchIcon } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -166,10 +166,10 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({ onClose, open }) =
         />
         <button
           aria-label="前往搜尋結果頁"
-          className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-brand-sage hover:bg-brand-border/40"
+          className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer rounded-md bg-brand-sage p-1.5 text-white transition-[filter] hover:brightness-90"
           type="submit"
         >
-          <SearchIcon className="size-4" />
+          <CornerDownLeft className="size-4" />
         </button>
       </form>
 
