@@ -299,11 +299,12 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 |------|------|
 | Wrapper | `Section variant="muted" spacing="default"` |
 | Meta row | `SectionHeader`：`heading` + `sectionNumber` |
-| Desktop layout | `grid lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch lg:gap-x-16` |
-| 左欄 | 肖像 `aspect-[3/4]`、`object-cover object-top`，白色 frame + shadow；高度對齊右欄 |
-| 右欄 | `doctorName` → `DisplayHeading` → `credentialsLine` → `body` richText → `highlightLine` → `ReadMoreLink` |
-| Mobile layout | 白色 frame 卡片：肖像 + 姓名/職稱垂直 stack；內文與引述全寬於下方 |
-| 無圖 | `EditorialImagePlaceholder variant="oval"` |
+| Desktop layout | `grid md:grid-cols-[2fr_3fr] md:gap-12 lg:gap-16`，editorial 開放排版（無 frame） |
+| 左欄（有圖） | 肖像 `aspect-[3/4]`，無白框 |
+| 左欄（無圖） | `doctorName` + 小標「醫師」→ `credentialsLine` 條列 |
+| 右欄 | `body` → `highlightLine` → `ReadMoreLink`；desktop 以細線 `border-l` 分隔 |
+| Mobile layout | 姓名/職稱與內文垂直 stack，無 frame 卡片 |
+| 無圖 | 不使用 placeholder；editorial 雙欄文字排版 |
 
 #### CMS fields
 
@@ -312,7 +313,7 @@ Hero 為 default（暖白）背景；Header 維持 light-on-light。Footer inver
 | `sectionNumber` | text | no，default `04` |
 | `heading` | text | yes，區塊標籤（seed：`認識章醫師`） |
 | `doctorName` | text | yes（seed：`章明珠`） |
-| `credentialsLine` | text | no |
+| `credentialsLine` | textarea | no，每行一項（條列顯示） |
 | `body` | richText | yes |
 | `highlightLine` | text | no（重點引述） |
 | `image` | upload | no |
