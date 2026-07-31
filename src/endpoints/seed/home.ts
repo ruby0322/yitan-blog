@@ -7,7 +7,6 @@ type HomeArgs = {
   bookFlatImage: Media
   categoryByTitle: Record<string, Category>
   featuredPostIds: number[]
-  metaImage: Media
 }
 
 const BRAND_INTRO =
@@ -17,7 +16,6 @@ export const home = ({
   bookFlatImage,
   categoryByTitle,
   featuredPostIds,
-  metaImage,
 }: HomeArgs): RequiredDataFromCollectionSlug<'pages'> => ({
   slug: 'home',
   _status: 'published',
@@ -174,6 +172,5 @@ export const home = ({
   meta: {
     title: '胰探究竟－章醫師的胰臟日常',
     description: BRAND_INTRO,
-    image: metaImage.id,
   },
 })

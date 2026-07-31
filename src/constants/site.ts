@@ -18,5 +18,5 @@ export const SITE_KEYWORDS = [
   ...TOPIC_CATEGORIES,
 ] as const
 
-export const DEFAULT_OG_PATH = '/opengraph-image'
+export const DEFAULT_OG_PATH = '/og-default.png'
 export const ICON_PATH = '/icon.png'

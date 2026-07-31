@@ -1,13 +1,8 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
-import type { Media } from '@/payload-types'
 import { LEGAL } from '@/content/legal'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
-type AboutArgs = {
-  metaImage: Media
-}
-
-export const about = ({ metaImage }: AboutArgs): RequiredDataFromCollectionSlug<'pages'> => ({
+export const about = (): RequiredDataFromCollectionSlug<'pages'> => ({
   slug: 'about',
   _status: 'published',
   title: '關於',
@@ -111,6 +106,5 @@ export const about = ({ metaImage }: AboutArgs): RequiredDataFromCollectionSlug<
     title: '關於 | 胰探究竟－章醫師的胰臟日常',
     description:
       '認識章明珠醫師：台大胰臟癌篩檢權威、零期攔截先驅，Nature Communications 早期篩檢研究，以 25 年臨床經驗分享可信、易懂的胰臟衛教。',
-    image: metaImage.id,
   },
 })

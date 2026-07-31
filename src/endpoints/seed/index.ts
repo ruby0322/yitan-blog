@@ -144,14 +144,13 @@ export const seed = async ({
         bookFlatImage: bookFlatDoc,
         categoryByTitle,
         featuredPostIds: featuredPostIdsFromClientPosts(clientPosts),
-        metaImage: brandHeroDoc,
       }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       context: { disableRevalidate: true },
-      data: about({ metaImage: brandHeroDoc }),
+      data: about(),
     }),
   ])
 
