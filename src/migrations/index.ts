@@ -11,6 +11,8 @@ import * as migration_20260731_120000_features_block from './20260731_120000_fea
 
 import * as migration_20260731_123000_category_nav_carousel from './20260731_123000_category_nav_carousel'
 import * as migration_20260731_132500_post_excerpt_faq_marketing from './20260731_132500_post_excerpt_faq_marketing'
+import * as migration_20260731_151800_clear_page_default_og_images from './20260731_151800_clear_page_default_og_images'
+import * as migration_20260731_170000_remove_about_content_direction from './20260731_170000_remove_about_content_direction'
 
 export const migrations = [
   {
@@ -72,5 +74,15 @@ export const migrations = [
     up: migration_20260731_132500_post_excerpt_faq_marketing.up,
     down: migration_20260731_132500_post_excerpt_faq_marketing.down,
     name: '20260731_132500_post_excerpt_faq_marketing',
+  },
+  {
+    up: migration_20260731_151800_clear_page_default_og_images.up,
+    down: migration_20260731_151800_clear_page_default_og_images.down,
+    name: '20260731_151800_clear_page_default_og_images',
+  },
+  {
+    up: migration_20260731_170000_remove_about_content_direction.up,
+    down: migration_20260731_170000_remove_about_content_direction.down,
+    name: '20260731_170000_remove_about_content_direction',
   },
 ]

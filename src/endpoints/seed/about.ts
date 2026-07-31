@@ -61,33 +61,6 @@ export const about = (): RequiredDataFromCollectionSlug<'pages'> => ({
     },
     {
       blockType: 'content',
-      blockName: 'Content Direction',
-      columns: [
-        {
-          size: 'oneThird',
-          richText: richTextRoot(
-            heading('h3', '基礎知識'),
-            paragraph(text('用白話方式介紹胰臟功能、常見症狀與就醫時機。')),
-          ),
-        },
-        {
-          size: 'oneThird',
-          richText: richTextRoot(
-            heading('h3', '健檢判讀'),
-            paragraph(text('協助理解影像與血液檢查結果，釐清哪些發現需要追蹤。')),
-          ),
-        },
-        {
-          size: 'oneThird',
-          richText: richTextRoot(
-            heading('h3', '飲食保健'),
-            paragraph(text('整理與代謝健康相關的生活型態與飲食原則。')),
-          ),
-        },
-      ],
-    },
-    {
-      blockType: 'content',
       blockName: 'Disclaimer',
       columns: [
         {
