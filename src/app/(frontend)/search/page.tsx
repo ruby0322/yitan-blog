@@ -1,7 +1,9 @@
 import type { Metadata } from 'next/types'
 
-import { CardPostData } from '@/components/Card'
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { SearchPageHeader } from '@/components/SearchPageHeader'
+import { BodyText } from '@/components/theme'
+import type { ArticleCardPostData } from '@/components/theme'
 import { Search } from '@/search/Component'
 import { buildMetadata } from '@/utilities/buildMetadata'
 import configPromise from '@payload-config'
@@ -10,11 +12,12 @@ import PageClient from './page.client'
 
 type Args = {
   searchParams: Promise<{
-    q: string
+    q?: string
   }>
 }
+
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
-  const { q: query } = await searchParamsPromise
+  const { q: query = '' } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
@@ -26,8 +29,8 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       slug: true,
       categories: true,
       meta: true,
+      publishedAt: true,
     },
-    // pagination: false reduces overhead if you don't need totalDocs
     pagination: false,
     ...(query
       ? {
@@ -60,24 +63,24 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <article className="bg-brand-warm-white pb-16 pt-24">
       <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Search</h1>
+      <SearchPageHeader />
 
-          <div className="max-w-[50rem] mx-auto">
-            <Search />
-          </div>
-        </div>
+      <div className="container py-8 md:py-10">
+        <Search initialValue={query} />
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <CollectionArchive posts={posts.docs as ArticleCardPostData[]} />
       ) : (
-        <div className="container">No results found.</div>
+        <div className="container">
+          <BodyText>
+            {query ? `找不到與「${query}」相關的文章，請試試其他關鍵字。` : '請輸入關鍵字開始搜尋。'}
+          </BodyText>
+        </div>
       )}
-    </div>
+    </article>
   )
 }
 
