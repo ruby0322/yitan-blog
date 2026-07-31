@@ -1,20 +1,22 @@
 import type { Metadata } from 'next'
+
+import { DEFAULT_OG_PATH, SITE_DESCRIPTION, SITE_FULL_NAME } from '@/constants/site'
 import { getServerSideURL } from './getURL'
 
-const SITE_NAME = '胰探究竟－章醫師的胰臟日常'
-const SITE_DESCRIPTION =
-  '以臨床經驗結合最新醫學證據，分享真正重要的胰臟知識，破解迷思，傳遞正確且容易理解的醫學資訊。'
+export function getDefaultOgImageUrl(): string {
+  return `${getServerSideURL()}${DEFAULT_OG_PATH}`
+}
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   description: SITE_DESCRIPTION,
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: getDefaultOgImageUrl(),
     },
   ],
-  siteName: SITE_NAME,
-  title: SITE_NAME,
+  siteName: SITE_FULL_NAME,
+  title: SITE_FULL_NAME,
   locale: 'zh_TW',
 }
 
@@ -23,5 +25,18 @@ export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'
     ...defaultOpenGraph,
     ...og,
     images: og?.images ? og.images : defaultOpenGraph.images,
+  }
+}
+
+export const mergeTwitter = (args: {
+  title: string
+  description?: string
+  image?: string
+}): Metadata['twitter'] => {
+  return {
+    card: 'summary_large_image',
+    title: args.title,
+    description: args.description ?? SITE_DESCRIPTION,
+    images: [args.image ?? getDefaultOgImageUrl()],
   }
 }
