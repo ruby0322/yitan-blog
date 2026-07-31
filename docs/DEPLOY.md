@@ -56,6 +56,8 @@ git push -u origin main
 | `PREVIEW_SECRET` | 草稿預覽驗證 | 同上 |
 | `NEXT_PUBLIC_SERVER_URL` | 正式網域 | 例如 `https://yitan.example.com` |
 | `BLOB_READ_WRITE_TOKEN` | Payload 媒體上傳（**必填**） | Blob store 連接 project 時一併注入；見 §二 step 3 |
+| `SEED_ADMIN_EMAIL` | Seed 建立的 admin Email | 例如 `hello@pancrease.com` |
+| `SEED_ADMIN_PASSWORD` | Seed 建立的 admin 密碼 | 強密碼，勿寫進 repo |
 
 ### 5. 部署
 
@@ -96,13 +98,13 @@ Vercel build 的 `pnpm run ci` 會自動執行 `payload migrate`。
 
 ## 六、章醫師帳號建立
 
-部署完成後，由管理員在 `/admin` 建立唯一 admin 使用者：
+部署時 `pnpm seed` 會依環境變數自動建立 admin 使用者：
 
-- **姓名**：章醫師
-- **Email**：由客戶提供
-- **密碼**：強密碼，透過安全管道（非 Email 明文）交付
+- **姓名**：`SEED_ADMIN_NAME`（選填，預設 `章醫師`）
+- **Email**：`SEED_ADMIN_EMAIL`
+- **密碼**：`SEED_ADMIN_PASSWORD`
 
-交付後請修改 demo 帳號密碼或刪除 demo 帳號（seed 建立的 `demo-author@example.com`）。
+重新執行 seed（`pnpm seed` 或 `POST /next/seed`）會重置此帳號及所有 CMS 內容。
 
 ## 七、維運
 
