@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { SITE_DESCRIPTION, SITE_FULL_NAME } from '@/constants/site'
-import type { Config, Media, Page, Post } from '../payload-types'
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_FULL_NAME } from '@/constants/site'
+import type { Category, Config, Media, Page, Post } from '../payload-types'
 import { buildMetadata } from './buildMetadata'
 import { getServerSideURL } from './getURL'
 
@@ -33,11 +33,31 @@ export const generateMeta = async (args: {
     resolvedPath = slug === 'home' ? '/' : `/${slug}`
   }
 
+  const postDoc = ogType === 'article' ? (doc as Partial<Post> | null) : null
+  const categories = postDoc?.categories
+  const tags = categories
+    ?.filter((c): c is Category => typeof c === 'object' && c !== null && 'title' in c)
+    .map((c) => c.title)
+    .filter((title): title is string => Boolean(title))
+
+  const authors =
+    postDoc?.populatedAuthors?.map((a) => a.name).filter((name): name is string => Boolean(name)) ??
+    (ogType === 'article' ? [SITE_AUTHOR] : undefined)
+
   return buildMetadata({
     title,
     description,
     path: resolvedPath,
     ogImage,
     ogType,
+    article:
+      ogType === 'article'
+        ? {
+            publishedTime: postDoc?.publishedAt,
+            modifiedTime: postDoc?.updatedAt,
+            authors,
+            tags,
+          }
+        : undefined,
   })
 }

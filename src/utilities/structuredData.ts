@@ -34,6 +34,23 @@ export function getSiteStructuredData() {
   ]
 }
 
+type FaqItem = { question: string; answer: string }
+
+export function getFaqStructuredData(items: FaqItem[]) {
+  const validItems = items.filter((item) => item.question?.trim() && item.answer?.trim())
+  if (!validItems.length) return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: validItems.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  }
+}
+
 export function getPostStructuredData(post: Post, ogImage?: string) {
   const serverUrl = getServerSideURL()
   const slug = typeof post.slug === 'string' ? post.slug : ''
@@ -45,6 +62,7 @@ export function getPostStructuredData(post: Post, ogImage?: string) {
     headline: post.meta?.title || post.title,
     description: post.meta?.description ?? undefined,
     datePublished: post.publishedAt ?? undefined,
+    dateModified: post.updatedAt ?? undefined,
     author: {
       '@type': 'Person',
       name: SITE_AUTHOR,
@@ -53,4 +71,11 @@ export function getPostStructuredData(post: Post, ogImage?: string) {
     url: `${serverUrl}/posts/${slug}`,
     inLanguage: 'zh-TW',
   }
+}
+
+export function getPostStructuredDataBundle(post: Post, ogImage?: string) {
+  const schemas: Record<string, unknown>[] = [getPostStructuredData(post, ogImage)]
+  const faq = getFaqStructuredData(post.faq ?? [])
+  if (faq) schemas.push(faq)
+  return schemas
 }

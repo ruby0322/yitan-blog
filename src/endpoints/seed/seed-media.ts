@@ -1,10 +1,12 @@
-import { readFile } from 'fs/promises'
+import { access, readFile } from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import type { File } from 'payload'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const MATERIALS_ROOTS = ['posts-revised', 'posts'] as const
 
 function fileFromBuffer(relativePath: string, data: Buffer): File {
   const uniqueName = relativePath.replace(/\//g, '-')
@@ -31,8 +33,22 @@ export async function fetchLocalSeedFile(relativePath: string): Promise<File> {
   return fileFromBuffer(relativePath, data)
 }
 
+async function resolveMaterialsPath(folder: string, relativePath: string): Promise<string> {
+  for (const root of MATERIALS_ROOTS) {
+    const absolutePath = path.resolve(dirname, '../../../materials', root, folder, relativePath)
+    try {
+      await access(absolutePath)
+      return absolutePath
+    } catch {
+      continue
+    }
+  }
+
+  throw new Error(`Materials file not found for ${folder}/${relativePath}`)
+}
+
 export async function fetchMaterialsFile(folder: string, relativePath: string): Promise<File> {
-  const absolutePath = path.resolve(dirname, '../../../materials/posts', folder, relativePath)
+  const absolutePath = await resolveMaterialsPath(folder, relativePath)
   const data = await readFile(absolutePath)
   const safeName = `${folder}-${relativePath}`.replace(/[^\w.-]+/g, '-')
   return fileFromBuffer(safeName, data)

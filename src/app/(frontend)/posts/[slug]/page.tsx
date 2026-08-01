@@ -16,7 +16,7 @@ import { postPageProseClassName } from '@/components/theme'
 import { PostHero } from '@/heros/PostHero'
 import { StructuredData } from '@/components/StructuredData'
 import { generateMeta } from '@/utilities/generateMeta'
-import { getPostStructuredData } from '@/utilities/structuredData'
+import { getPostStructuredDataBundle } from '@/utilities/structuredData'
 import PageClient from './page.client'
 
 export async function generateStaticParams() {
@@ -57,7 +57,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   return (
     <article className="bg-brand-warm-white pb-16">
-      <StructuredData data={getPostStructuredData(post)} />
+      <StructuredData data={getPostStructuredDataBundle(post)} />
       <PageClient />
 
       {/* Allows redirects for valid pages too */}

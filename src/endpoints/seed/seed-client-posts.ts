@@ -16,6 +16,46 @@ function publishedAtForIndex(index: number): string {
   return date.toISOString()
 }
 
+async function uploadHeroImage(
+  payload: Payload,
+  definition: ClientPostDefinition,
+): Promise<Media> {
+  const coverPath = definition.covers[0]
+  if (!coverPath) {
+    throw new Error(`Missing cover image for post ${definition.slug}`)
+  }
+
+  const heroAlt = definition.alts[0] || definition.title
+  const heroFile = await fetchMaterialsFile(definition.folder, coverPath)
+  return payload.create({
+    collection: 'media',
+    data: { alt: heroAlt },
+    file: heroFile,
+  })
+}
+
+async function uploadInlineImages(
+  payload: Payload,
+  definition: ClientPostDefinition,
+): Promise<Media[]> {
+  const inlineImages: Media[] = []
+
+  for (const [inlineIndex, inlinePath] of definition.inlines.entries()) {
+    const inlineAlt =
+      definition.alts[inlineIndex + 1] || `${definition.title} 配圖 ${inlineIndex + 1}`
+    const inlineFile = await fetchMaterialsFile(definition.folder, inlinePath)
+    inlineImages.push(
+      await payload.create({
+        collection: 'media',
+        data: { alt: inlineAlt },
+        file: inlineFile,
+      }),
+    )
+  }
+
+  return inlineImages
+}
+
 export async function seedClientPosts({
   author,
   categoryByTitle,
@@ -26,7 +66,7 @@ export async function seedClientPosts({
   payload: Payload
 }) {
   const definitions = await loadClientPostDefinitions()
-  const createdPosts: Array<{ id: number; slug: string; category: string }> = []
+  const upsertedPosts: Array<{ id: number; slug: string; category: string }> = []
 
   for (const [index, definition] of definitions.entries()) {
     const category = categoryByTitle[definition.category]
@@ -34,57 +74,55 @@ export async function seedClientPosts({
       throw new Error(`Missing category for post ${definition.slug}: ${definition.category}`)
     }
 
-    const coverPath = definition.covers[0]
-    if (!coverPath) {
-      throw new Error(`Missing cover image for post ${definition.slug}`)
-    }
+    const heroImage = await uploadHeroImage(payload, definition)
+    const inlineImages = await uploadInlineImages(payload, definition)
 
-    const heroAlt = definition.alts[0] || definition.title
-    const heroFile = await fetchMaterialsFile(definition.folder, coverPath)
-    const heroImage = await payload.create({
-      collection: 'media',
-      data: { alt: heroAlt },
-      file: heroFile,
+    const postData = buildClientPost({
+      author,
+      category,
+      definition,
+      heroImage,
+      inlineImages,
+      publishedAt: publishedAtForIndex(index),
     })
 
-    const inlineImages: Media[] = []
-    for (const [inlineIndex, inlinePath] of definition.inlines.entries()) {
-      const inlineAlt =
-        definition.alts[inlineIndex + 1] ||
-        `${definition.title} 配圖 ${inlineIndex + 1}`
-      const inlineFile = await fetchMaterialsFile(definition.folder, inlinePath)
-      inlineImages.push(
-        await payload.create({
-          collection: 'media',
-          data: { alt: inlineAlt },
-          file: inlineFile,
-        }),
-      )
-    }
-
-    const postDoc = await payload.create({
+    const existing = await payload.find({
       collection: 'posts',
       depth: 0,
-      context: { disableRevalidate: true },
-      data: buildClientPost({
-        author,
-        category,
-        definition,
-        heroImage,
-        inlineImages,
-        publishedAt: publishedAtForIndex(index),
-      }),
+      limit: 1,
+      where: {
+        slug: {
+          equals: definition.slug,
+        },
+      },
     })
 
-    createdPosts.push({
+    const existingPost = existing.docs[0]
+
+    const postDoc = existingPost
+      ? await payload.update({
+          id: existingPost.id,
+          collection: 'posts',
+          depth: 0,
+          context: { disableRevalidate: true },
+          data: postData,
+        })
+      : await payload.create({
+          collection: 'posts',
+          depth: 0,
+          context: { disableRevalidate: true },
+          data: postData,
+        })
+
+    upsertedPosts.push({
       id: postDoc.id,
       slug: definition.slug,
       category: definition.category,
     })
   }
 
-  for (const post of createdPosts) {
-    const related = createdPosts
+  for (const post of upsertedPosts) {
+    const related = upsertedPosts
       .filter((candidate) => candidate.category === post.category && candidate.id !== post.id)
       .slice(0, 3)
       .map((candidate) => candidate.id)
@@ -99,7 +137,7 @@ export async function seedClientPosts({
     }
   }
 
-  return createdPosts
+  return upsertedPosts
 }
 
 export function featuredPostIdsFromClientPosts(

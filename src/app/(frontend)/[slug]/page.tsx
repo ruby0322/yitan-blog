@@ -14,7 +14,7 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 600
 
 export async function generateStaticParams() {
   try {
