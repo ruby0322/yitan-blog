@@ -314,15 +314,15 @@ function parseSeoBlock(seoText: string) {
   }
 }
 
-function resolveCategory(
+function resolveCategories(
   folder: string,
   slug: string,
   categoryMap: CategoryMap,
   existingByFolder: Map<string, ClientPostDefinition>,
-): string {
-  if (categoryMap[folder]) return categoryMap[folder]
+): string[] {
+  if (categoryMap[folder]) return [categoryMap[folder]]
   const existing = existingByFolder.get(folder)
-  if (existing?.category) return existing.category
+  if (existing?.categories?.length) return existing.categories
   throw new Error(`Missing category mapping for folder: ${folder} (${slug})`)
 }
 
@@ -363,7 +363,7 @@ async function parseFolder(
   return {
     folder,
     slug,
-    category: resolveCategory(folder, slug, categoryMap, existingByFolder),
+    categories: resolveCategories(folder, slug, categoryMap, existingByFolder),
     title,
     seoTitle: seo.seoTitle || title,
     metaDescription: seo.metaDescription || excerpt,

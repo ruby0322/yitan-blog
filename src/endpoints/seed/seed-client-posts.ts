@@ -66,20 +66,23 @@ export async function seedClientPosts({
   payload: Payload
 }) {
   const definitions = await loadClientPostDefinitions()
-  const upsertedPosts: Array<{ id: number; slug: string; category: string }> = []
+  const upsertedPosts: Array<{ id: number; slug: string; categories: string[] }> = []
 
   for (const [index, definition] of definitions.entries()) {
-    const category = categoryByTitle[definition.category]
-    if (!category) {
-      throw new Error(`Missing category for post ${definition.slug}: ${definition.category}`)
-    }
+    const categories = definition.categories.map((title) => {
+      const category = categoryByTitle[title]
+      if (!category) {
+        throw new Error(`Missing category for post ${definition.slug}: ${title}`)
+      }
+      return category
+    })
 
     const heroImage = await uploadHeroImage(payload, definition)
     const inlineImages = await uploadInlineImages(payload, definition)
 
     const postData = buildClientPost({
       author,
-      category,
+      categories,
       definition,
       heroImage,
       inlineImages,
@@ -117,13 +120,18 @@ export async function seedClientPosts({
     upsertedPosts.push({
       id: postDoc.id,
       slug: definition.slug,
-      category: definition.category,
+      categories: definition.categories,
     })
   }
 
   for (const post of upsertedPosts) {
+    const postCategories = new Set(post.categories)
     const related = upsertedPosts
-      .filter((candidate) => candidate.category === post.category && candidate.id !== post.id)
+      .filter(
+        (candidate) =>
+          candidate.id !== post.id &&
+          candidate.categories.some((category) => postCategories.has(category)),
+      )
       .slice(0, 3)
       .map((candidate) => candidate.id)
 

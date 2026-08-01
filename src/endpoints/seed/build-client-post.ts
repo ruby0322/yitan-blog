@@ -25,7 +25,7 @@ export type ClientPostSection = {
 export type ClientPostDefinition = {
   folder: string
   slug: string
-  category: string
+  categories: string[]
   title: string
   seoTitle: string
   metaDescription: string
@@ -72,7 +72,7 @@ function distributeInlineInsertions(sectionCount: number, inlineCount: number): 
 
 type BuildClientPostArgs = {
   author: Pick<User, 'id'>
-  category: Category
+  categories: Category[]
   heroImage: Media
   inlineImages: Media[]
   publishedAt: string
@@ -81,7 +81,7 @@ type BuildClientPostArgs = {
 
 export function buildClientPost({
   author,
-  category,
+  categories,
   definition,
   heroImage,
   inlineImages,
@@ -114,7 +114,7 @@ export function buildClientPost({
     excerpt: definition.excerpt,
     heroImage: heroImage.id,
     authors: [author.id],
-    categories: [category.id],
+    categories: categories.map((item) => item.id),
     publishedAt,
     content: richTextRoot(...contentNodes),
     faq: definition.faq.map((item) => ({

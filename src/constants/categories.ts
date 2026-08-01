@@ -23,6 +23,14 @@ export const TOPIC_CATEGORY_DATA = [
     title: '健檢判讀',
     description: '協助理解影像與血液檢查結果，釐清哪些數值或報告用語需要追蹤。',
   },
+  {
+    title: '胰臟癌篩檢',
+    description: '整理胰臟癌高風險族群的篩檢策略、追蹤時機與早期攔截方法。',
+  },
+  {
+    title: '胰臟健康',
+    description: '飲食原則與生活型態，從日常守護胰臟。',
+  },
 ] as const
 
 export const TOPIC_CATEGORIES = TOPIC_CATEGORY_DATA.map((item) => item.title)
