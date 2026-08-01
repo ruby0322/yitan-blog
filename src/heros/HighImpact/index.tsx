@@ -51,7 +51,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, richText }) => {
           )}
         </div>
 
-        <div className="order-1 mx-auto w-full max-w-80 -translate-y-3 sm:max-w-96 sm:-translate-y-4 lg:order-2 lg:max-w-lg lg:-translate-y-6">
+        <div className="order-1 mx-auto w-full max-w-80 -translate-y-5 sm:max-w-96 sm:-translate-y-6 lg:order-2 lg:max-w-lg lg:-translate-y-8">
           <HeroRingStage />
         </div>
       </div>
