@@ -99,7 +99,7 @@ def backfill_missing_slug(ws, posts_by_slug: dict[str, dict]) -> None:
 
 
 def update_category_dropdown(ws) -> None:
-    categories = "基礎知識,胰臟癌,胰臟發炎,胰臟水泡,飲食保健,健檢判讀,胰臟癌篩檢,胰臟功能,胰臟健康"
+    categories = "胰臟癌,胰臟癌篩檢,胰臟健康,胰臟發炎,胰臟水泡"
     ws.data_validations.dataValidation.clear()
     from openpyxl.worksheet.datavalidation import DataValidation
 

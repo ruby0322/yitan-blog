@@ -8,11 +8,6 @@ export const SITE_DESCRIPTION =
 export const SITE_AUTHOR = '章明珠醫師'
 export const SITE_KEYWORDS = [
   '胰臟',
-  '胰臟癌',
-  '胰臟發炎',
-  '胰臟水泡',
-  '飲食保健',
-  '健檢判讀',
   '章醫師',
   '胰探究竟',
   ...TOPIC_CATEGORIES,

@@ -35,7 +35,7 @@ export const PostsPageHeader: React.FC<Props> = ({
             {isSearching
               ? isFiltered
                 ? `在「${categoryTitle}」主題中搜尋與「${query}」相關的文章。`
-                : '輸入關鍵字搜尋胰臟相關衛教文章，包含基礎知識、胰臟癌、胰臟發炎、飲食保健與健檢判讀等主題。'
+                : `輸入關鍵字搜尋胰臟相關衛教文章，包含${TOPIC_CATEGORIES_DESCRIPTION}等主題。`
               : isFiltered
                 ? categoryDescription || `依「${categoryTitle}」主題整理的文章。`
                 : `以臨床經驗與醫學證據整理胰臟相關知識，包含${TOPIC_CATEGORIES_DESCRIPTION}。`}
