@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      {
+        pathname: '/vector-pancreas.png',
+      },
     ],
     qualities: [100],
     remotePatterns: [
