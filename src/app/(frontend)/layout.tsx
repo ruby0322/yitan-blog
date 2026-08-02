@@ -8,7 +8,6 @@ import { StructuredData } from '@/components/StructuredData'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
 import {
   ICON_PATH,
   SITE_AUTHOR,
@@ -33,9 +32,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { isEnabled } = await draftMode()
 
   return (
-    <html lang="zh-Hant" suppressHydrationWarning>
+    <html data-theme="light" lang="zh-Hant" suppressHydrationWarning>
       <head>
-        <InitTheme />
         <StructuredData data={getSiteStructuredData()} />
       </head>
       <body className="font-sans">

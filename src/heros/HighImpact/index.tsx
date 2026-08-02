@@ -17,12 +17,23 @@ function heroLinkAppearance(appearance?: LinkAppearances | null) {
   return 'cta' as const
 }
 
+/** Vertical stack below lg (`lg:grid-cols-2`). Illustration sizing follows the same breakpoint. */
+const heroGridClassName =
+  'container relative z-10 grid items-center gap-7.5 sm:gap-9.375 lg:grid-cols-2 lg:gap-12 xl:gap-16'
+
+/** Vertical: viewport-relative width. Horizontal (lg+): fixed max width. */
+const heroIllustrationClassName = cn(
+  'order-1 mx-auto max-w-full',
+  'max-lg:w-[75vw]',
+  'lg:order-2 lg:w-full lg:max-w-264.6 lg:-translate-y-6 xl:-translate-y-8',
+)
+
 export const HighImpactHero: React.FC<Page['hero']> = ({ links, richText }) => {
   return (
-    <Section className="relative overflow-hidden py-12 md:py-20 lg:py-28" spacing="none" variant="default">
+    <Section className="relative overflow-hidden py-12 md:py-20 lg:pb-28 lg:pt-32 xl:pb-28 xl:pt-36" spacing="none" variant="default">
       <HeroDecor />
 
-      <div className="container relative z-10 grid items-center gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:gap-8">
+      <div className={heroGridClassName}>
         <div className="order-2 flex flex-col gap-4 text-center sm:gap-6 sm:text-left lg:order-1 lg:gap-8">
           {richText && (
             <RichText
@@ -51,7 +62,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, richText }) => {
           )}
         </div>
 
-        <div className="order-1 mx-auto w-full max-h-56 max-w-48 sm:max-h-80 sm:max-w-70 lg:order-2 lg:max-h-105 lg:max-w-sm">
+        <div className={heroIllustrationClassName}>
           <HeroRingStage />
         </div>
       </div>
