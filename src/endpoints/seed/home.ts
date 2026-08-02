@@ -164,7 +164,7 @@ export const home = ({
       buyLink: {
         type: 'custom',
         label: '前往博客來選購',
-        url: 'https://www.books.com.tw/',
+        url: 'https://reurl.cc/27ZMn6',
         newTab: true,
       },
     },

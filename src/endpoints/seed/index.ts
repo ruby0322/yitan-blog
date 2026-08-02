@@ -232,7 +232,7 @@ export const seed = async ({
                 link: {
                   type: 'custom',
                   label: '博客來選購',
-                  url: 'https://www.books.com.tw/products/search?key=9786267916070',
+                  url: 'https://reurl.cc/27ZMn6',
                   newTab: true,
                 },
               },
