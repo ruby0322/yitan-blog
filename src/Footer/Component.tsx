@@ -46,20 +46,6 @@ export async function Footer() {
                 </ul>
               </nav>
             ))}
-            <nav aria-label={LEGAL.contact.heading}>
-              <p className="mb-3 font-sans text-xs tracking-[0.2em] text-brand-inverse-fg/55 uppercase">
-                {LEGAL.contact.heading}
-              </p>
-              <p className="mb-2.5 text-sm text-brand-inverse-fg/75">
-                {LEGAL.contact.description}
-              </p>
-              <a
-                className="text-sm text-brand-inverse-fg/85 underline decoration-brand-inverse-fg/35 underline-offset-[0.25em] transition-[color,text-decoration-color] hover:text-brand-inverse-fg hover:decoration-brand-inverse-fg/70"
-                href={`mailto:${LEGAL.contact.email}`}
-              >
-                {LEGAL.contact.email}
-              </a>
-            </nav>
           </div>
         </div>
 
