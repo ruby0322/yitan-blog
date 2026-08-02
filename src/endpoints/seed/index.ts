@@ -104,13 +104,14 @@ export const seed = async ({
   })
 
   const categoryDocs = await Promise.all(
-    TOPIC_CATEGORY_DATA.map(({ title, description }) =>
+    TOPIC_CATEGORY_DATA.map(({ title, description, sortOrder }) =>
       payload.create({
         collection: 'categories',
         data: {
           title,
           description,
           slug: title,
+          sortOrder,
         },
       }),
     ),
