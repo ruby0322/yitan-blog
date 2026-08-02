@@ -37,7 +37,7 @@ export const PostsPageHeader: React.FC<Props> = ({
                 : `輸入關鍵字搜尋胰臟相關衛教文章，包含${categoryTitlesDescription}等主題。`
               : isFiltered
                 ? categoryDescription || `依「${categoryTitle}」主題整理的文章。`
-                : `以臨床經驗與醫學證據整理胰臟相關知識，包含${categoryTitlesDescription}。`}
+                : `以臨床經驗與醫學證據整理胰臟相關知識，包含${categoryTitlesDescription}等主題。`}
           </BodyText>
           {typeof totalDocs === 'number' && (
             <Caption as="p" className="mt-4 block">
