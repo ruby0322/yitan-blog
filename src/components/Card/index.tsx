@@ -6,11 +6,9 @@ import React from 'react'
 
 import type { Post } from '@/payload-types'
 
-import { CategoryBadge } from '@/components/CategoryBadge'
+import { ArticleCardMeta } from '@/components/theme/article-card-meta'
 import { ReadMoreLink } from '@/components/theme/read-more-link'
 import { Media } from '@/components/Media'
-import { formatDateTime } from '@/utilities/formatDateTime'
-import { getPopulatedCategories, sortCategoriesByOrder } from '@/utilities/categoryOrder'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'publishedAt'>
 
@@ -35,8 +33,6 @@ export const Card: React.FC<{
 
   const { slug, categories, meta, title, publishedAt } = doc || {}
   const { description, image: metaImage } = meta || {}
-
-  const sortedCategories = sortCategoriesByOrder(getPopulatedCategories(categories))
 
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ')
@@ -64,17 +60,11 @@ export const Card: React.FC<{
         )}
       </div>
       <div className={cn('p-4', featured && 'p-6')}>
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          {showCategories &&
-            sortedCategories.map((category) =>
-              category.title ? <CategoryBadge key={category.title} label={category.title} /> : null,
-            )}
-          {publishedAt && (
-            <time className="text-xs text-brand-sage" dateTime={publishedAt}>
-              {formatDateTime(publishedAt)}
-            </time>
-          )}
-        </div>
+        <ArticleCardMeta
+          categories={categories}
+          publishedAt={publishedAt}
+          showCategories={showCategories}
+        />
         {titleToUse && (
           <h3
             className={cn(

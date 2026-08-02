@@ -1,10 +1,8 @@
-import { CategoryBadge } from '@/components/CategoryBadge'
 import { EditorialImagePlaceholder } from '@/components/brand'
 import { Media } from '@/components/Media'
+import { ArticleCardMeta } from '@/components/theme/article-card-meta'
 import { ReadMoreLink } from '@/components/theme/read-more-link'
 import { cn } from '@/utilities/ui'
-import { formatDateTime } from '@/utilities/formatDateTime'
-import { getPopulatedCategories, sortCategoriesByOrder } from '@/utilities/categoryOrder'
 import React from 'react'
 
 import type { Post } from '@/payload-types'
@@ -31,8 +29,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const { slug, categories, meta, title, publishedAt } = doc || {}
   const { description, image: metaImage } = meta || {}
 
-  const sortedCategories = sortCategoriesByOrder(getPopulatedCategories(categories))
-
   const href = hrefFromProps ?? `/${relationTo}/${slug}`
   const sanitizedDescription = description?.replace(/\s/g, ' ')
 
@@ -55,17 +51,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         )}
       </div>
       <div className={cn('p-4', featured && 'p-6')}>
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          {showCategories &&
-            sortedCategories.map((category) =>
-              category.title ? <CategoryBadge key={category.title} label={category.title} /> : null,
-            )}
-          {publishedAt && (
-            <time className="text-xs text-brand-sage" dateTime={publishedAt}>
-              {formatDateTime(publishedAt)}
-            </time>
-          )}
-        </div>
+        <ArticleCardMeta
+          categories={categories}
+          publishedAt={publishedAt}
+          showCategories={showCategories}
+        />
         {title && (
           <h3
             className={cn(

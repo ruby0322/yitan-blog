@@ -19,11 +19,20 @@ export function sortCategoriesByOrder<T extends CategoryOrderFields>(categories:
 export function formatCategoryTitles<T extends CategoryOrderFields>(
   categories: T[],
   separator = '、',
+  maxVisible?: number,
 ): string {
-  return sortCategoriesByOrder(categories)
+  const titles = sortCategoriesByOrder(categories)
     .map((category) => category.title)
     .filter((title): title is string => Boolean(title))
-    .join(separator)
+
+  if (maxVisible === undefined || titles.length <= maxVisible) {
+    return titles.join(separator)
+  }
+
+  const visible = titles.slice(0, maxVisible)
+  const overflow = titles.length - maxVisible
+
+  return `${visible.join(separator)} +${overflow}`
 }
 
 export function getPopulatedCategories<T extends CategoryOrderFields>(
