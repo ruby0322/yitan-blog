@@ -38,7 +38,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
   const isSearching = Boolean(query)
 
   return (
-    <article className="bg-brand-warm-white pb-16 pt-24">
+    <article className="bg-brand-warm-white pb-16 pt-12 md:pt-20">
       {pageClient}
       <PostsPageHeader
         categoryDescription={category?.description}
