@@ -20,15 +20,23 @@ export const PostsPageHeader: React.FC<Props> = ({
   const isFiltered = Boolean(categoryTitle)
   const isSearching = Boolean(query)
 
+  const contextLabel = isSearching ? `搜尋「${query}」` : isFiltered ? categoryTitle : '部落格'
+
+  const resultLabel =
+    typeof totalDocs === 'number'
+      ? totalDocs > 0
+        ? `找到 ${totalDocs} 篇文章`
+        : isSearching
+          ? '沒有符合的結果'
+          : '目前尚無文章'
+      : null
+
   return (
     <header className="border-b border-brand-border pb-8 md:pb-12">
       <div className="container">
         <div className="max-w-3xl">
-          <Caption as="p" className="mb-3 block uppercase tracking-[0.28em]">
-            {SITE_NAME}
-          </Caption>
           <DisplayHeading className="mb-4 font-semibold text-brand-heading">
-            {isSearching ? `搜尋「${query}」` : isFiltered ? categoryTitle : '部落格'}
+            {SITE_NAME}
           </DisplayHeading>
           <BodyText className="text-base md:text-lg">
             {isSearching
@@ -39,15 +47,13 @@ export const PostsPageHeader: React.FC<Props> = ({
                 ? categoryDescription || `依「${categoryTitle}」主題整理的文章。`
                 : `以臨床經驗與醫學證據整理胰臟相關知識，包含${categoryTitlesDescription}等主題。`}
           </BodyText>
-          {typeof totalDocs === 'number' && (
-            <Caption as="p" className="mt-4 block">
-              {totalDocs > 0
-                ? `找到 ${totalDocs} 篇文章`
-                : isSearching
-                  ? '沒有符合的結果'
-                  : '目前尚無文章'}
+          {resultLabel ? (
+            <Caption as="p" className="mt-4 block text-base">
+              <span className="uppercase tracking-[0.28em]">{contextLabel}</span>
+              {' / '}
+              {resultLabel}
             </Caption>
-          )}
+          ) : null}
           {isFiltered && !isSearching ? (
             <div className="mt-6">
               <ReadMoreLink href="/posts" label="查看全部文章" />
