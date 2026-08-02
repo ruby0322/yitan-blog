@@ -3,7 +3,7 @@ import type { Metadata } from 'next/types'
 import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { buildMetadata } from '@/utilities/buildMetadata'
 import { formatCategoryTitles } from '@/utilities/categoryOrder'
-import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
+import { queryAllCategories, queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -21,7 +21,7 @@ type Args = {
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { category: categorySlug, q: query = '' } = await searchParamsPromise
   const trimmedQuery = query.trim()
-  const categories = await queryAllCategories()
+  const { categories, totalPostCount } = await queryCategoriesWithPostCounts()
 
   if (trimmedQuery) {
     const { category, notFound: searchNotFound, posts } = await querySearchPosts({
@@ -42,6 +42,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
         pageClient={<PageClient />}
         posts={posts}
         query={trimmedQuery}
+        totalPostCount={totalPostCount}
       />
     )
   }
@@ -64,6 +65,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       categorySlug={categorySlug}
       pageClient={<PageClient />}
       posts={posts}
+      totalPostCount={totalPostCount}
     />
   )
 }

@@ -4,7 +4,7 @@ import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { POSTS_PER_PAGE } from '@/constants/posts'
 import { buildMetadata } from '@/utilities/buildMetadata'
 import { formatCategoryTitles } from '@/utilities/categoryOrder'
-import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
+import { queryAllCategories, queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -32,7 +32,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
 
   if (!Number.isInteger(sanitizedPageNumber) || sanitizedPageNumber < 1) notFound()
 
-  const categories = await queryAllCategories()
+  const { categories, totalPostCount } = await queryCategoriesWithPostCounts()
 
   if (trimmedQuery) {
     const { category, notFound: searchNotFound, posts } = await querySearchPosts({
@@ -55,6 +55,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
         pageClient={<PageClient />}
         posts={posts}
         query={trimmedQuery}
+        totalPostCount={totalPostCount}
       />
     )
   }
@@ -79,6 +80,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
       categorySlug={categorySlug}
       pageClient={<PageClient />}
       posts={posts}
+      totalPostCount={totalPostCount}
     />
   )
 }

@@ -8,6 +8,10 @@ type PostListItem = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'publi
 
 type CategoryListItem = Pick<Category, 'title' | 'slug' | 'sortOrder'>
 
+export type CategoryFilterItem = CategoryListItem & {
+  postCount: number
+}
+
 export async function queryAllCategories(): Promise<CategoryListItem[]> {
   const payload = await getPayload({ config: configPromise })
 
@@ -25,6 +29,55 @@ export async function queryAllCategories(): Promise<CategoryListItem[]> {
   })
 
   return result.docs
+}
+
+export async function queryCategoriesWithPostCounts(): Promise<{
+  categories: CategoryFilterItem[]
+  totalPostCount: number
+}> {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'categories',
+    depth: 0,
+    limit: 100,
+    overrideAccess: false,
+    sort: 'sortOrder',
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      sortOrder: true,
+    },
+  })
+
+  const [totalPostCount, ...categoryCounts] = await Promise.all([
+    payload.count({
+      collection: 'posts',
+      overrideAccess: false,
+    }),
+    ...result.docs.map((category) =>
+      payload.count({
+        collection: 'posts',
+        overrideAccess: false,
+        where: {
+          categories: {
+            contains: category.id,
+          },
+        },
+      }),
+    ),
+  ])
+
+  return {
+    totalPostCount: totalPostCount.totalDocs,
+    categories: result.docs.map((category, index) => ({
+      title: category.title,
+      slug: category.slug,
+      sortOrder: category.sortOrder,
+      postCount: categoryCounts[index]?.totalDocs ?? 0,
+    })),
+  }
 }
 
 export async function findCategoryBySlug(slug: string): Promise<Category | null> {

@@ -26,6 +26,7 @@ type Props = {
   pageClient: React.ReactNode
   posts: PostsResult
   query?: string
+  totalPostCount: number
 }
 
 export const PostsArchiveLayout: React.FC<Props> = ({
@@ -35,6 +36,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
   pageClient,
   posts,
   query,
+  totalPostCount,
 }) => {
   const isSearching = Boolean(query)
   const categoryTitlesDescription = formatCategoryTitles(categories)
@@ -53,6 +55,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
         activeCategorySlug={categorySlug}
         categories={categories}
         initialQuery={query}
+        totalPostCount={totalPostCount}
       />
 
       {posts.totalDocs > 0 ? (

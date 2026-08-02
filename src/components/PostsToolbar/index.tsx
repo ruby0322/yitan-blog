@@ -8,12 +8,14 @@ type Props = {
   activeCategorySlug?: string | null
   categories: CategoryFilterItem[]
   initialQuery?: string
+  totalPostCount: number
 }
 
 export const PostsToolbar: React.FC<Props> = ({
   activeCategorySlug,
   categories,
   initialQuery,
+  totalPostCount,
 }) => {
   return (
     <div className="container space-y-6 py-8 md:py-10">
@@ -21,6 +23,7 @@ export const PostsToolbar: React.FC<Props> = ({
         activeSlug={activeCategorySlug}
         categories={categories}
         query={initialQuery}
+        totalPostCount={totalPostCount}
       />
       <PostsSearchInput categorySlug={activeCategorySlug} initialQuery={initialQuery} />
     </div>
