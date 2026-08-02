@@ -2,8 +2,8 @@ import type { Metadata } from 'next/types'
 
 import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { POSTS_PER_PAGE } from '@/constants/posts'
-import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
 import { buildMetadata } from '@/utilities/buildMetadata'
+import { formatCategoryTitles } from '@/utilities/categoryOrder'
 import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import configPromise from '@payload-config'
@@ -133,7 +133,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `部落格 - 第 ${pageNumber} 頁`,
-    description: `閱讀胰探究竟的最新文章，了解${TOPIC_CATEGORIES_DESCRIPTION}等主題。`,
+    description: `閱讀胰探究竟的最新文章，了解${formatCategoryTitles(await queryAllCategories())}等主題。`,
     path: `/posts/page/${pageNumber}`,
     noIndex,
   })

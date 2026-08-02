@@ -56,6 +56,10 @@ export const searchFields: Field[] = [
         name: 'title',
         type: 'text',
       },
+      {
+        name: 'sortOrder',
+        type: 'number',
+      },
     ],
   },
 ]

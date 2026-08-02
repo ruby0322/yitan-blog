@@ -6,7 +6,7 @@ import { getPayload } from 'payload'
 
 type PostListItem = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'publishedAt'>
 
-type CategoryListItem = Pick<Category, 'title' | 'slug'>
+type CategoryListItem = Pick<Category, 'title' | 'slug' | 'sortOrder'>
 
 export async function queryAllCategories(): Promise<CategoryListItem[]> {
   const payload = await getPayload({ config: configPromise })
@@ -16,10 +16,11 @@ export async function queryAllCategories(): Promise<CategoryListItem[]> {
     depth: 0,
     limit: 100,
     overrideAccess: false,
-    sort: 'title',
+    sort: 'sortOrder',
     select: {
       title: true,
       slug: true,
+      sortOrder: true,
     },
   })
 

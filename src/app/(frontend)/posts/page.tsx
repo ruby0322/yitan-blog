@@ -1,8 +1,8 @@
 import type { Metadata } from 'next/types'
 
 import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
-import { TOPIC_CATEGORIES_DESCRIPTION } from '@/constants/categories'
 import { buildMetadata } from '@/utilities/buildMetadata'
+import { formatCategoryTitles } from '@/utilities/categoryOrder'
 import { queryAllCategories, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import { notFound } from 'next/navigation'
@@ -112,7 +112,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: '部落格',
-    description: `閱讀胰探究竟的最新文章，了解${TOPIC_CATEGORIES_DESCRIPTION}等主題。`,
+    description: `閱讀胰探究竟的最新文章，了解${formatCategoryTitles(await queryAllCategories())}等主題。`,
     path: '/posts',
   })
 }

@@ -6,6 +6,7 @@ import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { Caption } from '@/components/theme/typography'
 import { formatAuthors } from '@/utilities/formatAuthors'
+import { formatCategoryTitles, getPopulatedCategories } from '@/utilities/categoryOrder'
 
 export const PostHero: React.FC<{
   post: Post
@@ -14,24 +15,15 @@ export const PostHero: React.FC<{
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
+  const categoryLabel = formatCategoryTitles(getPopulatedCategories(categories), ' · ')
 
   return (
     <header className="border-b border-brand-border bg-brand-warm-white pt-8 md:pt-12">
       <div className="container">
         <div className="mx-auto w-full max-w-[48rem]">
-          {categories && categories.length > 0 && (
-            <Caption className="mb-4 block uppercase tracking-[0.14em]">
-              {categories
-                .map((category) => {
-                  if (typeof category === 'object' && category !== null) {
-                    return category.title || 'Untitled category'
-                  }
-                  return null
-                })
-                .filter(Boolean)
-                .join(' · ')}
-            </Caption>
-          )}
+          {categoryLabel ? (
+            <Caption className="mb-4 block uppercase tracking-[0.14em]">{categoryLabel}</Caption>
+          ) : null}
 
           <h1 className="font-serif text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-[1.2] tracking-wide text-brand-heading md:text-4xl md:leading-[1.15]">
             {title}

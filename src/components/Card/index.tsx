@@ -10,6 +10,7 @@ import { CategoryBadge } from '@/components/CategoryBadge'
 import { ReadMoreLink } from '@/components/theme/read-more-link'
 import { Media } from '@/components/Media'
 import { formatDateTime } from '@/utilities/formatDateTime'
+import { getPopulatedCategories, sortCategoriesByOrder } from '@/utilities/categoryOrder'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'publishedAt'>
 
@@ -35,10 +36,7 @@ export const Card: React.FC<{
   const { slug, categories, meta, title, publishedAt } = doc || {}
   const { description, image: metaImage } = meta || {}
 
-  const primaryCategory =
-    categories && Array.isArray(categories) && categories.length > 0
-      ? categories.find((category) => typeof category === 'object')?.title
-      : undefined
+  const sortedCategories = sortCategoriesByOrder(getPopulatedCategories(categories))
 
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ')
@@ -67,7 +65,10 @@ export const Card: React.FC<{
       </div>
       <div className={cn('p-4', featured && 'p-6')}>
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          {showCategories && primaryCategory && <CategoryBadge label={primaryCategory} />}
+          {showCategories &&
+            sortedCategories.map((category) =>
+              category.title ? <CategoryBadge key={category.title} label={category.title} /> : null,
+            )}
           {publishedAt && (
             <time className="text-xs text-brand-sage" dateTime={publishedAt}>
               {formatDateTime(publishedAt)}

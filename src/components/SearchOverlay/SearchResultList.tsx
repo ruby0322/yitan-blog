@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { cn } from '@/utilities/ui'
+import { formatCategoryTitles } from '@/utilities/categoryOrder'
 
 export type SearchResultItem = {
   slug?: string | null
@@ -9,7 +10,7 @@ export type SearchResultItem = {
     description?: string | null
     title?: string | null
   } | null
-  categories?: Array<{ title?: string | null }> | null
+  categories?: Array<{ title?: string | null; sortOrder?: number | null }> | null
 }
 
 type SearchResultListProps = {
@@ -26,7 +27,9 @@ export const SearchResultList: React.FC<SearchResultListProps> = ({
   return (
     <ul className="py-2">
       {results.map((result, index) => {
-        const categoryLabel = result.categories?.[0]?.title
+        const categoryLabel = result.categories?.length
+          ? formatCategoryTitles(result.categories, ' · ')
+          : undefined
         const description = result.meta?.description || result.meta?.title
         const isActive = index === activeIndex
 

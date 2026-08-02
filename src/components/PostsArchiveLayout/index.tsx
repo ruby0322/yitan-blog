@@ -9,6 +9,7 @@ import type { CategoryFilterItem } from '@/components/PostsCategoryFilter'
 import { PostsToolbar } from '@/components/PostsToolbar'
 import { BodyText } from '@/components/theme'
 import type { ArticleCardPostData } from '@/components/theme'
+import { formatCategoryTitles } from '@/utilities/categoryOrder'
 
 type PostsResult = {
   docs: ArticleCardPostData[]
@@ -36,6 +37,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
   query,
 }) => {
   const isSearching = Boolean(query)
+  const categoryTitlesDescription = formatCategoryTitles(categories)
 
   return (
     <article className="bg-brand-warm-white pb-16 pt-12 md:pt-20">
@@ -43,6 +45,7 @@ export const PostsArchiveLayout: React.FC<Props> = ({
       <PostsPageHeader
         categoryDescription={category?.description}
         categoryTitle={category?.title}
+        categoryTitlesDescription={categoryTitlesDescription}
         query={query}
         totalDocs={posts.totalDocs}
       />

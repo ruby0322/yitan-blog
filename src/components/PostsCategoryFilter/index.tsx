@@ -8,6 +8,7 @@ import { cn } from '@/utilities/ui'
 
 export type CategoryFilterItem = {
   slug: string
+  sortOrder?: number | null
   title: string
 }
 

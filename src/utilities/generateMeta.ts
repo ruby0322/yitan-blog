@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_FULL_NAME } from '@/constants/site'
-import type { Category, Config, Media, Page, Post } from '../payload-types'
+import type { Config, Media, Page, Post } from '../payload-types'
 import { buildMetadata } from './buildMetadata'
 import { getServerSideURL } from './getURL'
+import { getPopulatedCategories, sortCategoriesByOrder } from './categoryOrder'
 
 const getCmsImageURL = (image?: Media | Config['db']['defaultIDType'] | null): string | undefined => {
   if (!image || typeof image !== 'object' || !('url' in image)) {
@@ -34,10 +35,8 @@ export const generateMeta = async (args: {
   }
 
   const postDoc = ogType === 'article' ? (doc as Partial<Post> | null) : null
-  const categories = postDoc?.categories
-  const tags = categories
-    ?.filter((c): c is Category => typeof c === 'object' && c !== null && 'title' in c)
-    .map((c) => c.title)
+  const tags = sortCategoriesByOrder(getPopulatedCategories(postDoc?.categories))
+    .map((category) => category.title)
     .filter((title): title is string => Boolean(title))
 
   const authors =

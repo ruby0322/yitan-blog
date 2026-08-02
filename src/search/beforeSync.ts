@@ -1,5 +1,13 @@
 import { BeforeSync, DocToSync } from '@payloadcms/plugin-search/types'
 
+import { sortCategoriesByOrder } from '@/utilities/categoryOrder'
+
+type PopulatedSearchCategory = {
+  id: string | number
+  sortOrder?: number | null
+  title: string
+}
+
 export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searchDoc }) => {
   const {
     doc: { relationTo: collection },
@@ -20,14 +28,19 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
   }
 
   if (categories && Array.isArray(categories) && categories.length > 0) {
-    const populatedCategories: { id: string | number; title: string }[] = []
+    const populatedCategories: PopulatedSearchCategory[] = []
+
     for (const category of categories) {
       if (!category) {
         continue
       }
 
       if (typeof category === 'object') {
-        populatedCategories.push(category)
+        populatedCategories.push({
+          id: category.id,
+          sortOrder: 'sortOrder' in category ? category.sortOrder : null,
+          title: category.title,
+        })
         continue
       }
 
@@ -36,12 +49,16 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
         id: category,
         disableErrors: true,
         depth: 0,
-        select: { title: true },
+        select: { title: true, sortOrder: true },
         req,
       })
 
       if (doc !== null) {
-        populatedCategories.push(doc)
+        populatedCategories.push({
+          id: doc.id,
+          sortOrder: doc.sortOrder,
+          title: doc.title,
+        })
       } else {
         console.error(
           `Failed. Category not found when syncing collection '${collection}' with id: '${id}' to search.`,
@@ -49,10 +66,11 @@ export const beforeSyncWithSearch: BeforeSync = async ({ req, originalDoc, searc
       }
     }
 
-    modifiedDoc.categories = populatedCategories.map((each) => ({
+    modifiedDoc.categories = sortCategoriesByOrder(populatedCategories).map((each) => ({
       relationTo: 'categories',
       categoryID: String(each.id),
       title: each.title,
+      sortOrder: each.sortOrder,
     }))
   }
 
