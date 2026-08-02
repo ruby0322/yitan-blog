@@ -439,6 +439,10 @@ export interface Category {
   id: number;
   title: string;
   description?: string | null;
+  /**
+   * 數字越小越靠前。建議以 10 為間距（10、20、30…）方便日後插入新分類。
+   */
+  sortOrder: number;
   slug: string;
   parent?: (number | null) | Category;
   breadcrumbs?:
@@ -1068,6 +1072,7 @@ export interface Search {
         relationTo?: string | null;
         categoryID?: string | null;
         title?: string | null;
+        sortOrder?: number | null;
         id?: string | null;
       }[]
     | null;
@@ -1703,6 +1708,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  sortOrder?: T;
   slug?: T;
   parent?: T;
   breadcrumbs?:
@@ -1926,6 +1932,7 @@ export interface SearchSelect<T extends boolean = true> {
         relationTo?: T;
         categoryID?: T;
         title?: T;
+        sortOrder?: T;
         id?: T;
       };
   updatedAt?: T;

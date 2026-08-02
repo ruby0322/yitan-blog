@@ -15,6 +15,7 @@ import * as migration_20260731_151800_clear_page_default_og_images from './20260
 import * as migration_20260731_170000_remove_about_content_direction from './20260731_170000_remove_about_content_direction'
 import * as migration_20260731_181500_remove_footer_doctor_link_group from './20260731_181500_remove_footer_doctor_link_group'
 import * as migration_20260731_182100_remove_footer_terms_link from './20260731_182100_remove_footer_terms_link'
+import * as migration_20260802_000000_category_sort_order from './20260802_000000_category_sort_order'
 
 export const migrations = [
   {
@@ -96,5 +97,10 @@ export const migrations = [
     up: migration_20260731_182100_remove_footer_terms_link.up,
     down: migration_20260731_182100_remove_footer_terms_link.down,
     name: '20260731_182100_remove_footer_terms_link',
+  },
+  {
+    up: migration_20260802_000000_category_sort_order.up,
+    down: migration_20260802_000000_category_sort_order.down,
+    name: '20260802_000000_category_sort_order',
   },
 ]
