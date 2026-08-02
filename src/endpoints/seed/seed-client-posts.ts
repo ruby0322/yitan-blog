@@ -11,7 +11,7 @@ import { fetchMaterialsFile } from './seed-media'
 const PUBLISHED_AT_START = new Date('2026-05-01T08:00:00.000Z')
 
 /** Only this post is published on seed; all other client posts stay draft. */
-const PUBLISHED_SEED_POST_SLUG = 'common-pancreas-findings-health-checkup'
+const PUBLISHED_SEED_POST_SLUG = 'pancreatic-cancer-treatment-20-years'
 
 function publishedAtForIndex(index: number): string {
   const date = new Date(PUBLISHED_AT_START)
@@ -155,15 +155,8 @@ export async function seedClientPosts({
 export function featuredPostIdsFromClientPosts(
   createdPosts: Array<{ id: number; slug: string }>,
 ): number[] {
-  const preferredSlugs = [
-    'pancreatic-cancer-early-symptoms-6-warning-signs',
-    'pancreas-three-questions',
-    'who-should-watch-pancreas-health',
-  ]
-
-  return preferredSlugs
-    .map((slug) => createdPosts.find((post) => post.slug === slug)?.id)
-    .filter((id): id is number => typeof id === 'number')
+  const publishedPost = createdPosts.find((post) => post.slug === PUBLISHED_SEED_POST_SLUG)
+  return publishedPost ? [publishedPost.id] : []
 }
 
 export async function getClientPostDefinitions(): Promise<ClientPostDefinition[]> {
