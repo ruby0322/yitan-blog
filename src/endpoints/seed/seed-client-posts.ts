@@ -11,7 +11,7 @@ import { fetchMaterialsFile } from './seed-media'
 const PUBLISHED_AT_START = new Date('2026-05-01T08:00:00.000Z')
 
 /** Only this post is published on seed; all other client posts stay draft. */
-const PUBLISHED_SEED_POST_SLUG = 'pancreatic-cancer-treatment-20-years'
+const PUBLISHED_SEED_POST_SLUG = 'pancreatic-cancer-treatment-30-years'
 
 function publishedAtForIndex(index: number): string {
   const date = new Date(PUBLISHED_AT_START)
