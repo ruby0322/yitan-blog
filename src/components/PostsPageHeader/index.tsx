@@ -25,8 +25,6 @@ export const PostsPageHeader: React.FC<Props> = ({
         <div className="max-w-3xl">
           <Caption as="p" className="mb-3 block uppercase tracking-[0.28em]">
             {SITE_NAME}
-            {isFiltered && !isSearching ? ` · ${categoryTitle}` : null}
-            {isFiltered && isSearching ? ` · ${categoryTitle}` : null}
           </Caption>
           <DisplayHeading className="mb-4 font-semibold text-brand-heading">
             {isSearching ? `搜尋「${query}」` : isFiltered ? categoryTitle : '部落格'}
