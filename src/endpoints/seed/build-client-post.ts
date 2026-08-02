@@ -76,6 +76,7 @@ type BuildClientPostArgs = {
   heroImage: Media
   inlineImages: Media[]
   publishedAt: string
+  status: 'draft' | 'published'
   definition: ClientPostDefinition
 }
 
@@ -86,6 +87,7 @@ export function buildClientPost({
   heroImage,
   inlineImages,
   publishedAt,
+  status,
 }: BuildClientPostArgs): RequiredDataFromCollectionSlug<'posts'> {
   const inlineInsertAt = distributeInlineInsertions(definition.sections.length, inlineImages.length)
   const contentNodes: ContentNode[] = []
@@ -108,7 +110,7 @@ export function buildClientPost({
   const marketingNotes = definition.marketingNotes
 
   return {
-    _status: 'published',
+    _status: status,
     title: definition.title,
     slug: definition.slug,
     excerpt: definition.excerpt,

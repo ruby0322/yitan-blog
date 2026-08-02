@@ -10,6 +10,9 @@ import { fetchMaterialsFile } from './seed-media'
 
 const PUBLISHED_AT_START = new Date('2026-05-01T08:00:00.000Z')
 
+/** Only this post is published on seed; all other client posts stay draft. */
+const PUBLISHED_SEED_POST_SLUG = 'common-pancreas-findings-health-checkup'
+
 function publishedAtForIndex(index: number): string {
   const date = new Date(PUBLISHED_AT_START)
   date.setDate(date.getDate() + index * 3)
@@ -87,6 +90,7 @@ export async function seedClientPosts({
       heroImage,
       inlineImages,
       publishedAt: publishedAtForIndex(index),
+      status: definition.slug === PUBLISHED_SEED_POST_SLUG ? 'published' : 'draft',
     })
 
     const existing = await payload.find({
