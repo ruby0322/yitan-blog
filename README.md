@@ -36,7 +36,7 @@ pnpm seed           # re-seed if needed
 
 ## 操作手冊
 
-給章醫師的使用說明：[docs/操作手冊.md](docs/操作手冊.md)
+給章醫師的使用說明：[docs/operator-manual.md](docs/operator-manual.md)（完整版：[docs/admin-handover-manual.md](docs/admin-handover-manual.md)）
 
 ## 技術棧
 
