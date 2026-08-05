@@ -3,13 +3,13 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 
+import { SITEMAP_STATIC_PATHS } from '@/constants/sitemapStaticPaths'
+import { getServerSideURL } from '@/utilities/getURL'
+
 const getPagesSitemap = unstable_cache(
   async () => {
     const payload = await getPayload({ config })
-    const SITE_URL =
-      process.env.NEXT_PUBLIC_SERVER_URL ||
-      process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-      'https://example.com'
+    const siteUrl = getServerSideURL()
 
     const results = await payload.find({
       collection: 'pages',
@@ -31,19 +31,17 @@ const getPagesSitemap = unstable_cache(
 
     const dateFallback = new Date().toISOString()
 
-    const defaultSitemap = [
-      {
-        loc: `${SITE_URL}/posts`,
-        lastmod: dateFallback,
-      },
-    ]
+    const defaultSitemap = SITEMAP_STATIC_PATHS.map((path) => ({
+      loc: `${siteUrl}${path}`,
+      lastmod: dateFallback,
+    }))
 
     const sitemap = results.docs
       ? results.docs
           .filter((page) => Boolean(page?.slug))
           .map((page) => {
             return {
-              loc: page?.slug === 'home' ? `${SITE_URL}/` : `${SITE_URL}/${page?.slug}`,
+              loc: page?.slug === 'home' ? `${siteUrl}/` : `${siteUrl}/${page?.slug}`,
               lastmod: page.updatedAt || dateFallback,
             }
           })
