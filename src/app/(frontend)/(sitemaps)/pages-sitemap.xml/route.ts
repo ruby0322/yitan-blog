@@ -31,10 +31,30 @@ const getPagesSitemap = unstable_cache(
 
     const dateFallback = new Date().toISOString()
 
-    const defaultSitemap = SITEMAP_STATIC_PATHS.map((path) => ({
-      loc: `${siteUrl}${path}`,
-      lastmod: dateFallback,
-    }))
+    const categories = await payload.find({
+      collection: 'categories',
+      overrideAccess: false,
+      depth: 0,
+      limit: 100,
+      pagination: false,
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+    })
+
+    const defaultSitemap = [
+      ...SITEMAP_STATIC_PATHS.map((path) => ({
+        loc: `${siteUrl}${path}`,
+        lastmod: dateFallback,
+      })),
+      ...(categories.docs ?? [])
+        .filter((category) => Boolean(category.slug))
+        .map((category) => ({
+          loc: `${siteUrl}/posts?category=${encodeURIComponent(category.slug as string)}`,
+          lastmod: category.updatedAt || dateFallback,
+        })),
+    ]
 
     const sitemap = results.docs
       ? results.docs

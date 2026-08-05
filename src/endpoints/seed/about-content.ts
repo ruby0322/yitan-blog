@@ -1,3 +1,4 @@
+import { ABOUT_SEO } from '@/constants/seo'
 import { LEGAL } from '@/content/legal'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
@@ -135,7 +136,6 @@ export const aboutHeroRichText = richTextRoot(
 )
 
 export const aboutMeta = {
-  title: '關於 | 胰探究竟－章醫師的胰臟日常',
-  description:
-    '認識章明珠醫師與「胰探究竟」：近三十年胰臟疾病臨床與研究經驗，分享早期發現、胰臟癌篩檢與日常照護的可信衛教。',
+  title: ABOUT_SEO.title,
+  description: ABOUT_SEO.description,
 } as const

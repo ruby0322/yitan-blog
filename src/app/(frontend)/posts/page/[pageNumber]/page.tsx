@@ -3,8 +3,12 @@ import type { Metadata } from 'next/types'
 import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
 import { POSTS_PER_PAGE } from '@/constants/posts'
 import { buildMetadata } from '@/utilities/buildMetadata'
-import { formatCategoryTitles } from '@/utilities/categoryOrder'
-import { queryAllCategories, queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
+import {
+  getCategorySeoDescription,
+  getCategorySeoTitle,
+  POSTS_ARCHIVE_SEO,
+} from '@/constants/seo'
+import { queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -125,17 +129,16 @@ export async function generateMetadata({
     }
 
     return buildMetadata({
-      title: `${category.title} | 部落格 - 第 ${pageNumber} 頁`,
-      description:
-        category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
+      title: `${getCategorySeoTitle(category.title)} - 第 ${pageNumber} 頁`,
+      description: getCategorySeoDescription(category.title, category.description),
       path: `/posts/page/${pageNumber}?category=${encodeURIComponent(categorySlug)}`,
       noIndex,
     })
   }
 
   return buildMetadata({
-    title: `部落格 - 第 ${pageNumber} 頁`,
-    description: `閱讀胰探究竟的最新文章，了解${formatCategoryTitles(await queryAllCategories())}等主題。`,
+    title: `${POSTS_ARCHIVE_SEO.title} - 第 ${pageNumber} 頁`,
+    description: POSTS_ARCHIVE_SEO.description,
     path: `/posts/page/${pageNumber}`,
     noIndex,
   })

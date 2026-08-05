@@ -10,8 +10,10 @@ import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { AboutArticleBody } from '@/components/AboutArticleBody'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { StructuredData } from '@/components/StructuredData'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getAboutStructuredData } from '@/utilities/structuredData'
 import PageClient from './page.client'
 
 export const revalidate = 600
@@ -92,6 +94,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <div className={isHome ? undefined : isAbout ? 'bg-brand-warm-white pb-16' : 'pb-24 pt-16'}>
+      {isAbout ? <StructuredData data={getAboutStructuredData()} /> : null}
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />

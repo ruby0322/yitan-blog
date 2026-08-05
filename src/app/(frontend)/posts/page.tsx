@@ -1,9 +1,13 @@
 import type { Metadata } from 'next/types'
 
 import { PostsArchiveLayout } from '@/components/PostsArchiveLayout'
+import {
+  getCategorySeoDescription,
+  getCategorySeoTitle,
+  POSTS_ARCHIVE_SEO,
+} from '@/constants/seo'
 import { buildMetadata } from '@/utilities/buildMetadata'
-import { formatCategoryTitles } from '@/utilities/categoryOrder'
-import { queryAllCategories, queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
+import { queryCategoriesWithPostCounts, queryPosts } from '@/utilities/queryPosts'
 import { querySearchPosts } from '@/utilities/querySearch'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -105,16 +109,16 @@ export async function generateMetadata({
     }
 
     return buildMetadata({
-      title: `${category.title} | 部落格`,
-      description:
-        category.description || `閱讀「${category.title}」主題文章，了解胰臟相關資訊。`,
+      title: getCategorySeoTitle(category.title),
+      description: getCategorySeoDescription(category.title, category.description),
       path: `/posts?category=${encodeURIComponent(categorySlug)}`,
+      keywords: [category.title, '胰臟', '章明珠醫師'],
     })
   }
 
   return buildMetadata({
-    title: '部落格',
-    description: `閱讀胰探究竟的最新文章，了解${formatCategoryTitles(await queryAllCategories())}等主題。`,
+    title: POSTS_ARCHIVE_SEO.title,
+    description: POSTS_ARCHIVE_SEO.description,
     path: '/posts',
   })
 }

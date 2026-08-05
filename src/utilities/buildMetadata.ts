@@ -17,6 +17,7 @@ type BuildMetadataArgs = {
   ogImage?: string
   ogType?: 'website' | 'article'
   noIndex?: boolean
+  keywords?: string[]
   article?: {
     publishedTime?: string | null
     modifiedTime?: string | null
@@ -38,16 +39,18 @@ export function buildMetadata({
   ogImage,
   ogType = 'website',
   noIndex = false,
+  keywords,
   article,
 }: BuildMetadataArgs): Metadata {
   const ogImages = ogImage ? [{ url: ogImage }] : undefined
   const twitterImage = ogImage ?? getDefaultOgImageUrl()
   const absoluteUrl = path ? resolveAbsoluteUrl(path) : getServerSideURL()
+  const resolvedKeywords = keywords ? [...new Set([...keywords, ...SITE_KEYWORDS])] : [...SITE_KEYWORDS]
 
   return {
     title,
     description,
-    keywords: [...SITE_KEYWORDS],
+    keywords: resolvedKeywords,
     authors: [{ name: SITE_AUTHOR }],
     creator: SITE_AUTHOR,
     publisher: SITE_FULL_NAME,

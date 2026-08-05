@@ -1,5 +1,6 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Category, Media } from '@/payload-types'
+import { HOME_SEO } from '@/constants/seo'
 import { TOPIC_CATEGORY_DATA, postsCategoryUrl } from '@/constants/categories'
 import { heading, paragraph, richTextRoot, text } from './lexical-helpers'
 
@@ -9,8 +10,7 @@ type HomeArgs = {
   featuredPostIds: number[]
 }
 
-const BRAND_INTRO =
-  '歡迎來到「胰探究竟－章醫師的胰臟日常」。這裡以臨床經驗結合最新醫學證據，分享真正重要的胰臟知識，破解迷思，致力於傳遞正確、可信且容易理解的醫學資訊。希望幫助更多人認識胰臟、了解胰臟，進而守護自己與家人的胰臟健康。'
+const BRAND_INTRO = HOME_SEO.description
 
 export const home = ({
   bookFlatImage,
@@ -170,7 +170,7 @@ export const home = ({
     },
   ],
   meta: {
-    title: '胰探究竟－章醫師的胰臟日常',
+    title: HOME_SEO.title,
     description: BRAND_INTRO,
   },
 })
